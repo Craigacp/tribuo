@@ -62,6 +62,7 @@
              include Windows support -->
         <skipXGBoostTests>false</skipXGBoostTests>
         <skipONNXTests>false</skipONNXTests>
+        <skipTFTests>false</skipTFTests>
     </properties>
 
     <name>Tribuo</name>
