@@ -40,7 +40,7 @@ public final class ONNXContext {
 
     private final Map<String, Long> nameMap;
 
-    private final OnnxMl.GraphProto.Builder protoBuilder;
+    protected final OnnxMl.GraphProto.Builder protoBuilder;
 
     /**
      * Creates an empty ONNX context.
@@ -134,16 +134,32 @@ public final class ONNXContext {
      * Creates an input node for this ONNXContext, with the given name, of dimension
      * [batch_size, {@code featureDimension}], and of type float32.
      * @param name The name for this input node.
-     * @param featureDimension the second dimension of this input node.
+     * @param featureDimensions the dimensions excluding batch size of this node.
      * @return An {@link ONNXPlaceholder} instance representing this input node.
      */
-    public ONNXPlaceholder floatInput(String name, int featureDimension) {
-        OnnxMl.TypeProto inputType = ONNXUtils.buildTensorTypeNode(new ONNXShape(new long[]{-1, featureDimension}, new String[]{"batch", null}), OnnxMl.TensorProto.DataType.FLOAT);
+    public ONNXPlaceholder floatInput(String name, int[] featureDimensions) {
+        long[] dimensions = new long[featureDimensions.length+1];
+        dimensions[0] = -1;
+        for (int i = 0; i < featureDimensions.length; i++) {
+            dimensions[i+1] = featureDimensions[i];
+        }
+        OnnxMl.TypeProto inputType = ONNXUtils.buildTensorTypeNode(new ONNXShape(dimensions, new String[]{"batch", null}), OnnxMl.TensorProto.DataType.FLOAT);
         OnnxMl.ValueInfoProto inputValue = OnnxMl.ValueInfoProto.newBuilder()
                 .setType(inputType)
                 .setName(name).build();
         protoBuilder.addInput(inputValue);
         return new ONNXPlaceholder(this, inputValue, name);
+    }
+
+    /**
+     * Creates an input node for this ONNXContext, with the given name, of dimension
+     * [batch_size, {@code featureDimension}], and of type float32.
+     * @param name The name for this input node.
+     * @param featureDimension the second dimension of this input node.
+     * @return An {@link ONNXPlaceholder} instance representing this input node.
+     */
+    public ONNXPlaceholder floatInput(String name, int featureDimension) {
+        return floatInput(name, new int[]{featureDimension});
     }
 
     /**
@@ -160,16 +176,32 @@ public final class ONNXContext {
      * Creates an output node for this ONNXContext, with the given name, of dimension
      * [batch_size, {@code outputDimension}], and of type float32.
      * @param name the name for this output node.
-     * @param outputDimension The second dimension of this output node.
+     * @param outputDimensions The non batch size dimensions of this output node.
      * @return An {@link ONNXPlaceholder} instance representing this output node.
      */
-    public ONNXPlaceholder floatOutput(String name, int outputDimension) {
-        OnnxMl.TypeProto outputType = ONNXUtils.buildTensorTypeNode(new ONNXShape(new long[]{-1,outputDimension}, new String[]{"batch",null}), OnnxMl.TensorProto.DataType.FLOAT);
+    public ONNXPlaceholder floatOutput(String name, int[] outputDimensions) {
+        long[] dimensions = new long[outputDimensions.length+1];
+        dimensions[0] = -1;
+        for (int i = 0; i < outputDimensions.length; i++) {
+            dimensions[i+1] = outputDimensions[i];
+        }
+        OnnxMl.TypeProto outputType = ONNXUtils.buildTensorTypeNode(new ONNXShape(dimensions, new String[]{"batch", null}), OnnxMl.TensorProto.DataType.FLOAT);
         OnnxMl.ValueInfoProto outputValueProto = OnnxMl.ValueInfoProto.newBuilder()
                 .setType(outputType)
                 .setName(name).build();
         protoBuilder.addOutput(outputValueProto);
         return new ONNXPlaceholder(this, outputValueProto, name);
+    }
+
+    /**
+     * Creates an output node for this ONNXContext, with the given name, of dimension
+     * [batch_size, {@code outputDimension}], and of type float32.
+     * @param name the name for this output node.
+     * @param outputDimension The second dimension of this output node.
+     * @return An {@link ONNXPlaceholder} instance representing this output node.
+     */
+    public ONNXPlaceholder floatOutput(String name, int outputDimension) {
+        return floatOutput(name, new int[]{outputDimension});
     }
 
     /**

@@ -18,7 +18,9 @@ package org.tribuo.util.onnx;
 
 import ai.onnx.proto.OnnxMl;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -97,7 +99,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String input, String output) {
-        return build(context,new String[]{input},new String[]{output}, Collections.emptyMap());
+        return new ONNXOp(this, input, output).build(context);
     }
 
     /**
@@ -111,7 +113,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String input, String output, Map<String,Object> attributeValues) {
-        return build(context,new String[]{input},new String[]{output},attributeValues);
+        return new ONNXOp(this, input, output, attributeValues).build(context);
     }
 
     /**
@@ -123,7 +125,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String[] inputs, String output) {
-        return build(context,inputs,new String[]{output},Collections.emptyMap());
+        return new ONNXOp(this, Arrays.asList(inputs), output).build(context);
     }
 
     /**
@@ -137,7 +139,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String[] inputs, String output, Map<String,Object> attributeValues) {
-        return build(context,inputs,new String[]{output},attributeValues);
+        return new ONNXOp(this, Arrays.asList(inputs),output,attributeValues).build(context);
     }
 
     /**
@@ -149,7 +151,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String input, String[] outputs) {
-        return build(context,new String[]{input},outputs,Collections.emptyMap());
+        return new ONNXOp(this, input, Arrays.asList(outputs)).build(context);
     }
 
     /**
@@ -163,7 +165,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String input, String[] outputs, Map<String,Object> attributeValues) {
-        return build(context,new String[]{input},outputs,attributeValues);
+        return new ONNXOp(this, input, Arrays.asList(outputs),attributeValues).build(context);
     }
 
     /**
@@ -175,7 +177,7 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String[] inputs, String[] outputs) {
-        return build(context,inputs,outputs,Collections.emptyMap());
+        return new ONNXOp(this, Arrays.asList(inputs), Arrays.asList(outputs)).build(context);
     }
 
     /**
@@ -189,48 +191,109 @@ public interface ONNXOperator {
      * @return The NodeProto.
      */
     default public OnnxMl.NodeProto build(ONNXContext context, String[] inputs, String[] outputs, Map<String,Object> attributeValues) {
-        int numInputs = getNumInputs();
-        int numOptionalInputs = getNumOptionalInputs();
-        int numOutputs = getNumOutputs();
-        String opName = getOpName();
-        String domain = getOpDomain();
-        Map<String, ONNXAttribute> attributes = getAttributes();
-        Set<String> mandatoryAttributeNames = getMandatoryAttributeNames();
+        return new ONNXOp(this, Arrays.asList(inputs), Arrays.asList(outputs), attributeValues).build(context);
+    }
 
-        String opStatus = String.format("Building op %s:%s(%d(+%d)) -> %d", domain, opName, numInputs, numOptionalInputs, numOutputs);
-
-        if ((numInputs != VARIADIC_INPUT) && ((inputs.length < numInputs) || (inputs.length > numInputs + numOptionalInputs))) {
-            throw new IllegalArgumentException(opStatus + ". Expected " + numInputs + " inputs, with " + numOptionalInputs + " optional inputs, but received " + inputs.length);
-        } else if ((numInputs == VARIADIC_INPUT) && (inputs.length == 0)) {
-            throw new IllegalArgumentException(opStatus + ". Expected at least one input for variadic input, received zero");
-        }
-        if (outputs.length != numOutputs) {
-            throw new IllegalArgumentException(opStatus + ". Expected " + numOutputs + " outputs, but received " + outputs.length);
-        }
-        if (!attributes.keySet().containsAll(attributeValues.keySet())) {
-            throw new IllegalArgumentException(opStatus + ". Unexpected attribute found, received " + attributeValues.keySet() + ", expected values from " + attributes.keySet());
-        }
-        if (!attributeValues.keySet().containsAll(mandatoryAttributeNames)) {
-            throw new IllegalArgumentException(opStatus + ". Expected to find all mandatory attributes, received " + attributeValues.keySet() + ", expected " + mandatoryAttributeNames);
+    public record ONNXOp(ONNXOperator op, List<String> inputs, List<String> outputs, Map<String,Object> attributeValues) {
+        public ONNXOp {
+            inputs = Collections.unmodifiableList(inputs);
+            outputs = Collections.unmodifiableList(outputs);
+            attributeValues = Collections.unmodifiableMap(attributeValues);
         }
 
-        Logger.getLogger("org.tribuo.util.onnx.ONNXOperator").fine(opStatus);
-        OnnxMl.NodeProto.Builder nodeBuilder = OnnxMl.NodeProto.newBuilder();
-        for (String i : inputs) {
-            nodeBuilder.addInput(i);
+        public ONNXOp(ONNXOperator op, String input, String output, Map<String, Object> attributeValues) {
+            this(op,List.of(input),List.of(output),attributeValues);
         }
-        for (String o : outputs) {
-            nodeBuilder.addOutput(o);
+        public ONNXOp(ONNXOperator op, String input, List<String> outputs, Map<String, Object> attributeValues) {
+            this(op,List.of(input),outputs,attributeValues);
         }
-        nodeBuilder.setName(context.generateUniqueName(opName));
-        nodeBuilder.setOpType(opName);
-        if (domain != null) {
-            nodeBuilder.setDomain(domain);
+        public ONNXOp(ONNXOperator op, List<String> inputs, String output, Map<String, Object> attributeValues) {
+            this(op,inputs,List.of(output),attributeValues);
         }
-        for (Map.Entry<String,Object> e : attributeValues.entrySet()) {
-            ONNXAttribute attr = attributes.get(e.getKey());
-            nodeBuilder.addAttribute(attr.build(e.getValue()));
+        public ONNXOp(ONNXOperator op, String input, String output) {
+            this(op,List.of(input),List.of(output),Map.of());
         }
-        return nodeBuilder.build();
+        public ONNXOp(ONNXOperator op, String input, List<String> outputs) {
+            this(op,List.of(input),outputs,Map.of());
+        }
+        public ONNXOp(ONNXOperator op, List<String> inputs, String output) {
+            this(op,inputs,List.of(output),Map.of());
+        }
+        public ONNXOp(ONNXOperator op, List<String> inputs, List<String> outputs) {
+            this(op,inputs,outputs,Map.of());
+        }
+
+        /**
+         * Builds a node from this op record.
+         * Throws {@link IllegalArgumentException} if the number of inputs, outputs or attributes is wrong.
+         * May throw {@link UnsupportedOperationException} if the attribute type is not supported.
+         * @param context The onnx context used to ensure the generated node has a unique name.
+         * @return The NodeProto.
+         */
+        public OnnxMl.NodeProto build(ONNXContext context) {
+            int numInputs = op.getNumInputs();
+            int numOptionalInputs = op.getNumOptionalInputs();
+            int numOutputs = op.getNumOutputs();
+            String opName = op.getOpName();
+            String domain = op.getOpDomain();
+            Map<String, ONNXAttribute> attributes = op.getAttributes();
+            Set<String> mandatoryAttributeNames = op.getMandatoryAttributeNames();
+
+            String opStatus = String.format("Building op %s:%s(%d(+%d)) -> %d", domain, opName, numInputs, numOptionalInputs, numOutputs);
+
+            if ((numInputs != VARIADIC_INPUT) && ((inputs.size() < numInputs) || (inputs.size() > numInputs + numOptionalInputs))) {
+                throw new IllegalArgumentException(opStatus + ". Expected " + numInputs + " inputs, with " + numOptionalInputs + " optional inputs, but received " + inputs.size());
+            } else if ((numInputs == VARIADIC_INPUT) && (inputs.size() == 0)) {
+                throw new IllegalArgumentException(opStatus + ". Expected at least one input for variadic input, received zero");
+            }
+            if (outputs.size() != numOutputs) {
+                throw new IllegalArgumentException(opStatus + ". Expected " + numOutputs + " outputs, but received " + outputs.size());
+            }
+            if (!attributes.keySet().containsAll(attributeValues.keySet())) {
+                throw new IllegalArgumentException(opStatus + ". Unexpected attribute found, received " + attributeValues.keySet() + ", expected values from " + attributes.keySet());
+            }
+            if (!attributeValues.keySet().containsAll(mandatoryAttributeNames)) {
+                throw new IllegalArgumentException(opStatus + ". Expected to find all mandatory attributes, received " + attributeValues.keySet() + ", expected " + mandatoryAttributeNames);
+            }
+
+            Logger.getLogger("org.tribuo.util.onnx.ONNXOperator").fine(opStatus);
+            OnnxMl.NodeProto.Builder nodeBuilder = OnnxMl.NodeProto.newBuilder();
+            for (String i : inputs()) {
+                nodeBuilder.addInput(i);
+            }
+            for (String o : outputs()) {
+                nodeBuilder.addOutput(o);
+            }
+            nodeBuilder.setName(context.generateUniqueName(opName));
+            nodeBuilder.setOpType(opName);
+            if (domain != null) {
+                nodeBuilder.setDomain(domain);
+            }
+            for (Map.Entry<String,Object> e : attributeValues.entrySet()) {
+                ONNXAttribute attr = attributes.get(e.getKey());
+                nodeBuilder.addAttribute(attr.build(e.getValue()));
+            }
+            return nodeBuilder.build();
+        }
+
+        public OnnxMl.ModelProto makeSingleOpModel() {
+            ONNXContext context = new ONNXContext();
+            OnnxMl.ValueInfoProto inputValue = OnnxMl.ValueInfoProto.newBuilder().setName(inputs().get(0)).build();
+            context.protoBuilder.addInput(inputValue);
+            OnnxMl.ValueInfoProto outputValue = OnnxMl.ValueInfoProto.newBuilder().setName(outputs().get(0)).build();
+            context.protoBuilder.addOutput(outputValue);
+            OnnxMl.NodeProto opNode = build(context);
+            context.protoBuilder.addNode(opNode);
+            return OnnxMl.ModelProto.newBuilder()
+                    .setGraph(context.buildGraph())
+                    .setDomain("org.tribuo.onnx.test")
+                    .setProducerName("Tribuo")
+                    .setProducerVersion("5.0.0")
+                    .setModelVersion(0)
+                    .addOpsetImport(ONNXOperators.getOpsetProto())
+                    .setIrVersion(6)
+                    .setDocString("eager-test")
+                    .build();
+        }
     }
 }

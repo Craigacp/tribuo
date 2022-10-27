@@ -51,6 +51,10 @@ public enum ONNXOperators implements ONNXOperator {
             new ONNXAttribute("value", OnnxMl.AttributeProto.AttributeType.TENSOR, false)
     )),
     /**
+     * Relu element-wise.
+     */
+    RELU("Relu",1,1),
+    /**
      * Sigmoid element-wise.
      */
     SIGMOID("Sigmoid",1,1),
@@ -61,6 +65,15 @@ public enum ONNXOperators implements ONNXOperator {
      * </ul>
      */
     SOFTMAX("Softmax",1,1, Collections.singletonList(
+            new ONNXAttribute("axis", OnnxMl.AttributeProto.AttributeType.INT, false)
+    )),
+    /**
+     * Log softmax.
+     * <ul>
+     *     <li>{@code axis} defaults to -1.</li>
+     * </ul>
+     */
+    LOG_SOFTMAX("LogSoftmax",1,1, Collections.singletonList(
             new ONNXAttribute("axis", OnnxMl.AttributeProto.AttributeType.INT, false)
     )),
     /**
@@ -100,6 +113,47 @@ public enum ONNXOperators implements ONNXOperator {
      * Element-wise summation across the supplied inputs with broadcasting.
      */
     SUM("Sum",VARIADIC_INPUT,1),
+    /**
+     * Convolution operation.
+     * Expects 2 inputs, the image and the filter, and an optional input of biases.
+     * <ul>
+     *     <li>{@code auto_pad} defaults to "NOTSET", choices are "NOTSET", "SAME_UPPER", "SAME_LOWER", "VALID".</li>
+     *     <li>{@code dilations} defaults to 1, dilation values along each spatial axis of the input.</li>
+     *     <li>{@code group} defaults to 1, the number of groups input and output channels are divided into.</li>
+     *     <li>{@code kernel_shape} defaults to inferred from input, the convolution kernel size.</li>
+     *     <li>{@code pads} defaults to 0, cannot be used with "auto_pad", padding for the beginning and end of each spatial axis.</li>
+     *     <li>{@code strides} defaults to 1, stride along each spatial axis.</li>
+     * </ul>
+     */
+    CONV("Conv",2,1,1,Arrays.asList(
+            new ONNXAttribute("auto_pad", OnnxMl.AttributeProto.AttributeType.STRING, false),
+            new ONNXAttribute("dilations", OnnxMl.AttributeProto.AttributeType.INTS, false),
+            new ONNXAttribute("group", OnnxMl.AttributeProto.AttributeType.INT, false),
+            new ONNXAttribute("kernel_shape", OnnxMl.AttributeProto.AttributeType.INTS, false),
+            new ONNXAttribute("pads", OnnxMl.AttributeProto.AttributeType.INTS, false),
+            new ONNXAttribute("strides",OnnxMl.AttributeProto.AttributeType.INTS,false)
+    )),
+    /**
+     * Max pooling operation.
+     * <ul>
+     *     <li>{@code auto_pad} defaults to "NOTSET", choices are "NOTSET", "SAME_UPPER", "SAME_LOWER", "VALID".</li>
+     *     <li>{@code ceil_mode} defaults to floor, if set to 1 uses ceiling.</li>
+     *     <li>{@code dilations} defaults to 1, dilation values along each spatial axis of the input.</li>
+     *     <li>{@code kernel_shape} required, the pooling kernel size.</li>
+     *     <li>{@code pads} defaults to 0, cannot be used with "auto_pad", padding for the beginning and end of each spatial axis.</li>
+     *     <li>{@code storage_order} defaults to 0 (row major), set to 1 for column major.</li>
+     *     <li>{@code strides} defaults to 1, stride along each spatial axis.</li>
+     * </ul>
+     */
+    MAX_POOL("MaxPool",1,2,Arrays.asList(
+            new ONNXAttribute("auto_pad", OnnxMl.AttributeProto.AttributeType.STRING, false),
+            new ONNXAttribute("ceil_mode", OnnxMl.AttributeProto.AttributeType.INT, false),
+            new ONNXAttribute("dilations", OnnxMl.AttributeProto.AttributeType.INTS, false),
+            new ONNXAttribute("kernel_shape", OnnxMl.AttributeProto.AttributeType.INTS, true),
+            new ONNXAttribute("pads", OnnxMl.AttributeProto.AttributeType.INTS, false),
+            new ONNXAttribute("storage_order", OnnxMl.AttributeProto.AttributeType.INT, false),
+            new ONNXAttribute("strides",OnnxMl.AttributeProto.AttributeType.INTS,false)
+    )),
     /**
      * Gathers elements from the first argument (of rank r) indexed by the second argument (of rank q) producing
      * a tensor of rank {@code q + r - 1}.
