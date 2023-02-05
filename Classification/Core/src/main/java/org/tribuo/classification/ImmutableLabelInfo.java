@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  * Gives each unique label an id number. Also counts each label occurrence like {@link MutableLabelInfo} does,
  * though the counts are frozen in this object.
  */
-public class ImmutableLabelInfo extends LabelInfo implements ImmutableOutputInfo<Label> {
+public final class ImmutableLabelInfo extends LabelInfo implements ImmutableOutputInfo<Label> {
     private static final Logger logger = Logger.getLogger(ImmutableLabelInfo.class.getName());
 
     private static final long serialVersionUID = 1L;

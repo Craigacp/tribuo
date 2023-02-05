@@ -27,7 +27,7 @@ import java.util.Optional;
  *
  * @param <T> The {@link Output} type.
  */
-public class MetricTarget<T extends Output<T>> {
+public final class MetricTarget<T extends Output<T>> {
 
     private final T target;
     private final EvaluationMetric.Average avg;

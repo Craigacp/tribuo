@@ -53,7 +53,7 @@ import java.util.Optional;
  * Mathematical Programming, 2011.
  * </pre>
  */
-public class KernelSVMModel extends Model<Label> {
+public final class KernelSVMModel extends Model<Label> {
     private static final long serialVersionUID = 2L;
 
     /**

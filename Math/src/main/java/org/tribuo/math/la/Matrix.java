@@ -21,7 +21,7 @@ package org.tribuo.math.la;
  * <p>
  * Matrices have immutable sizes and immutable indices (so {@link DenseSparseMatrix} can't grow).
  */
-public interface Matrix extends Tensor, Iterable<MatrixTuple> {
+public sealed interface Matrix extends Tensor, Iterable<MatrixTuple> permits DenseMatrix, DenseSparseMatrix {
 
     /**
      * Copies the matrix.

@@ -29,7 +29,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
  * that there is no set of "never_split" tokens used here. Those are handled by
  * {@link WordpieceTokenizer}.
  */
-public class WordpieceBasicTokenizer extends SplitFunctionTokenizer {
+public final class WordpieceBasicTokenizer extends SplitFunctionTokenizer {
 
     /**
      * Creates a {@link SplitFunction} that is used by the super class

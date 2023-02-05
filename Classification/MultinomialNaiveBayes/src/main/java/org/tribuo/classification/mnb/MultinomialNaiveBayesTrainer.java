@@ -50,7 +50,7 @@ import java.util.Map;
  * Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics, 2012.
  * </pre>
  */
-public class MultinomialNaiveBayesTrainer implements Trainer<Label>, WeightedExamples {
+public final class MultinomialNaiveBayesTrainer implements Trainer<Label>, WeightedExamples {
 
     @Config(description="Smoothing parameter.")
     private double alpha = 1.0;

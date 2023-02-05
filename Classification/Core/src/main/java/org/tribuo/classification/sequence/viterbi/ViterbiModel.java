@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 /**
  * An implementation of a viterbi model.
  */
-public class ViterbiModel extends SequenceModel<Label> {
+public final class ViterbiModel extends SequenceModel<Label> {
 
     private static final long serialVersionUID = 1L;
 

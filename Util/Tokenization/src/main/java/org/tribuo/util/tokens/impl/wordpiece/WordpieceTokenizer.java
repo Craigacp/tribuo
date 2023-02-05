@@ -50,7 +50,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
  * input vocabulary which matches tokens and token suffixes as it can. Any
  * tokens that are not found in the input vocabulary are marked as "unknown".
  */
-public class WordpieceTokenizer implements Tokenizer {
+public final class WordpieceTokenizer implements Tokenizer {
 
     private static final Pattern accentsPattern = Pattern.compile("\\p{Mn}");
 

@@ -43,7 +43,7 @@ import static org.tribuo.interop.modelcard.ModelCard.mapper;
  * A command line interface for creating and appending UsageDetails to the serialized version of an
  * existing ModelCard.
  */
-public class ModelCardCLI implements CommandGroup {
+public final class ModelCardCLI implements CommandGroup {
     private static final Logger logger = Logger.getLogger(ModelCardCLI.class.getName());
     /**
      * The command shell instance.

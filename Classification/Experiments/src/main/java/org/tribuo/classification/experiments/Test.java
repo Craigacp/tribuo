@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 /**
  * Test a classifier for a standard dataset.
  */
-public class Test {
+public final class Test {
 
     private static final Logger logger = Logger.getLogger(Test.class.getName());
 

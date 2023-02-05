@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 /**
  * A command line interface for loading in models and inspecting their feature and output spaces.
  */
-public class ModelExplorer implements CommandGroup {
+public final class ModelExplorer implements CommandGroup {
     private static final Logger logger = Logger.getLogger(ModelExplorer.class.getName());
 
     /**

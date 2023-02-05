@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * <p>
  * Returns an empty optional if the value failed to parse.
  */
-public class FloatExtractor extends SimpleFieldExtractor<Float> {
+public final class FloatExtractor extends SimpleFieldExtractor<Float> {
 
     private static final Logger logger = Logger.getLogger(FloatExtractor.class.getName());
 

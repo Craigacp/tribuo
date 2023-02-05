@@ -48,7 +48,7 @@ import java.util.Random;
  * <p>
  * Set slope to zero to draw from a gaussian.
  */
-public class GaussianDataSource implements ConfigurableDataSource<Regressor> {
+public final class GaussianDataSource implements ConfigurableDataSource<Regressor> {
     @Config(mandatory=true,description = "The number of samples to draw.")
     private int numSamples;
 

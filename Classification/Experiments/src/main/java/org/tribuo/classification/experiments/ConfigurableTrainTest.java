@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 /**
  * Build and run a classifier for a standard dataset.
  */
-public class ConfigurableTrainTest {
+public final class ConfigurableTrainTest {
 
     private static final Logger logger = Logger.getLogger(ConfigurableTrainTest.class.getName());
 

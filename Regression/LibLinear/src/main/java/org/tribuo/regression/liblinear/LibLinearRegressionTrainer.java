@@ -57,7 +57,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibLinearRegressionTrainer extends LibLinearTrainer<Regressor> {
+public final class LibLinearRegressionTrainer extends LibLinearTrainer<Regressor> {
 
     private static final Logger logger = Logger.getLogger(LibLinearRegressionTrainer.class.getName());
 

@@ -71,7 +71,7 @@ import java.util.logging.Logger;
  * The tokenizer is expected to be a HuggingFace Transformers tokenizer config json file.
  * @param <T> The output type.
  */
-public class BERTFeatureExtractor<T extends Output<T>> implements AutoCloseable, TextFeatureExtractor<T>, TextPipeline {
+public final class BERTFeatureExtractor<T extends Output<T>> implements AutoCloseable, TextFeatureExtractor<T>, TextPipeline {
     private static final Logger logger = Logger.getLogger(BERTFeatureExtractor.class.getName());
 
     /**

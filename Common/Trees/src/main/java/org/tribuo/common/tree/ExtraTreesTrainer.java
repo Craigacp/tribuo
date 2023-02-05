@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * </pre>
  *
  */
-public class ExtraTreesTrainer<T extends Output<T>> extends BaggingTrainer<T> {
+public final class ExtraTreesTrainer<T extends Output<T>> extends BaggingTrainer<T> {
 
     private static final Logger logger = Logger.getLogger(ExtraTreesTrainer.class.getName());
 

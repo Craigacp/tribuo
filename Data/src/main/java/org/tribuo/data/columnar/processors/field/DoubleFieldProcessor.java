@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * <p>
  * Returns an empty list if the value failed to parse or was empty.
  */
-public class DoubleFieldProcessor implements FieldProcessor {
+public final class DoubleFieldProcessor implements FieldProcessor {
     
     private static final Logger logger = Logger.getLogger(DoubleFieldProcessor.class.getName());
 

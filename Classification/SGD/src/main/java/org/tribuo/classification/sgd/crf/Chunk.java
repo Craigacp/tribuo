@@ -19,7 +19,7 @@ package org.tribuo.classification.sgd.crf;
 /**
  * Chunk class used for chunk level confidence prediction in the {@link CRFModel}.
  */
-public class Chunk {
+public final class Chunk {
     /**
      * The starting point of this chunk.
      */

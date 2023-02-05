@@ -46,7 +46,7 @@ import java.util.Properties;
  * {@link java.sql.DriverManager}'s default logic will be used to determine which {@link java.sql.Driver} to use for
  * a given connection string.
  */
-public class SQLDBConfig implements Configurable, Provenancable<ConfiguredObjectProvenance> {
+public final class SQLDBConfig implements Configurable, Provenancable<ConfiguredObjectProvenance> {
 
     @Config(description="Connection string, including host, port and db.")
     private String connectionString;

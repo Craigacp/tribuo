@@ -19,7 +19,7 @@ package org.tribuo;
 /**
  * Adds an id number to a {@link VariableInfo}.
  */
-public interface VariableIDInfo extends VariableInfo {
+public sealed interface VariableIDInfo extends VariableInfo permits CategoricalIDInfo, RealIDInfo {
 
     /**
      * The id number associated with this variable.

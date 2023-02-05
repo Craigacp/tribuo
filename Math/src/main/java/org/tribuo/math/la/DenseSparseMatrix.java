@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * <p>
  * Backed by an array of {@link SparseVector}.
  */
-public class DenseSparseMatrix implements Matrix {
+public non-sealed class DenseSparseMatrix implements Matrix {
     private static final long serialVersionUID = 1L;
 
     /**

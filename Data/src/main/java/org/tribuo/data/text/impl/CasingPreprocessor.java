@@ -24,7 +24,7 @@ import org.tribuo.data.text.DocumentPreprocessor;
 /**
  * A document preprocessor which uppercases or lowercases the input.
  */
-public class CasingPreprocessor implements DocumentPreprocessor {
+public final class CasingPreprocessor implements DocumentPreprocessor {
 
     /**
      * The possible casing operations.

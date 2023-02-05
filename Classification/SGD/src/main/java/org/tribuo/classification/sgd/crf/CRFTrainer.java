@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  * Proceedings of the 18th International Conference on Machine Learning 2001 (ICML 2001).
  * </pre>
  */
-public class CRFTrainer implements SequenceTrainer<Label>, WeightedExamples {
+public final class CRFTrainer implements SequenceTrainer<Label>, WeightedExamples {
     private static final Logger logger = Logger.getLogger(CRFTrainer.class.getName());
 
     @Config(mandatory = true,description="The gradient optimiser to use.")

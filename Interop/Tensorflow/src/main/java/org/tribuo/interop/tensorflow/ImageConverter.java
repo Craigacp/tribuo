@@ -50,7 +50,7 @@ import java.util.Set;
  * That is, they are in multidimensional row major order (e.g. the order used by {@link org.tribuo.datasource.IDXDataSource}).
  */
 @ProtoSerializableClass(serializedDataClass = ImageConverterProto.class, version = ImageConverter.CURRENT_VERSION)
-public class ImageConverter implements FeatureConverter {
+public final class ImageConverter implements FeatureConverter {
     private static final long serialVersionUID = 1L;
 
     /**

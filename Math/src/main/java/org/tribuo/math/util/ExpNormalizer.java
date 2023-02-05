@@ -31,7 +31,7 @@ import java.util.Collections;
  * <p>
  * a.k.a. SoftMax.
  */
-public class ExpNormalizer implements VectorNormalizer, Serializable {
+public final class ExpNormalizer implements VectorNormalizer, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

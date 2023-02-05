@@ -25,7 +25,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
 /**
  * A quartile to split data into 4 chunks.
  */
-public class Quartile implements Configurable, Provenancable<ConfiguredObjectProvenance> {
+public final class Quartile implements Configurable, Provenancable<ConfiguredObjectProvenance> {
 
     @Config(mandatory = true,description="The median value.")
     private double median;

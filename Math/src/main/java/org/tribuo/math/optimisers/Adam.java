@@ -37,7 +37,7 @@ import java.util.function.DoubleUnaryOperator;
  * arXiv preprint arXiv:1412.6980, 2014.
  * </pre>
  */
-public class Adam implements StochasticGradientOptimiser {
+public final class Adam implements StochasticGradientOptimiser {
 
     @Config(description="Learning rate to scale the gradients by.")
     private double initialLearningRate = 0.001;

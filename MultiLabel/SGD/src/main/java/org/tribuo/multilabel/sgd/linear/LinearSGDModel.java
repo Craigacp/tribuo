@@ -51,7 +51,7 @@ import java.util.Set;
  * Proceedings of COMPSTAT, 2010.
  * </pre>
  */
-public class LinearSGDModel extends AbstractLinearSGDModel<MultiLabel> implements ONNXExportable {
+public final class LinearSGDModel extends AbstractLinearSGDModel<MultiLabel> implements ONNXExportable {
     private static final long serialVersionUID = 2L;
 
     /**

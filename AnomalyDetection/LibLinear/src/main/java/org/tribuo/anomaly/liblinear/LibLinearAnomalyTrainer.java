@@ -55,7 +55,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibLinearAnomalyTrainer extends LibLinearTrainer<Event> {
+public final class LibLinearAnomalyTrainer extends LibLinearTrainer<Event> {
 
     private static final Logger logger = Logger.getLogger(LibLinearAnomalyTrainer.class.getName());
 

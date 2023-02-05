@@ -46,7 +46,7 @@ import java.util.Optional;
  * Transformations only operate on observed values. To operate on implicit zeros then
  * first call {@link MutableDataset#densify} on the datasets.
  */
-public class TransformedModel<T extends Output<T>> extends Model<T> {
+public final class TransformedModel<T extends Output<T>> extends Model<T> {
     private static final long serialVersionUID = 1L;
 
     /**

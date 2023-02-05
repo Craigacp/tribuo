@@ -69,7 +69,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibSVMClassificationTrainer extends LibSVMTrainer<Label> implements WeightedLabels {
+public final class LibSVMClassificationTrainer extends LibSVMTrainer<Label> implements WeightedLabels {
     private static final Logger logger = Logger.getLogger(LibSVMClassificationTrainer.class.getName());
 
     @Config(description="Use Label specific weights.")

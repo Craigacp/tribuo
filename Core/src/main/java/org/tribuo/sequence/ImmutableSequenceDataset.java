@@ -45,7 +45,7 @@ import java.util.Set;
  * Whenever an example is added to this dataset it removes features that do not exist in the FeatureMap.
  * The dataset is immutable after construction (unless the examples are modified).
  */
-public class ImmutableSequenceDataset<T extends Output<T>> extends SequenceDataset<T> implements Serializable {
+public sealed class ImmutableSequenceDataset<T extends Output<T>> extends SequenceDataset<T> implements Serializable permits MinimumCardinalitySequenceDataset {
     private static final long serialVersionUID = 1L;
 
     /**

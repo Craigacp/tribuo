@@ -33,7 +33,7 @@ import java.util.Map.Entry;
  * @param <T2> Type of the second list.
  * @param <T3> Type of the third list.
  */
-public class TripleDistribution<T1,T2,T3> {
+public final class TripleDistribution<T1,T2,T3> {
     /**
      * The default map size to initialise the marginalised count maps with.
      */

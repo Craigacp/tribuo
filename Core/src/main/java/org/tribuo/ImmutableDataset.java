@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  * This class is mostly for performance optimisations inside the framework, and should not
  * generally be used by external code.
  */
-public class ImmutableDataset<T extends Output<T>> extends Dataset<T> implements Serializable {
+public non-sealed class ImmutableDataset<T extends Output<T>> extends Dataset<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = Logger.getLogger(ImmutableDataset.class.getName());

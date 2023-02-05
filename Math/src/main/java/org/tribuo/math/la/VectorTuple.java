@@ -23,7 +23,7 @@ package org.tribuo.math.la;
  * <p>
  * While it does implement hashcode, don't use it as a key as the hashcode is data dependent.
  */
-public class VectorTuple {
+public final class VectorTuple {
 
     /**
      * The tolerance for equality in value comparisons.

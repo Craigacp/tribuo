@@ -70,7 +70,7 @@ import java.util.logging.Logger;
  * @param <T> The type of the features built by the underlying text processing
  * infrastructure.
  */
-public class DirectoryFileSource<T extends Output<T>> implements ConfigurableDataSource<T> {
+public final class DirectoryFileSource<T extends Output<T>> implements ConfigurableDataSource<T> {
 
     private static final Logger logger = Logger.getLogger(DirectoryFileSource.class.getName());
 

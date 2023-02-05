@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * @param <T1> The type of the first object.
  * @param <T2> The type of the second object.
  */
-public class CachedPair<T1, T2> extends Pair<T1,T2> {
+public final class CachedPair<T1, T2> extends Pair<T1,T2> {
     private static final long serialVersionUID = 1L;
 
     private final int cachedHash;

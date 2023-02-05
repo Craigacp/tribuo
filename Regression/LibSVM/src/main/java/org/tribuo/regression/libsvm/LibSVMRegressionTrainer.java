@@ -67,7 +67,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibSVMRegressionTrainer extends LibSVMTrainer<Regressor> {
+public final class LibSVMRegressionTrainer extends LibSVMTrainer<Regressor> {
     private static final Logger logger = Logger.getLogger(LibSVMRegressionTrainer.class.getName());
 
     @Config(description="Standardise the regression outputs before training.")

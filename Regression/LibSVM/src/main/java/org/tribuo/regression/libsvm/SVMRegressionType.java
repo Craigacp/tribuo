@@ -27,7 +27,7 @@ import org.tribuo.regression.Regressor;
  * <p>
  * Supports C_SVC and NU_SVC.
  */
-public class SVMRegressionType implements SVMType<Regressor> {
+public final class SVMRegressionType implements SVMType<Regressor> {
     private static final long serialVersionUID = 1L;
 
     /**

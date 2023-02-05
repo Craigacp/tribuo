@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 /**
  * A model which performs dummy regressions (e.g., constant output, gaussian sampled output, mean value, median, quartile).
  */
-public class DummyRegressionModel extends Model<Regressor> {
+public final class DummyRegressionModel extends Model<Regressor> {
     private static final long serialVersionUID = 2L;
 
     /**

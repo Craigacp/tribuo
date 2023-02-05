@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 /**
  * A pipeline for generating ngram features.
  */
-public class TokenPipeline implements TextPipeline {
+public final class TokenPipeline implements TextPipeline {
 
     private static final Logger logger = Logger.getLogger(TokenPipeline.class.getName());
 

@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  * The Annals of Statistics, 2004.
  * </pre>
  */
-public class LARSTrainer extends SLMTrainer {
+public final class LARSTrainer extends SLMTrainer {
     private static final Logger logger = Logger.getLogger(LARSTrainer.class.getName());
 
     /**

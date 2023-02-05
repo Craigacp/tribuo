@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * A simple example which wraps a MultiLabel example, converting the
  * MultiLabel to the presence or absence of a single Label.
  */
-class BinaryExample extends Example<Label> {
+final class BinaryExample extends Example<Label> {
     private static final Logger logger = Logger.getLogger(BinaryExample.class.getName());
 
     /**

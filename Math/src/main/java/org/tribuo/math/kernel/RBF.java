@@ -34,7 +34,7 @@ import java.util.Objects;
  * A Radial Basis Function (RBF) kernel, exp(-gamma*|u-v|^2).
  */
 @ProtoSerializableClass(version = RBF.CURRENT_VERSION, serializedDataClass = RBFKernelProto.class)
-public class RBF implements Kernel {
+public final class RBF implements Kernel {
     private static final long serialVersionUID = 1L;
 
     /**

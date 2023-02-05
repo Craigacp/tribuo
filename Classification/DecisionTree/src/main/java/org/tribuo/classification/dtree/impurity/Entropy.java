@@ -22,7 +22,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
 /**
  * A log_e entropy impurity measure.
  */
-public class Entropy implements LabelImpurity {
+public final class Entropy implements LabelImpurity {
 
     @Override
     public double impurityNormed(double[] input) {

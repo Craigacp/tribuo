@@ -27,7 +27,8 @@ import java.util.SplittableRandom;
  * A VariableInfo subclass contains information about a feature and
  * its observed values.
  */
-public interface VariableInfo extends Serializable, ProtoSerializable<VariableInfoProto>, Cloneable {
+public sealed interface VariableInfo extends Serializable, ProtoSerializable<VariableInfoProto>, Cloneable
+        permits SkeletalVariableInfo, VariableIDInfo {
     /**
      * The name of this feature.
      * @return The feature name.

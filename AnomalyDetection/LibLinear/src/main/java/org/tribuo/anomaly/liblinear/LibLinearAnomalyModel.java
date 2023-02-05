@@ -65,7 +65,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibLinearAnomalyModel extends LibLinearModel<Event> {
+public final class LibLinearAnomalyModel extends LibLinearModel<Event> {
     private static final long serialVersionUID = 3L;
 
     private static final Logger logger = Logger.getLogger(LibLinearAnomalyModel.class.getName());

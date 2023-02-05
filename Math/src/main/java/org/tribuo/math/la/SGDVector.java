@@ -27,7 +27,7 @@ import java.util.function.ToDoubleBiFunction;
  * <p>
  * Vectors have immutable sizes and immutable indices (so {@link SparseVector} can't grow).
  */
-public interface SGDVector extends Tensor, Iterable<VectorTuple> {
+public sealed interface SGDVector extends Tensor, Iterable<VectorTuple> permits DenseVector, SparseVector {
 
     /**
      * Applies a {@link ToDoubleBiFunction} elementwise to this {@link SGDVector}.

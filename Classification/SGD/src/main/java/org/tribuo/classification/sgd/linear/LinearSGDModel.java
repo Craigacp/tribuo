@@ -50,7 +50,7 @@ import java.util.Map;
  * Proceedings of COMPSTAT, 2010.
  * </pre>
  */
-public class LinearSGDModel extends AbstractLinearSGDModel<Label> implements ONNXExportable {
+public final class LinearSGDModel extends AbstractLinearSGDModel<Label> implements ONNXExportable {
     private static final long serialVersionUID = 2L;
 
     /**

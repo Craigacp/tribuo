@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * Trains a sequence model by training a regular model to independently predict every example in each sequence.
  * @param <T> The output type.
  */
-public class IndependentSequenceTrainer<T extends Output<T>> implements SequenceTrainer<T> {
+public final class IndependentSequenceTrainer<T extends Output<T>> implements SequenceTrainer<T> {
     private static final Logger logger = Logger.getLogger(IndependentSequenceTrainer.class.getName());
 
     @Config(mandatory = true, description = "The trainer to use.")

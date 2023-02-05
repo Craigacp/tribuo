@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 /**
  * An iterator over a CSV file.
  */
-public class CSVIterator extends ColumnarIterator implements AutoCloseable {
+public final class CSVIterator extends ColumnarIterator implements AutoCloseable {
     private static final Logger logger = Logger.getLogger(CSVIterator.class.getName());
 
     /**

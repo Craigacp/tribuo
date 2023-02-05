@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  * <p>
  * CSVSaver is thread safe and immutable.
  */
-public class CSVSaver implements Configurable {
+public final class CSVSaver implements Configurable {
 
     private static final Logger logger = Logger.getLogger(CSVSaver.class.getName());
 

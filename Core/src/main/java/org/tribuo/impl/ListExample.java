@@ -48,7 +48,7 @@ import java.util.logging.Logger;
  * An example that's a simple list of features. It is not guaranteed that feature instances are preserved.
  * @param <T> the type of the features in this example.
  */
-public class ListExample<T extends Output<T>> extends Example<T> implements Serializable {
+public final class ListExample<T extends Output<T>> extends Example<T> implements Serializable {
     private static final Logger logger = Logger.getLogger(ListExample.class.getName());
     private static final long serialVersionUID = 1L;
 

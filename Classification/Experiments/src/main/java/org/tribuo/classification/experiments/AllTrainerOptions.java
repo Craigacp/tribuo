@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 /**
  * Aggregates all the classification algorithms.
  */
-public class AllTrainerOptions implements ClassificationOptions<Trainer<Label>> {
+public final class AllTrainerOptions implements ClassificationOptions<Trainer<Label>> {
     private static final Logger logger = Logger.getLogger(AllTrainerOptions.class.getName());
 
     /**

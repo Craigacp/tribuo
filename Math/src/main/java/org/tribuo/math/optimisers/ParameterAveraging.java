@@ -35,7 +35,7 @@ import org.tribuo.math.la.Tensor;
  * SIAM Journal on Control and Optimization, 1992.
  * </pre>
  */
-public class ParameterAveraging implements StochasticGradientOptimiser {
+public final class ParameterAveraging implements StochasticGradientOptimiser {
 
     @Config(mandatory = true,description="Inner optimiser to average parameters across.")
     private StochasticGradientOptimiser optimiser;

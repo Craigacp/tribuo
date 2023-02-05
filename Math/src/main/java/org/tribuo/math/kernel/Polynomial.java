@@ -34,7 +34,7 @@ import java.util.Objects;
  * A polynomial kernel, (gamma*u.dot(v) + intercept)^degree.
  */
 @ProtoSerializableClass(version = Polynomial.CURRENT_VERSION, serializedDataClass = PolynomialKernelProto.class)
-public class Polynomial implements Kernel {
+public final class Polynomial implements Kernel {
     private static final long serialVersionUID = 1L;
 
     /**

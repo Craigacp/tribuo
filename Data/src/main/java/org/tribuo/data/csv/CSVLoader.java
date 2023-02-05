@@ -76,7 +76,7 @@ import java.util.logging.Logger;
  * value, then a list of the concatenated values is passed to the {@link OutputFactory}.
  * @param <T> The type of the output generated.
  */
-public class CSVLoader<T extends Output<T>> {
+public final class CSVLoader<T extends Output<T>> {
 
     private static final Logger logger = Logger.getLogger(CSVLoader.class.getName());
 

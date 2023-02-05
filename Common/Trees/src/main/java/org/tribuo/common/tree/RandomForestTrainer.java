@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  * Springer 2001. <a href="http://web.stanford.edu/~hastie/ElemStatLearn/">PDF</a>
  * </pre>
  */
-public class RandomForestTrainer<T extends Output<T>> extends BaggingTrainer<T> {
+public final class RandomForestTrainer<T extends Output<T>> extends BaggingTrainer<T> {
 
     private static final Logger logger = Logger.getLogger(RandomForestTrainer.class.getName());
 

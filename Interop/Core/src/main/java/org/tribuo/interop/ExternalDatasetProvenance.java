@@ -32,7 +32,7 @@ import java.util.Map;
  * <p>
  * Should not be used apart from by the external model system.
  */
-public class ExternalDatasetProvenance extends DatasetProvenance {
+public final class ExternalDatasetProvenance extends DatasetProvenance {
     private static final long serialVersionUID = 1L;
 
     /**

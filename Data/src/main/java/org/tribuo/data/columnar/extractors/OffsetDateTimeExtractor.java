@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  * <p>
  * Returns an empty optional if the date failed to parse.
  */
-public class OffsetDateTimeExtractor extends SimpleFieldExtractor<OffsetDateTime> {
+public final class OffsetDateTimeExtractor extends SimpleFieldExtractor<OffsetDateTime> {
     private static final Logger logger = Logger.getLogger(OffsetDateTimeExtractor.class.getName());
 
     @Config(mandatory = true, description = "The expected date format.")

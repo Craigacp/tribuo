@@ -28,7 +28,7 @@ import java.util.Locale;
 /**
  * A tokenizer wrapping a {@link BreakIterator} instance.
  */
-public class BreakIteratorTokenizer implements Tokenizer {
+public final class BreakIteratorTokenizer implements Tokenizer {
 
     @Config(mandatory = true, description="The locale language tag string.")
     private String localeStr;

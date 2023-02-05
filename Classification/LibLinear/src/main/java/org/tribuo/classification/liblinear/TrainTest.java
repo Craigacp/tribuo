@@ -31,7 +31,7 @@ import java.io.IOException;
 /**
  * Build and run a liblinear-java classifier for a standard dataset.
  */
-public class TrainTest {
+public final class TrainTest {
 
     /**
      * Command line options.

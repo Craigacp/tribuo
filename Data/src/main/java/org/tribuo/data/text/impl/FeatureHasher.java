@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * <p>
  * Uses murmurhash3_x86_32 as the hashing function for the feature names.
  */
-public class FeatureHasher implements FeatureTransformer {
+public final class FeatureHasher implements FeatureTransformer {
 
     private static final Logger logger = Logger.getLogger(FeatureHasher.class.getName());
 

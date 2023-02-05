@@ -31,7 +31,7 @@ import java.util.Collections;
 /**
  * Normalizes, but first subtracts the minimum value (to ensure positivity).
  */
-public class Normalizer implements VectorNormalizer, Serializable {
+public final class Normalizer implements VectorNormalizer, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

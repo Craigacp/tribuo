@@ -21,7 +21,7 @@ package org.tribuo.util.tokens;
  * <p>
  * Tokens are immutable, and may be records one day.
  */
-public class Token {
+public final class Token {
 
     /**
      * The token text.

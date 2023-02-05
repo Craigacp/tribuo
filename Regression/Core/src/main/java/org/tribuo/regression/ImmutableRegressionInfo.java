@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 /**
  * A {@link ImmutableOutputInfo} for {@link Regressor}s.
  */
-public class ImmutableRegressionInfo extends RegressionInfo implements ImmutableOutputInfo<Regressor> {
+public final class ImmutableRegressionInfo extends RegressionInfo implements ImmutableOutputInfo<Regressor> {
     private static final Logger logger = Logger.getLogger(ImmutableRegressionInfo.class.getName());
 
     private static final long serialVersionUID = 2L;

@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * An iterator over a ResultSet returned from JDBC.
  */
-public class ResultSetIterator extends ColumnarIterator {
+public final class ResultSetIterator extends ColumnarIterator {
     private static final Logger logger = Logger.getLogger(ResultSetIterator.class.getName());
 
     private final ResultSet resultSet;

@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  * Converts a sparse example into a dense float vector, then wraps it in a {@link TFloat32}.
  */
 @ProtoSerializableClass(serializedDataClass = DenseFeatureConverterProto.class, version = DenseFeatureConverter.CURRENT_VERSION)
-public class DenseFeatureConverter implements FeatureConverter {
+public final class DenseFeatureConverter implements FeatureConverter {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(DenseFeatureConverter.class.getName());
 

@@ -26,7 +26,7 @@ import org.tribuo.regression.sgd.RegressionObjective;
 /**
  * Absolute loss (i.e., l1).
  */
-public class AbsoluteLoss implements RegressionObjective {
+public final class AbsoluteLoss implements RegressionObjective {
 
     /**
      * Constructs an absolute loss.

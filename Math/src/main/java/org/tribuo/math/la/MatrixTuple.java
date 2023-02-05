@@ -23,7 +23,7 @@ import java.util.Objects;
  * <p>
  * While it does implement hashcode, don't use it as a key as the hashcode is data dependent.
  */
-public class MatrixTuple {
+public final class MatrixTuple {
 
     /**
      * The i index.

@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 /**
  * Build and run a sequence classifier on a generated dataset.
  */
-public class SeqTest {
+public final class SeqTest {
 
     private static final Logger logger = Logger.getLogger(SeqTest.class.getName());
 

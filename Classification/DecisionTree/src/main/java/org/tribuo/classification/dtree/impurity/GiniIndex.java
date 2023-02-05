@@ -22,7 +22,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
 /**
  * The Gini index impurity measure.
  */
-public class GiniIndex implements LabelImpurity {
+public final class GiniIndex implements LabelImpurity {
 
     @Override
     public double impurityNormed(double[] input) {

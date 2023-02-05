@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  * Converts a sparse Tribuo example into a dense float vector, then wraps it in an {@link OnnxTensor}.
  */
 @ProtoSerializableClass(version = DenseTransformer.CURRENT_VERSION)
-public class DenseTransformer implements ExampleTransformer {
+public final class DenseTransformer implements ExampleTransformer {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(DenseTransformer.class.getName());
 

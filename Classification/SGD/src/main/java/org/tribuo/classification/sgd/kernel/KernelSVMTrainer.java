@@ -54,7 +54,7 @@ import java.util.logging.Logger;
  * Mathematical Programming, 2011.
  * </pre>
  */
-public class KernelSVMTrainer implements Trainer<Label>, WeightedExamples {
+public final class KernelSVMTrainer implements Trainer<Label>, WeightedExamples {
     private static final Logger logger = Logger.getLogger(KernelSVMTrainer.class.getName());
 
     @Config(mandatory = true,description="SVM kernel.")

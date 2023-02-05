@@ -47,7 +47,7 @@ import org.tribuo.math.optimisers.util.ShrinkingVector;
  * Mathematical Programming, 2011.
  * </pre>
  */
-public class Pegasos implements StochasticGradientOptimiser {
+public final class Pegasos implements StochasticGradientOptimiser {
 
     @Config(description="Step size shrinkage.")
     private double lambda = 1e-2;

@@ -30,7 +30,7 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * Huber loss, i.e., a mixture of l2 and l1 losses.
  */
-public class Huber implements RegressionObjective {
+public final class Huber implements RegressionObjective {
 
     /**
      * The default cost beyond which the function is linear.

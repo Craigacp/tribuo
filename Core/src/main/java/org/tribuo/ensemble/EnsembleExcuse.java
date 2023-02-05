@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * An {@link Excuse} which has a List of excuses for each of the ensemble members.
  */
-public class EnsembleExcuse<T extends Output<T>> extends Excuse<T> {
+public final class EnsembleExcuse<T extends Output<T>> extends Excuse<T> {
 
     private final List<Excuse<T>> innerExcuses;
 

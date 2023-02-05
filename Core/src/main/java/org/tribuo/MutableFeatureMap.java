@@ -31,7 +31,7 @@ import java.util.Objects;
  * A feature map that can record new feature value observations.
  */
 @ProtoSerializableClass(version = MutableFeatureMap.CURRENT_VERSION, serializedDataClass = MutableFeatureMapProto.class)
-public class MutableFeatureMap extends FeatureMap {
+public final class MutableFeatureMap extends FeatureMap {
     private static final long serialVersionUID = 2L;
 
     /**

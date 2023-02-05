@@ -26,7 +26,7 @@ import org.tribuo.util.tokens.Tokenizer;
  * don't actually want to split up the text into tokens.  This tokenizer will
  * serve up a single "token" corresponding to the input text.
  */
-public class NonTokenizer implements Tokenizer {
+public final class NonTokenizer implements Tokenizer {
 
     private CharSequence cs;
 

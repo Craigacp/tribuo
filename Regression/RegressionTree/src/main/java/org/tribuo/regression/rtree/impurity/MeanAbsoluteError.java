@@ -26,7 +26,7 @@ import java.util.List;
  * <p>
  * Used to calculate the impurity of a regression node.
  */
-public class MeanAbsoluteError implements RegressorImpurity {
+public final class MeanAbsoluteError implements RegressorImpurity {
 
     @Override
     public double impurity(float[] targets, float[] weights) {

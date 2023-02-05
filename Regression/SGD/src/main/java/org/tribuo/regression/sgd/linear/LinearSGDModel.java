@@ -49,7 +49,7 @@ import java.util.Arrays;
  * Proceedings of COMPSTAT, 2010.
  * </pre>
  */
-public class LinearSGDModel extends AbstractLinearSGDModel<Regressor> implements ONNXExportable {
+public final class LinearSGDModel extends AbstractLinearSGDModel<Regressor> implements ONNXExportable {
     private static final long serialVersionUID = 3L;
 
     /**

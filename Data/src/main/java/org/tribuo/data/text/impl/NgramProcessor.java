@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 /**
  * A text processor that will generate token ngrams of a particular size.
  */
-public class NgramProcessor implements TextProcessor {
+public final class NgramProcessor implements TextProcessor {
 
     private static final Logger logger = Logger.getLogger(NgramProcessor.class.getName());
 

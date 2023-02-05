@@ -79,7 +79,7 @@ import java.util.stream.Collectors;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibSVMClassificationModel extends LibSVMModel<Label> implements ONNXExportable {
+public final class LibSVMClassificationModel extends LibSVMModel<Label> implements ONNXExportable {
     private static final long serialVersionUID = 3L;
 
     /**

@@ -29,7 +29,7 @@ import java.util.Arrays;
  * Normalizes the input by applying a logistic sigmoid to each element.
  * Used when the input is independent dimensions of log space.
  */
-public class SigmoidNormalizer implements VectorNormalizer, Serializable {
+public final class SigmoidNormalizer implements VectorNormalizer, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -43,7 +43,7 @@ import java.util.Optional;
  * </ul>
  * All other settings are invalid.
  */
-public class FieldResponseProcessor<T extends Output<T>> implements ResponseProcessor<T> {
+public final class FieldResponseProcessor<T extends Output<T>> implements ResponseProcessor<T> {
 
     @Config(description="The field name to read.")
     @Deprecated

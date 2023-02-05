@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * <p>
  * It produces a list of {@link Evaluation}s for each of the test sets.
  */
-public class CrossValidation<T extends Output<T>, E extends Evaluation<T>> {
+public final class CrossValidation<T extends Output<T>, E extends Evaluation<T>> {
 
     private static final Logger logger = Logger.getLogger(CrossValidation.class.getName());
 

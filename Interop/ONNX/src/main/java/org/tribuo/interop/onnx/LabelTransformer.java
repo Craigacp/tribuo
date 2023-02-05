@@ -62,7 +62,7 @@ import java.util.logging.Logger;
  * appropriate scoring operation, and this class will throw an exception when used on such input.
  */
 @ProtoSerializableClass(serializedDataClass = LabelTransformerProto.class, version = LabelTransformer.CURRENT_VERSION)
-public class LabelTransformer implements OutputTransformer<Label> {
+public sealed class LabelTransformer implements OutputTransformer<Label> permits LabelOneVOneTransformer {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(LabelTransformer.class.getName());
 

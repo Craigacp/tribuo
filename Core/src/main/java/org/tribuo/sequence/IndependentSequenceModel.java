@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  * A SequenceModel which independently predicts each element of the sequence.
  * @param <T> The output type.
  */
-public class IndependentSequenceModel<T extends Output<T>> extends SequenceModel<T> {
+public final class IndependentSequenceModel<T extends Output<T>> extends SequenceModel<T> {
     private static final Logger logger = Logger.getLogger(IndependentSequenceModel.class.getName());
     private static final long serialVersionUID = 1L;
 

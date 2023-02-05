@@ -32,7 +32,7 @@ import org.tribuo.math.util.VectorNormalizer;
  * <p>
  * The Hinge loss does not generate a probabilistic model, and uses a {@link NoopNormalizer}.
  */
-public class Hinge implements LabelObjective {
+public final class Hinge implements LabelObjective {
 
     @Config(description="The classification margin.")
     private double margin = 1.0;

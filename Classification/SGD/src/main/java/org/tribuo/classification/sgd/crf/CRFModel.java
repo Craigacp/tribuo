@@ -61,7 +61,7 @@ import static org.tribuo.Model.BIAS_FEATURE;
  * Proceedings of the 18th International Conference on Machine Learning 2001 (ICML 2001).
  * </pre>
  */
-public class CRFModel extends ConfidencePredictingSequenceModel {
+public final class CRFModel extends ConfidencePredictingSequenceModel {
     private static final Logger logger = Logger.getLogger(CRFModel.class.getName());
     private static final long serialVersionUID = 2L;
 

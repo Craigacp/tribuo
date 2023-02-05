@@ -43,7 +43,7 @@ import com.oracle.labs.mlrg.olcut.util.IOUtil;
  * {@link WordpieceBasicTokenizer}.
  * 
  */
-public class Wordpiece implements Configurable {
+public final class Wordpiece implements Configurable {
 
     /**
      * The default unknown token string.

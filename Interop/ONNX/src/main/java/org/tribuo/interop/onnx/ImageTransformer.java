@@ -47,7 +47,7 @@ import java.util.Objects;
  * ONNX expects images in the format [channels,height,width].
  */
 @ProtoSerializableClass(serializedDataClass = ImageTransformerProto.class, version = ImageTransformer.CURRENT_VERSION)
-public class ImageTransformer implements ExampleTransformer {
+public final class ImageTransformer implements ExampleTransformer {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -36,7 +36,7 @@ import java.util.Objects;
  * A factory which creates k-d tree nearest neighbour query objects.
  */
 @ProtoSerializableClass(version = KDTreeFactory.CURRENT_VERSION, serializedDataClass = KDTreeFactoryProto.class)
-public class KDTreeFactory implements NeighboursQueryFactory {
+public final class KDTreeFactory implements NeighboursQueryFactory {
     private static final long serialVersionUID = 1L;
 
     /**

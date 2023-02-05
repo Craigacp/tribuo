@@ -54,7 +54,7 @@ import java.util.Set;
  * This model implements the approach known as "Binary Relevance" in
  * the multi-label classification literature.
  */
-public class IndependentMultiLabelModel extends Model<MultiLabel> {
+public final class IndependentMultiLabelModel extends Model<MultiLabel> {
     private static final long serialVersionUID = 1L;
 
     /**

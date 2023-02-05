@@ -37,7 +37,7 @@ import org.tribuo.util.tokens.Tokenizer;
  * "CamelCase" into "Camel" and "Case". It also splits "ABCdef AAbb" into
  * "ABCdef" and "AAbb".
  */
-public class ShapeTokenizer implements Tokenizer {
+public final class ShapeTokenizer implements Tokenizer {
 
     private String cs;
 

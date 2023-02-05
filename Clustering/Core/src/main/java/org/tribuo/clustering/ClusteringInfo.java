@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * The base class for a ClusterID OutputInfo.
  */
-public abstract class ClusteringInfo implements OutputInfo<ClusterID> {
+public abstract sealed class ClusteringInfo implements OutputInfo<ClusterID> permits ImmutableClusteringInfo, MutableClusteringInfo {
     private static final long serialVersionUID = 1L;
 
     /**

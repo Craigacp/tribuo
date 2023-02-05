@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  * Technical report, 2012.
  * </pre>
  */
-public class RMSProp implements StochasticGradientOptimiser {
+public final class RMSProp implements StochasticGradientOptimiser {
     private static final Logger logger = Logger.getLogger(RMSProp.class.getName());
 
     @Config(mandatory = true,description="Learning rate to scale the gradients by.")

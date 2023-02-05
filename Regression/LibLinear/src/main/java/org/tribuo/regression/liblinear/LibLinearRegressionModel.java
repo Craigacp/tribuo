@@ -78,7 +78,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibLinearRegressionModel extends LibLinearModel<Regressor> implements ONNXExportable {
+public final class LibLinearRegressionModel extends LibLinearModel<Regressor> implements ONNXExportable {
     private static final long serialVersionUID = 2L;
 
     private static final Logger logger = Logger.getLogger(LibLinearRegressionModel.class.getName());

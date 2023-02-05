@@ -52,7 +52,7 @@ import java.util.function.BiFunction;
  * {@link Prediction} or {@code Regressor}.
  */
 @ProtoSerializableClass(version = RegressorConverter.CURRENT_VERSION)
-public class RegressorConverter implements OutputConverter<Regressor> {
+public final class RegressorConverter implements OutputConverter<Regressor> {
     private static final long serialVersionUID = 1L;
 
     /**

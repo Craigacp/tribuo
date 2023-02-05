@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 /**
  * A dense vector, backed by a double array.
  */
-public class DenseVector implements SGDVector {
+public non-sealed class DenseVector implements SGDVector {
     private static final long serialVersionUID = 1L;
 
     /**

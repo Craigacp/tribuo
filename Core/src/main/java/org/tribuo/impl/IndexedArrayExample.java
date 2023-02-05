@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  * Note: output id caching is only valid with single dimensional {@link Output}s like ClusterID, Event and Label.
  * Other outputs may return -1 from {@link #getOutputID()}.
  */
-public class IndexedArrayExample<T extends Output<T>> extends ArrayExample<T> {
+public final class IndexedArrayExample<T extends Output<T>> extends ArrayExample<T> {
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = Logger.getLogger(IndexedArrayExample.class.getName());

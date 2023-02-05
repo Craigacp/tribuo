@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  * <p>
  * Checks all the lines are valid before splitting.
  */
-public class SplitTextData {
+public final class SplitTextData {
     private static final Logger logger = Logger.getLogger(SplitTextData.class.getName());
 
     /**

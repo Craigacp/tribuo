@@ -33,7 +33,7 @@ import java.util.stream.IntStream;
  *
  * @param <T> the type of the examples that make up the dataset to be split
  */
-public class KFoldSplitter<T extends Output<T>> {
+public final class KFoldSplitter<T extends Output<T>> {
 
     private static final Logger logger = Logger.getLogger(KFoldSplitter.class.getName());
 

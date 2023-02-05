@@ -25,7 +25,7 @@ import org.tribuo.protos.ProtoSerializableField;
  * Contains information about a feature and can be stored in the feature map
  * in a {@link Dataset}.
  */
-public abstract class SkeletalVariableInfo implements VariableInfo {
+abstract sealed class SkeletalVariableInfo implements VariableInfo permits CategoricalInfo, RealInfo {
     private static final long serialVersionUID = 2L;
 
     private static final Logger logger = Logger.getLogger(SkeletalVariableInfo.class.getName());

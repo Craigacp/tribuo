@@ -40,10 +40,10 @@ import java.util.Random;
  * The base class for the 2d binary classification data sources in {@link org.tribuo.classification.example}.
  * <p>
  * The feature names are {@link #X1} and {@link #X2} and the labels are {@link #FIRST_CLASS} and {@link #SECOND_CLASS}.
- * <p>
- * Likely to be sealed to the classes in this package when we adopt Java 17.
  */
-public abstract class DemoLabelDataSource implements ConfigurableDataSource<Label> {
+public abstract sealed class DemoLabelDataSource implements ConfigurableDataSource<Label> permits
+        CheckerboardDataSource, ConcentricCirclesDataSource, GaussianLabelDataSource, InterlockingCrescentsDataSource,
+        NoisyInterlockingCrescentsDataSource {
 
     protected static final LabelFactory factory = new LabelFactory();
 

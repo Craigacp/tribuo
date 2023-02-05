@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  * any SQL escaping or other injection prevention. It is the user's responsibility to ensure that SQL passed to this
  * class performs as desired.
  */
-public class SQLToCSV {
+public final class SQLToCSV {
 
     /**
      * Command line options.

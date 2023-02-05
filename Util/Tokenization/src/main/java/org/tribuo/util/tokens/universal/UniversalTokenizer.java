@@ -64,7 +64,7 @@ import java.util.Queue;
  * <li>感[2,3]</li>
  * </ul>
  */
-public class UniversalTokenizer implements Tokenizer {
+public final class UniversalTokenizer implements Tokenizer {
 
     /**
      * The length of the longest token that we will generate.
