@@ -50,7 +50,7 @@ import java.util.Arrays;
  * 2010 IEEE International Conference on Data Mining
  * </pre>
  */
-public class FMRegressionModel extends AbstractFMModel<Regressor> implements ONNXExportable {
+public final class FMRegressionModel extends AbstractFMModel<Regressor> implements ONNXExportable {
     private static final long serialVersionUID = 3L;
 
     /**

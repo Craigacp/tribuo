@@ -27,7 +27,7 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * An interface for Tensors, currently Vectors and Matrices.
  */
-public interface Tensor extends ProtoSerializable<TensorProto>, Serializable {
+public sealed interface Tensor extends ProtoSerializable<TensorProto>, Serializable permits Matrix, SGDVector {
 
     /**
      * The number of elements in this shape, i.e., the product of the shape array.

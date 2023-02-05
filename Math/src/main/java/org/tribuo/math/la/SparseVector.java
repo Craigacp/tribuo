@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
  * This vector has immutable indices. It cannot get new indices after construction,
  * and will throw {@link IllegalArgumentException} if such an operation is tried.
  */
-public class SparseVector implements SGDVector {
+public non-sealed class SparseVector implements SGDVector {
     private static final long serialVersionUID = 1L;
 
     /**

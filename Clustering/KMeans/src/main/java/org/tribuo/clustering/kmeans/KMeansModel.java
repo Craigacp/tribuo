@@ -62,7 +62,7 @@ import java.util.Optional;
  * Springer 2001. <a href="http://web.stanford.edu/~hastie/ElemStatLearn/">PDF</a>
  * </pre>
  */
-public class KMeansModel extends Model<ClusterID> {
+public final class KMeansModel extends Model<ClusterID> {
     private static final long serialVersionUID = 1L;
 
     /**

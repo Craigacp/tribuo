@@ -54,7 +54,7 @@ import java.util.List;
  * Neural Computation, 2001, 1443-1471.
  * </pre>
  */
-public class LibSVMAnomalyModel extends LibSVMModel<Event> {
+public final class LibSVMAnomalyModel extends LibSVMModel<Event> {
     private static final long serialVersionUID = 1L;
 
     /**

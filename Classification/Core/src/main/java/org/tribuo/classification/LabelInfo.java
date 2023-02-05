@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * The base class for information about multi-class classification Labels.
  */
-public abstract class LabelInfo implements OutputInfo<Label> {
+public abstract sealed class LabelInfo implements OutputInfo<Label> permits ImmutableLabelInfo, MutableLabelInfo {
     private static final long serialVersionUID = 1L;
 
     /**

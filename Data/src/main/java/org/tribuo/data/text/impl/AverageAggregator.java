@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * A feature aggregator that averages feature values across a feature list.
  */
-public class AverageAggregator implements FeatureAggregator {
+public final class AverageAggregator implements FeatureAggregator {
 
     private final ThreadLocal<Map<String,Double>> map = ThreadLocal.withInitial(HashMap::new);
     private final ThreadLocal<Map<String,Integer>> countMap = ThreadLocal.withInitial(HashMap::new);

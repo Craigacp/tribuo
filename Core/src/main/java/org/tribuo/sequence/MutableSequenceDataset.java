@@ -43,7 +43,7 @@ import java.util.Set;
  * A MutableSequenceDataset is a {@link SequenceDataset} with a {@link MutableFeatureMap} which grows over time.
  * Whenever an {@link SequenceExample} is added to the dataset.
  */
-public class MutableSequenceDataset<T extends Output<T>> extends SequenceDataset<T> {
+public final class MutableSequenceDataset<T extends Output<T>> extends SequenceDataset<T> {
     private static final long serialVersionUID = 1L;
 
     /**

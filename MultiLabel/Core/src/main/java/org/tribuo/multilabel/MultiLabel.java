@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  * not present these are represented by {@link Double#NaN}. This is most
  * common with ground-truth labels which usually do not supply scores.
  */
-public class MultiLabel implements Classifiable<MultiLabel> {
+public final class MultiLabel implements Classifiable<MultiLabel> {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  * Whenever an {@link Example} is added to the dataset it observes each feature and output
  * keeping appropriate statistics in the {@link FeatureMap} and {@link OutputInfo}.
  */
-public class MutableDataset<T extends Output<T>> extends Dataset<T> {
+public final class MutableDataset<T extends Output<T>> extends Dataset<T> {
     
     private static final Logger logger = Logger.getLogger(MutableDataset.class.getName());
     

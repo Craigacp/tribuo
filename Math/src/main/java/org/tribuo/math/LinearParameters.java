@@ -40,7 +40,7 @@ import java.util.Objects;
  * A {@link Parameters} for producing linear models.
  */
 @ProtoSerializableClass(version = LinearParameters.CURRENT_VERSION, serializedDataClass = LinearParametersProto.class)
-public class LinearParameters implements FeedForwardParameters {
+public final class LinearParameters implements FeedForwardParameters {
     private static final long serialVersionUID = 1L;
 
     /**

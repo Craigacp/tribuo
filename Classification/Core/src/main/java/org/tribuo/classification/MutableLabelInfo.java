@@ -34,7 +34,7 @@ import java.util.Objects;
  * appropriate counts.
  */
 @ProtoSerializableClass(serializedDataClass=MutableLabelInfoProto.class, version=0)
-public class MutableLabelInfo extends LabelInfo implements MutableOutputInfo<Label> {
+public final class MutableLabelInfo extends LabelInfo implements MutableOutputInfo<Label> {
     private static final long serialVersionUID = 1L;
 
     MutableLabelInfo() {

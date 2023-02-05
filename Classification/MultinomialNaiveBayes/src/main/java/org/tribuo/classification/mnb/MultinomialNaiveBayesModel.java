@@ -59,7 +59,7 @@ import java.util.Optional;
  * Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics, 2012.
  * </pre>
  */
-public class MultinomialNaiveBayesModel extends Model<Label> {
+public final class MultinomialNaiveBayesModel extends Model<Label> {
     private static final long serialVersionUID = 1L;
 
     /**

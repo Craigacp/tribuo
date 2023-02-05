@@ -37,7 +37,7 @@ import java.util.Objects;
  * A feature transformation that computes the IDF for features and then transforms
  * them with a TF-IDF weighting.
  */
-public class IDFTransformation implements Transformation {
+public final class IDFTransformation implements Transformation {
     
     private TransformationProvenance provenance;
 

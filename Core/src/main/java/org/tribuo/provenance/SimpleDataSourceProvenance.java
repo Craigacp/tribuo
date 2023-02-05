@@ -38,7 +38,7 @@ import java.util.Objects;
  * implementation with a specific provenance, rather than using this
  * to construct an empty {@link org.tribuo.MutableDataset}.
  */
-public class SimpleDataSourceProvenance implements DataSourceProvenance {
+public final class SimpleDataSourceProvenance implements DataSourceProvenance {
     private static final long serialVersionUID = 1L;
 
     /**

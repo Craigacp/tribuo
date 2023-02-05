@@ -73,7 +73,7 @@ import java.util.stream.Stream;
  * is given the "modifyThread" and "modifyThreadGroup" privileges when running under a
  * {@link java.lang.SecurityManager}.
  */
-public class KNNModel<T extends Output<T>> extends Model<T> {
+public final class KNNModel<T extends Output<T>> extends Model<T> {
 
     private static final Logger logger = Logger.getLogger(KNNModel.class.getName());
 

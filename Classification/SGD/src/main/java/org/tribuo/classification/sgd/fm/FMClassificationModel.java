@@ -48,7 +48,7 @@ import java.util.Map;
  * 2010 IEEE International Conference on Data Mining
  * </pre>
  */
-public class FMClassificationModel extends AbstractFMModel<Label> implements ONNXExportable {
+public final class FMClassificationModel extends AbstractFMModel<Label> implements ONNXExportable {
     private static final long serialVersionUID = 1L;
 
     /**

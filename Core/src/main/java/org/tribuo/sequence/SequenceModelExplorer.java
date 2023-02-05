@@ -39,7 +39,7 @@ import java.util.logging.Logger;
 /**
  * A CLI for interacting with a {@link SequenceModel}.
  */
-public class SequenceModelExplorer implements CommandGroup {
+public final class SequenceModelExplorer implements CommandGroup {
     private static final Logger logger = Logger.getLogger(SequenceModelExplorer.class.getName());
 
     private final CommandInterpreter shell;

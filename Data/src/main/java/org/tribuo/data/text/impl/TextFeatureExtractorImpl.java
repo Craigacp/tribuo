@@ -32,7 +32,7 @@ import java.util.List;
  * An implementation of {@link TextFeatureExtractor} that takes a
  * {@link TextPipeline} and generates {@link ArrayExample}.
  */
-public class TextFeatureExtractorImpl<T extends Output<T>> implements TextFeatureExtractor<T> {
+public final class TextFeatureExtractorImpl<T extends Output<T>> implements TextFeatureExtractor<T> {
 
     @Config(mandatory=true,description="The text processing pipeline.")
     private TextPipeline pipeline;

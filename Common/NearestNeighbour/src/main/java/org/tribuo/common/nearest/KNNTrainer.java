@@ -46,7 +46,7 @@ import java.util.Map;
 /**
  * A {@link Trainer} for k-nearest neighbour models.
  */
-public class KNNTrainer<T extends Output<T>> implements Trainer<T> {
+public final class KNNTrainer<T extends Output<T>> implements Trainer<T> {
 
     /**
      * The available distance functions.

@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
  * </p>
  */
 @ProtoSerializableClass(version = CategoricalInfo.CURRENT_VERSION, serializedDataClass = CategoricalInfoProto.class)
-public class CategoricalInfo extends SkeletalVariableInfo {
+public sealed class CategoricalInfo extends SkeletalVariableInfo permits CategoricalIDInfo {
     private static final long serialVersionUID = 2L;
 
     /**

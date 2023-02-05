@@ -31,7 +31,7 @@ import java.util.Map;
  * appropriate counts.
  */
 @ProtoSerializableClass(serializedDataClass = ClusteringInfoProto.class, version = 0)
-public class MutableClusteringInfo extends ClusteringInfo implements MutableOutputInfo<ClusterID> {
+public final class MutableClusteringInfo extends ClusteringInfo implements MutableOutputInfo<ClusterID> {
     private static final long serialVersionUID = 1L;
 
     MutableClusteringInfo() {

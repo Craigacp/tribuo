@@ -32,7 +32,7 @@ import java.util.Optional;
  * This is the row wise count, i.e., the number of examples that the data
  * source has processed, rather than anything extracted from the data.
  */
-public class IndexExtractor implements FieldExtractor<Long> {
+public final class IndexExtractor implements FieldExtractor<Long> {
 
     @Config(description = "The metadata key to emit, defaults to Example.NAME")
     private String metadataName = Example.NAME;

@@ -42,7 +42,7 @@ import org.tribuo.protos.core.PredictionProto;
  * and how many features originally existed in the {@link Example}.
  */
 @ProtoSerializableClass(version = Prediction.CURRENT_VERSION, serializedDataClass = PredictionImplProto.class)
-public class Prediction<T extends Output<T>> implements ProtoSerializable<PredictionProto>, Serializable {
+public final class Prediction<T extends Output<T>> implements ProtoSerializable<PredictionProto>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

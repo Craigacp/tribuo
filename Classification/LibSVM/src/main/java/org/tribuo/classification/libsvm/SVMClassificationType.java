@@ -27,7 +27,7 @@ import org.tribuo.common.libsvm.SVMType;
  * <p>
  * Supports C_SVC and NU_SVC.
  */
-public class SVMClassificationType implements SVMType<Label> {
+public final class SVMClassificationType implements SVMType<Label> {
     private static final long serialVersionUID = 1L;
 
     /**

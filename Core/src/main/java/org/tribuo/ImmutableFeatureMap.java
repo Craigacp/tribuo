@@ -41,7 +41,7 @@ import java.util.TreeMap;
  * {@link Example}s and {@link ImmutableFeatureMap}.
  */
 @ProtoSerializableClass(version = ImmutableFeatureMap.CURRENT_VERSION, serializedDataClass = ImmutableFeatureMapProto.class)
-public class ImmutableFeatureMap extends FeatureMap implements Serializable {
+public non-sealed class ImmutableFeatureMap extends FeatureMap implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

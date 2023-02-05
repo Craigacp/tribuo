@@ -30,7 +30,7 @@ import java.util.Map.Entry;
  * @param <T1> Type of the first list.
  * @param <T2> Type of the second list.
  */
-public class WeightedPairDistribution<T1,T2> {
+public final class WeightedPairDistribution<T1,T2> {
 
     /**
      * The sample count.

@@ -36,7 +36,7 @@ import java.util.Map;
  * In most cases this will be unnecessary as the feature names will be unique as they are keyed by the field name,
  * however it's possible to induce collisions via text fields or other mechanisms.
  */
-public class UniqueProcessor implements FeatureProcessor {
+public final class UniqueProcessor implements FeatureProcessor {
 
     /**
      * The type of reduction operation to perform.

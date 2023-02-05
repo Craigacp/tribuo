@@ -37,7 +37,7 @@ import java.util.Optional;
  * The emitted outputs for each field are of the form:
  * {@code {<fieldName>:first, <fieldName>:second, <fieldName>:third, <fieldName>:fourth} }.
  */
-public class QuartileResponseProcessor<T extends Output<T>> implements ResponseProcessor<T> {
+public final class QuartileResponseProcessor<T extends Output<T>> implements ResponseProcessor<T> {
 
     /**
      * @deprecated This field causes issues with multidimensional outputs.

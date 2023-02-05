@@ -51,7 +51,7 @@ import java.util.Set;
  * 2010 IEEE International Conference on Data Mining
  * </pre>
  */
-public class FMMultiLabelModel extends AbstractFMModel<MultiLabel> implements ONNXExportable {
+public final class FMMultiLabelModel extends AbstractFMModel<MultiLabel> implements ONNXExportable {
     private static final long serialVersionUID = 2L;
 
     /**

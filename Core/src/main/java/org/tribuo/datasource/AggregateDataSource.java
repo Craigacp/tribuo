@@ -43,7 +43,7 @@ import java.util.Optional;
  * Aggregates multiple {@link DataSource}s, uses {@link AggregateDataSource.IterationOrder} to control the
  * iteration order.
  */
-public class AggregateDataSource<T extends Output<T>> implements DataSource<T> {
+public final class AggregateDataSource<T extends Output<T>> implements DataSource<T> {
 
     /**
      * Specifies the iteration order of the inner sources.

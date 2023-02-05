@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 /**
  * Build and run an XGBoost classifier for a standard dataset.
  */
-public class TrainTest {
+public final class TrainTest {
 
     private static final Logger logger = Logger.getLogger(TrainTest.class.getName());
 

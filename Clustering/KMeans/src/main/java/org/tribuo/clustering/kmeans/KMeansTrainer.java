@@ -90,7 +90,7 @@ import java.util.stream.Stream;
  * <a href="https://theory.stanford.edu/~sergei/papers/kMeansPP-soda">PDF</a>
  * </pre>
  */
-public class KMeansTrainer implements Trainer<ClusterID> {
+public final class KMeansTrainer implements Trainer<ClusterID> {
     private static final Logger logger = Logger.getLogger(KMeansTrainer.class.getName());
 
     // Thread factory for the FJP, to allow use with OpenSearch's SecureSM

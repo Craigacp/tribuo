@@ -34,7 +34,7 @@ import java.util.Objects;
  * A sigmoid kernel, tanh(gamma*u.dot(v) + intercept).
  */
 @ProtoSerializableClass(version = Sigmoid.CURRENT_VERSION, serializedDataClass = SigmoidKernelProto.class)
-public class Sigmoid implements Kernel {
+public final class Sigmoid implements Kernel {
     private static final long serialVersionUID = 1L;
 
     /**

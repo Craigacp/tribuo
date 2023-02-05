@@ -60,7 +60,7 @@ import java.util.logging.Logger;
  * Journal of Machine Learning Research, 2012, 2121-2159.
  * </pre>
  */
-public class AdaGradRDA implements StochasticGradientOptimiser {
+public final class AdaGradRDA implements StochasticGradientOptimiser {
     private static final Logger logger = Logger.getLogger(AdaGradRDA.class.getName());
 
     @Config(mandatory = true,description="Initial learning rate used to scale the gradients.")

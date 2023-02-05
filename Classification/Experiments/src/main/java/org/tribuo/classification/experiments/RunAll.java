@@ -49,7 +49,7 @@ import java.util.logging.Logger;
 /**
  * Trains and tests a model using the supplied data, for each trainer inside a configuration file.
  */
-public class RunAll {
+public final class RunAll {
     private static final Logger logger = Logger.getLogger(RunAll.class.getName());
 
     /**

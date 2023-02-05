@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 /**
  * An {@link ImmutableOutputInfo} for working with {@link MultiLabel} tasks.
  */
-public class ImmutableMultiLabelInfo extends MultiLabelInfo implements ImmutableOutputInfo<MultiLabel> {
+public final class ImmutableMultiLabelInfo extends MultiLabelInfo implements ImmutableOutputInfo<MultiLabel> {
     private static final Logger logger = Logger.getLogger(ImmutableMultiLabelInfo.class.getName());
 
     private static final long serialVersionUID = 1L;

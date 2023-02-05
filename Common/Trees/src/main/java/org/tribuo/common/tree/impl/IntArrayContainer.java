@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * An array container which maintains the array and the size.
  * This class is barely more than a Tuple, it's up to you to maintain the size invariant.
  */
-public class IntArrayContainer {
+public final class IntArrayContainer {
     private static final Logger logger = Logger.getLogger(IntArrayContainer.class.getName());
 
     /**

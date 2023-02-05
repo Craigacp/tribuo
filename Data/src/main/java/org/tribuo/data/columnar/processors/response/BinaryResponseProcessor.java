@@ -45,7 +45,7 @@ import java.util.Optional;
  * </ul>
  * All other settings are invalid.
  */
-public class BinaryResponseProcessor<T extends Output<T>> implements ResponseProcessor<T> {
+public final class BinaryResponseProcessor<T extends Output<T>> implements ResponseProcessor<T> {
 
     @Config(description="The field name to read, you should use only one of this or fieldNames")
     @Deprecated

@@ -26,7 +26,7 @@ import org.tribuo.Feature;
  * expect ColumnarFeatures to still be ColumnarFeatures if you probe the
  * Example after construction.
  */
-public class ColumnarFeature extends Feature {
+public final class ColumnarFeature extends Feature {
     private static final long serialVersionUID = 1L;
 
     /**

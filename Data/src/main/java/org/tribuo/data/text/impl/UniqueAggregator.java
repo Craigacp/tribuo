@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Aggregates feature tokens, generating unique features.
  */
-public class UniqueAggregator implements FeatureAggregator {
+public final class UniqueAggregator implements FeatureAggregator {
 
     private final ThreadLocal<Map<String,Double>> map = ThreadLocal.withInitial(HashMap::new);
 

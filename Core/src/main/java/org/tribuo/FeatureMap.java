@@ -33,7 +33,8 @@ import java.util.TreeMap;
  * A map from Strings to {@link VariableInfo} objects storing
  * information about a feature.
  */
-public abstract class FeatureMap implements Serializable, ProtoSerializable<FeatureDomainProto>, Iterable<VariableInfo> {
+public abstract sealed class FeatureMap implements Serializable, ProtoSerializable<FeatureDomainProto>,
+        Iterable<VariableInfo> permits ImmutableFeatureMap, MutableFeatureMap {
     private static final long serialVersionUID = 1L;
 
     /**

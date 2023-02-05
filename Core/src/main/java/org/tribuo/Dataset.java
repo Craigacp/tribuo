@@ -63,8 +63,8 @@ import java.util.regex.Pattern;
  * Subclass {@link MutableDataset} rather than this class.
  * @param <T> the type of the features in the data set.
  */
-public abstract class Dataset<T extends Output<T>> implements Iterable<Example<T>>, ProtoSerializable<DatasetProto>,
-    Provenancable<DatasetProvenance>, Serializable {
+public abstract sealed class Dataset<T extends Output<T>> implements Iterable<Example<T>>, ProtoSerializable<DatasetProto>,
+    Provenancable<DatasetProvenance>, Serializable permits ImmutableDataset, MutableDataset {
     private static final long serialVersionUID = 2L;
 
     private static final Logger logger = Logger.getLogger(Dataset.class.getName());

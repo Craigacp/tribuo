@@ -33,7 +33,7 @@ import java.util.TreeMap;
  * A {@link MutableOutputInfo} for {@link Regressor}s. All observed Regressors must
  * contain the same named dimensions.
  */
-public class MutableRegressionInfo extends RegressionInfo implements MutableOutputInfo<Regressor> {
+public final class MutableRegressionInfo extends RegressionInfo implements MutableOutputInfo<Regressor> {
     private static final long serialVersionUID = 2L;
 
     MutableRegressionInfo() {

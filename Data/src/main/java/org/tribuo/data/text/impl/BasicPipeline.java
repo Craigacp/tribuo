@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 /**
  * An example implementation of {@link TextPipeline}. Generates unique ngrams.
  */
-public class BasicPipeline implements TextPipeline {
+public final class BasicPipeline implements TextPipeline {
 
     private static final Logger logger = Logger.getLogger(BasicPipeline.class.getName());
 

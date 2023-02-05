@@ -37,7 +37,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
  * 
  * @author Philip Ogren
  */
-public class SplitCharactersTokenizer extends SplitFunctionTokenizer {
+public final class SplitCharactersTokenizer extends SplitFunctionTokenizer {
 
     /**
      * The default split characters.

@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * A {@link FieldProcessor} which applies a regex to a field and generates {@link ColumnarFeature}s based on the matches.
  */
-public class RegexFieldProcessor implements FieldProcessor {
+public final class RegexFieldProcessor implements FieldProcessor {
     private static final Logger logger = Logger.getLogger(RegexFieldProcessor.class.getName());
 
     private Pattern regex;

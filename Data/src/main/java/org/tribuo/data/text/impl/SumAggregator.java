@@ -30,7 +30,7 @@ import java.util.Map;
  * A feature aggregator that aggregates occurrence counts across a number of
  * feature lists.
  */
-public class SumAggregator implements FeatureAggregator {
+public final class SumAggregator implements FeatureAggregator {
 
     private final ThreadLocal<Map<String,Double>> map = ThreadLocal.withInitial(HashMap::new);
 

@@ -58,7 +58,7 @@ import java.util.logging.Logger;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibLinearClassificationTrainer extends LibLinearTrainer<Label> implements WeightedLabels {
+public final class LibLinearClassificationTrainer extends LibLinearTrainer<Label> implements WeightedLabels {
 
     private static final Logger logger = Logger.getLogger(LibLinearClassificationTrainer.class.getName());
 

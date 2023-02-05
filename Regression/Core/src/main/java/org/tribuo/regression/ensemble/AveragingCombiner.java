@@ -42,7 +42,7 @@ import java.util.Map;
  * A combiner which performs a weighted or unweighted average of the predicted
  * regressors independently across the output dimensions.
  */
-public class AveragingCombiner implements EnsembleCombiner<Regressor> {
+public final class AveragingCombiner implements EnsembleCombiner<Regressor> {
     private static final long serialVersionUID = 1L;
 
     /**

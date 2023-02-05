@@ -41,7 +41,7 @@ import java.util.Map;
  * <p>
  * Identical to {@link AggregateDataSource} except it can be configured.
  */
-public class AggregateConfigurableDataSource<T extends Output<T>> implements ConfigurableDataSource<T> {
+public final class AggregateConfigurableDataSource<T extends Output<T>> implements ConfigurableDataSource<T> {
 
     @Config(mandatory = true, description = "The iteration order.")
     private IterationOrder order;

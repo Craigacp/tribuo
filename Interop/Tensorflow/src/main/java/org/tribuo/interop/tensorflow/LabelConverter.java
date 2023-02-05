@@ -53,7 +53,7 @@ import java.util.logging.Logger;
  * can convert a {@link TFloat16} or {@link TFloat32} into a {@link Prediction} or a {@link Label}.
  */
 @ProtoSerializableClass(version = LabelConverter.CURRENT_VERSION)
-public class LabelConverter implements OutputConverter<Label> {
+public final class LabelConverter implements OutputConverter<Label> {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(LabelConverter.class.getName());
 

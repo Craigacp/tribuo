@@ -27,7 +27,7 @@ import java.util.Arrays;
 /**
  * NoopNormalizer returns a copy in {@link NoopNormalizer#normalize} and is a no-op in place.
  */
-public class NoopNormalizer implements VectorNormalizer, Serializable {
+public final class NoopNormalizer implements VectorNormalizer, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

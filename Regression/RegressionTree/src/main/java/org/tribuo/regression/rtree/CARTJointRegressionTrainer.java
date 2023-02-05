@@ -40,7 +40,7 @@ import org.tribuo.regression.rtree.impurity.RegressorImpurity;
  * Springer 2001. <a href="http://web.stanford.edu/~hastie/ElemStatLearn/">PDF</a>
  * </pre>
  */
-public class CARTJointRegressionTrainer extends AbstractCARTTrainer<Regressor> {
+public final class CARTJointRegressionTrainer extends AbstractCARTTrainer<Regressor> {
 
     /**
      * Impurity measure used to determine split quality.

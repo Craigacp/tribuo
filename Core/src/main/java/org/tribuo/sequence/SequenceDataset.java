@@ -58,7 +58,7 @@ import java.util.logging.Logger;
  *
  * @param <T> the type of the outputs in the data set.
  */
-public abstract class SequenceDataset<T extends Output<T>> implements Iterable<SequenceExample<T>>, ProtoSerializable<SequenceDatasetProto>, Provenancable<DatasetProvenance>, Serializable {
+public abstract sealed class SequenceDataset<T extends Output<T>> implements Iterable<SequenceExample<T>>, ProtoSerializable<SequenceDatasetProto>, Provenancable<DatasetProvenance>, Serializable permits ImmutableSequenceDataset, MutableSequenceDataset {
     private static final Logger logger = Logger.getLogger(SequenceDataset.class.getName());
     private static final long serialVersionUID = 2L;
 

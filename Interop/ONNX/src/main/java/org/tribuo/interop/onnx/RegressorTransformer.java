@@ -41,7 +41,7 @@ import java.util.List;
  * Can convert an {@link OnnxValue} into a {@link Prediction} or {@link Regressor}.
  */
 @ProtoSerializableClass(version = RegressorTransformer.CURRENT_VERSION)
-public class RegressorTransformer implements OutputTransformer<Regressor> {
+public final class RegressorTransformer implements OutputTransformer<Regressor> {
     private static final long serialVersionUID = 1L;
 
     /**

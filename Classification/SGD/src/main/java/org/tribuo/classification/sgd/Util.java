@@ -24,7 +24,10 @@ import java.util.SplittableRandom;
 /**
  * SGD utilities. Currently stores methods for shuffling examples and their associated labels and weights.
  */
-public class Util {
+public final class Util {
+
+    private Util() {}
+
     /**
      * In place shuffle of the features, labels and weights.
      * @deprecated In favour of {@link org.tribuo.common.sgd.AbstractLinearSGDTrainer#shuffleInPlace}.

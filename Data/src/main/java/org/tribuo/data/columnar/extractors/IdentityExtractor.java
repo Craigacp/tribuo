@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 /**
  * Extracts the field value and emits it as a String.
  */
-public class IdentityExtractor extends SimpleFieldExtractor<String> {
+public final class IdentityExtractor extends SimpleFieldExtractor<String> {
     private static final Logger logger = Logger.getLogger(IdentityExtractor.class.getName());
 
     /**

@@ -29,7 +29,7 @@ import org.tribuo.math.util.VectorNormalizer;
  * <p>
  * Generates a probabilistic model, and uses an {@link ExpNormalizer}.
  */
-public class LogMulticlass implements LabelObjective {
+public final class LogMulticlass implements LabelObjective {
 
     private final VectorNormalizer normalizer = new ExpNormalizer();
 

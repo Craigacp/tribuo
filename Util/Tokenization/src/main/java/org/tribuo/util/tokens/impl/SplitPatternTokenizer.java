@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  *
  * @author Philip Ogren
  */
-public class SplitPatternTokenizer implements Tokenizer {
+public final class SplitPatternTokenizer implements Tokenizer {
 
     /**
      * The default split pattern, which is [\.,]?\s+.

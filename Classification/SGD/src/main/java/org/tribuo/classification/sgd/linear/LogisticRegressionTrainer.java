@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * This is strictly a convenience class for folks who are looking for
  * a simple logistic regression.
  */
-public class LogisticRegressionTrainer extends LinearSGDTrainer {
+public final class LogisticRegressionTrainer extends LinearSGDTrainer {
     private static final Logger logger = Logger.getLogger(LogisticRegressionTrainer.class.getName());
 
     /**

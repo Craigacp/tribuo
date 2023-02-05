@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * Demo showing how to calculate various mutual informations and entropies.
  */
-public class InformationTheoryDemo {
+public final class InformationTheoryDemo {
 
     private static final Logger logger = Logger.getLogger(InformationTheoryDemo.class.getName());
 

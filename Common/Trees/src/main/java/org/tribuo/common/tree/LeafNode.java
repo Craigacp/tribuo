@@ -36,7 +36,7 @@ import java.util.Objects;
  * {@link LeafNode#equals} uses the {@link Output#fullEquals(Output)} method
  * to determine equality of two leaves.
  */
-public class LeafNode<T extends Output<T>> implements Node<T> {
+public final class LeafNode<T extends Output<T>> implements Node<T> {
     private static final long serialVersionUID = 4L;
 
     /**

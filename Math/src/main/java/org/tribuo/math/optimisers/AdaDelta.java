@@ -35,7 +35,7 @@ import org.tribuo.math.la.Tensor;
  * arXiv preprint arXiv:1212.5701.
  * </pre>
  */
-public class AdaDelta implements StochasticGradientOptimiser {
+public final class AdaDelta implements StochasticGradientOptimiser {
 
     @Config(description="Momentum value.")
     private double rho = 0.95;

@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * A {@link Parameters} for training a CRF using SGD.
  */
-public class CRFParameters implements Parameters, Serializable {
+public final class CRFParameters implements Parameters, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

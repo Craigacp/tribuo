@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * @param <T2> The type of the second object.
  * @param <T3> The type of the third object.
  */
-public class CachedTriple<T1, T2, T3> implements Serializable {
+public final class CachedTriple<T1, T2, T3> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = Logger.getLogger(CachedTriple.class.getName());

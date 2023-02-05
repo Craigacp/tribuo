@@ -24,7 +24,7 @@ import java.util.SplittableRandom;
 /**
  * Utilities. Currently stores methods for shuffling examples and their associated regression dimensions and weights.
  */
-public class Util {
+public final class Util {
     /**
      * In place shuffle of the features, labels and weights.
      * @param features Input features.

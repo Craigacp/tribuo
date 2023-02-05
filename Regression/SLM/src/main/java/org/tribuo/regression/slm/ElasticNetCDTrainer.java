@@ -57,7 +57,7 @@ import static org.tribuo.math.la.VectorTuple.DELTA;
  * Journal of Statistical Software, 2010
  * </pre>
  */
-public class ElasticNetCDTrainer implements SparseTrainer<Regressor> {
+public final class ElasticNetCDTrainer implements SparseTrainer<Regressor> {
 
     private static final Logger logger = Logger.getLogger(ElasticNetCDTrainer.class.getName());
 

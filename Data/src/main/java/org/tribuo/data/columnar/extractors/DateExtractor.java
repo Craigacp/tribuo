@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * <p>
  * Returns an empty optional if the date failed to parse.
  */
-public class DateExtractor extends SimpleFieldExtractor<LocalDate> {
+public final class DateExtractor extends SimpleFieldExtractor<LocalDate> {
     private static final Logger logger = Logger.getLogger(DateExtractor.class.getName());
 
     @Config(mandatory = true, description = "The expected date format.")

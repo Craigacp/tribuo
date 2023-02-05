@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
  * <p>
  * The type of the model depends on the trainer used.
  */
-public class SparseLinearModel extends SkeletalIndependentRegressionSparseModel implements ONNXExportable {
+public final class SparseLinearModel extends SkeletalIndependentRegressionSparseModel implements ONNXExportable {
     private static final long serialVersionUID = 3L;
     private static final Logger logger = Logger.getLogger(SparseLinearModel.class.getName());
 

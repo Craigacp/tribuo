@@ -77,7 +77,7 @@ import java.util.stream.Collectors;
  * Machine Learning, 1995.
  * </pre>
  */
-public class LibSVMRegressionModel extends LibSVMModel<Regressor> implements ONNXExportable {
+public final class LibSVMRegressionModel extends LibSVMModel<Regressor> implements ONNXExportable {
     private static final long serialVersionUID = 2L;
 
     /**

@@ -48,7 +48,7 @@ import java.util.regex.Pattern;
  * first call {@link MutableDataset#densify} on the datasets.
  * See {@link org.tribuo.transform} for a more detailed discussion of densify.
  */
-public class TransformationMap implements Configurable, Provenancable<ConfiguredObjectProvenance> {
+public final class TransformationMap implements Configurable, Provenancable<ConfiguredObjectProvenance> {
 
     @Config(mandatory = true,description="Global transformations to apply after the feature specific transforms.")
     private List<Transformation> globalTransformations;

@@ -26,7 +26,7 @@ import org.tribuo.regression.sgd.RegressionObjective;
 /**
  * Squared loss, i.e., l2.
  */
-public class SquaredLoss implements RegressionObjective {
+public final class SquaredLoss implements RegressionObjective {
 
     /**
      * Constructs a SquaredLoss.

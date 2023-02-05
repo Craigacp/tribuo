@@ -32,7 +32,7 @@ import java.util.Map;
  * A MutableOutputInfo for working with multi-label tasks.
  */
 @ProtoSerializableClass(serializedDataClass=MutableMultiLabelInfoProto.class, version=0)
-public class MutableMultiLabelInfo extends MultiLabelInfo implements MutableOutputInfo<MultiLabel> {
+public final class MutableMultiLabelInfo extends MultiLabelInfo implements MutableOutputInfo<MultiLabel> {
     private static final long serialVersionUID = 1L;
 
     /**

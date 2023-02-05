@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  * 2018, Arxiv 1811.03600
  * </pre>
  */
-public abstract class SGD implements StochasticGradientOptimiser {
+public abstract sealed class SGD implements StochasticGradientOptimiser {
     private static final Logger logger = Logger.getLogger(SGD.class.getName());
 
     /**

@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * The base class for information about {@link MultiLabel} outputs.
  */
-public abstract class MultiLabelInfo implements OutputInfo<MultiLabel> {
+public abstract sealed class MultiLabelInfo implements OutputInfo<MultiLabel> permits ImmutableMultiLabelInfo, MutableMultiLabelInfo {
     private static final long serialVersionUID = 1L;
 
     /**

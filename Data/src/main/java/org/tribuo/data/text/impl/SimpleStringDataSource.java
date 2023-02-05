@@ -45,7 +45,7 @@ import java.util.logging.Logger;
  * <p>
  * Uses the parsing logic from {@link SimpleTextDataSource}.
  */
-public class SimpleStringDataSource<T extends Output<T>> extends SimpleTextDataSource<T> {
+public final class SimpleStringDataSource<T extends Output<T>> extends SimpleTextDataSource<T> {
 
     private static final Logger logger = Logger.getLogger(SimpleStringDataSource.class.getName());
 

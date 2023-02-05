@@ -50,7 +50,7 @@ import java.util.Map;
  * This trainer implements the approach known as "Binary Relevance" in
  * the multi-label classification literature.
  */
-public class IndependentMultiLabelTrainer implements Trainer<MultiLabel> {
+public final class IndependentMultiLabelTrainer implements Trainer<MultiLabel> {
 
     @Config(mandatory = true,description="Trainer to use for each individual label.")
     private Trainer<Label> innerTrainer;

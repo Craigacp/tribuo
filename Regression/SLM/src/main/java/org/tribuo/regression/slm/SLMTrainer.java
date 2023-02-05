@@ -51,7 +51,7 @@ import java.util.logging.Logger;
  * normalize the data first. Each output dimension is trained independently
  * with no shared regularization.
  */
-public class SLMTrainer implements SparseTrainer<Regressor>, WeightedExamples {
+public sealed class SLMTrainer implements SparseTrainer<Regressor>, WeightedExamples permits LARSLassoTrainer, LARSTrainer {
     private static final Logger logger = Logger.getLogger(SLMTrainer.class.getName());
 
     /**

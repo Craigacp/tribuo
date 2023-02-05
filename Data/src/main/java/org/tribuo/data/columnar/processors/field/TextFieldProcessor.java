@@ -32,7 +32,7 @@ import java.util.List;
  * A {@link FieldProcessor} which takes a text field and runs a {@link TextPipeline} on it
  * to generate features.
  */
-public class TextFieldProcessor implements FieldProcessor {
+public final class TextFieldProcessor implements FieldProcessor {
 
     /**
      * The name of the field that values will be drawn from.

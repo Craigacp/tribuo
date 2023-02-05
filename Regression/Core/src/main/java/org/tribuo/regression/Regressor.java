@@ -53,7 +53,7 @@ import java.util.Set;
  * set to the sentinel value of {@link Double#NaN}, then they are considered equal.
  * </p>
  */
-public class Regressor implements Output<Regressor>, Iterable<Regressor.DimensionTuple> {
+public sealed class Regressor implements Output<Regressor>, Iterable<Regressor.DimensionTuple> {
     private static final long serialVersionUID = 1L;
 
     /**

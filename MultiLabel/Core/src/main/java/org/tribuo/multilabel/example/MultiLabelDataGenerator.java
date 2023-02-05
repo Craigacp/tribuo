@@ -34,7 +34,7 @@ import java.time.OffsetDateTime;
  * They don't necessarily have sensible classification boundaries,
  * it's for testing the machinery rather than accuracy.
  */
-public class MultiLabelDataGenerator {
+public final class MultiLabelDataGenerator {
 
     private static final MultiLabelFactory factory = new MultiLabelFactory();
 

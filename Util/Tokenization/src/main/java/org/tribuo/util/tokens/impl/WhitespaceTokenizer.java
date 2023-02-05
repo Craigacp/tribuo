@@ -24,7 +24,7 @@ import com.oracle.labs.mlrg.olcut.provenance.impl.ConfiguredObjectProvenanceImpl
  * tokens that correspond to whitespace - only those spans of text delimited by
  * whitespace.  For example, the text "a b" will result in two tokens "a" and "b". 
  */
-public class WhitespaceTokenizer extends SplitFunctionTokenizer {
+public final class WhitespaceTokenizer extends SplitFunctionTokenizer {
 
     /**
      * The splitting function for whitespace, using {@link Character#isWhitespace(char)}.

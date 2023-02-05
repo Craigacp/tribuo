@@ -26,7 +26,7 @@ import java.util.List;
  * <p>
  * Used to calculate the impurity of a regression node.
  */
-public class MeanSquaredError implements RegressorImpurity {
+public final class MeanSquaredError implements RegressorImpurity {
 
     @Override
     public double impurity(float[] targets, float[] weights) {

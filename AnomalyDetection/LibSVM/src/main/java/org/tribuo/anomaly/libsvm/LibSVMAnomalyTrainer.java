@@ -63,7 +63,7 @@ import java.util.logging.Logger;
  * Neural Computation, 2001, 1443-1471.
  * </pre>
  */
-public class LibSVMAnomalyTrainer extends LibSVMTrainer<Event> {
+public final class LibSVMAnomalyTrainer extends LibSVMTrainer<Event> {
     private static final Logger logger = Logger.getLogger(LibSVMAnomalyTrainer.class.getName());
 
     /**

@@ -54,7 +54,7 @@ import java.util.logging.Logger;
 /**
  * A CLI for interacting with {@link LIMEText}. Uses a simple tokenisation and text extraction pipeline.
  */
-public class LIMETextCLI implements CommandGroup {
+public final class LIMETextCLI implements CommandGroup {
     private static final Logger logger = Logger.getLogger(LIMETextCLI.class.getName());
 
     private final CommandInterpreter shell;

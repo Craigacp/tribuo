@@ -39,7 +39,7 @@ import java.util.Objects;
  * cluster (e.g., before the {@link Model} has been trained).
  */
 @ProtoSerializableClass(serializedDataClass = ClusterIDProto.class, version = 0)
-public class ClusterID implements Output<ClusterID> {
+public final class ClusterID implements Output<ClusterID> {
     private static final long serialVersionUID = 1L;
 
     /**

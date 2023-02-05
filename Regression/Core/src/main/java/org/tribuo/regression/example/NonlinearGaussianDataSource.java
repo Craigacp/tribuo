@@ -47,7 +47,7 @@ import java.util.Random;
  * <p>
  * The features are drawn from a uniform distribution over the range.
  */
-public class NonlinearGaussianDataSource implements ConfigurableDataSource<Regressor> {
+public final class NonlinearGaussianDataSource implements ConfigurableDataSource<Regressor> {
     @Config(mandatory=true,description = "The number of samples to draw.")
     private int numSamples;
 

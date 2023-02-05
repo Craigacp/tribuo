@@ -34,11 +34,9 @@ import java.util.stream.Collectors;
  * produced by calling {@code apply} methods on ONNXRefs are added to a {@link ai.onnx.proto.OnnxMl.GraphProto} field
  * in their governing ONNXContext. Instances of ONNXRef have a backreference to the ONNXContext that created them and
  * can thus be passed around without needing to pass their governing context as well.
- * <p>
- * N.B. This class will be sealed once the library is updated past Java 8. Users should not subclass this class.
  * @param <T> The protobuf type this reference generates.
  */
-public abstract class ONNXRef<T extends GeneratedMessageV3> {
+public abstract sealed class ONNXRef<T extends GeneratedMessageV3> permits ONNXInitializer, ONNXNode, ONNXPlaceholder {
     // Unfortunately there is no other shared supertype for OnnxML protobufs
     /**
      * Protobuf reference.

@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * and the body of the message. It deals with a variety of weird conditions
  * (e.g., no headers, can't find subject, etc.)
  */
-public class NewsPreprocessor implements DocumentPreprocessor {
+public final class NewsPreprocessor implements DocumentPreprocessor {
 
     private static final Logger logger = Logger.getLogger(NewsPreprocessor.class.getName());
 
