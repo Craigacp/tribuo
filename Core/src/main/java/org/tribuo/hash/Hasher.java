@@ -22,17 +22,14 @@ import com.oracle.labs.mlrg.olcut.provenance.Provenancable;
 import org.tribuo.protos.ProtoSerializable;
 import org.tribuo.protos.core.HasherProto;
 
-import java.io.Serializable;
-
 /**
  * An abstract base class for hash functions used to hash the names of features.
  * <p>
  * Hasher implementations do not serialize the salt in their serialized forms, and
  * thus the salt must be set after deserialization.
  */
-public abstract class Hasher implements Configurable, Provenancable<ConfiguredObjectProvenance>, Serializable,
-        ProtoSerializable<HasherProto>  {
-    private static final long serialVersionUID = 2L;
+public abstract class Hasher implements Configurable, Provenancable<ConfiguredObjectProvenance>,
+        ProtoSerializable<HasherProto> {
 
     /**
      * The minimum length of the salt. Salts shorter than this will not validate.

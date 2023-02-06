@@ -49,7 +49,6 @@ public class CRFTrainerTest {
         SequenceDataset<Label> p = SequenceDataGenerator.generateGorillaDataset(5);
         SequenceModel<Label> m = t.train(p);
         m.predict(p.getExample(0));
-        Helpers.testSequenceModelSerialization(m,Label.class);
         Helpers.testSequenceModelProtoSerialization(m,Label.class,p);
     }
 

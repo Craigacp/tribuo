@@ -220,8 +220,6 @@ public class TestLibLinearModel {
         Model<Label> model = testLibLinear(p);
 
         // Test serialization
-        Helpers.testModelSerialization(model,Label.class);
-
         Helpers.testModelProtoSerialization(model, Label.class, p.getB());
     }
 

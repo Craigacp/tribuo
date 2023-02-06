@@ -113,7 +113,7 @@ public class TestCART {
     @Test
     public void testDenseData() {
         Model<Label> model = runDenseData(t);
-        Helpers.testModelSerialization(model,Label.class);
+        Helpers.testModelProtoSerialization(model,Label.class);
     }
 
     @Test
