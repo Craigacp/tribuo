@@ -48,10 +48,7 @@ import org.tribuo.interop.onnx.OnnxTestUtils;
 import org.tribuo.test.Helpers;
 import org.tribuo.util.tokens.impl.BreakIteratorTokenizer;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -111,9 +108,9 @@ public class TestLibLinearModel {
     }
 
     @Test
-    public void testMulticlass() throws IOException, ClassNotFoundException {
+    public void testMulticlass() throws IOException {
         String prefix = "L2R_LR_multiclass";
-        LibLinearClassificationModel model = loadModel("/models/L2R_LR_multiclass.model");
+        LibLinearClassificationModel model =  (LibLinearClassificationModel) Model.deserializeFromFile(Path.of("/models/L2R_LR_multiclass.model"));
         Dataset<Label> examples = loadMulticlassTestDataset(model);
         assertNotNull(model, prefix);
         List<Prediction<Label>> predictions = model.predict(examples);
@@ -144,18 +141,9 @@ public class TestLibLinearModel {
     }
 
 
-    private LibLinearClassificationModel loadModel(LinearType modelType) throws IOException, ClassNotFoundException {
+    private LibLinearClassificationModel loadModel(LinearType modelType) throws IOException {
         String modelPath = "/models/" + modelType + ".model";
-        return loadModel(modelPath);
-    }
-
-    private LibLinearClassificationModel loadModel(String path) throws IOException, ClassNotFoundException {
-        URL modelFile = this.getClass().getResource(path);
-        assertNotNull(modelFile, String.format("model for %s does not exist", path));
-        try (ObjectInputStream oin = new ObjectInputStream(modelFile.openStream())) {
-            Object data = oin.readObject();
-            return (LibLinearClassificationModel) data;
-        }
+        return (LibLinearClassificationModel) Model.deserializeFromFile(Path.of(modelPath));
     }
 
     private Dataset<Label> loadTestDataset(LibLinearClassificationModel model) throws IOException {

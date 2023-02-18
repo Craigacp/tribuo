@@ -41,7 +41,6 @@ import org.junit.jupiter.api.Test;
 import org.tribuo.test.Helpers;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -52,7 +51,6 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestSGDLinear {
     private static final Logger logger = Logger.getLogger(TestSGDLinear.class.getName());
