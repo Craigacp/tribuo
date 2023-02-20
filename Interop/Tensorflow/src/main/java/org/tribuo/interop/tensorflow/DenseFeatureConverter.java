@@ -47,7 +47,6 @@ import java.util.logging.Logger;
  */
 @ProtoSerializableClass(serializedDataClass = DenseFeatureConverterProto.class, version = DenseFeatureConverter.CURRENT_VERSION)
 public class DenseFeatureConverter implements FeatureConverter {
-    private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(DenseFeatureConverter.class.getName());
 
     /**
