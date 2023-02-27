@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2023, Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,9 +49,15 @@ public class LinearParameters implements FeedForwardParameters {
 
     private static final Merger merger = new HeapMerger();
 
-    // Last row in this DenseMatrix is the bias, added by
-    // calling SparseVector.createSparseVector(example,featureInfo,true);
+    /**
+     * A single element array, containing {@link #weightMatrix}.
+     */
     private Tensor[] weights;
+
+    /**
+     * Last row in this DenseMatrix is the bias, added by
+     * calling SparseVector.createSparseVector(example,featureInfo,true);
+     */
     @ProtoSerializableField
     private DenseMatrix weightMatrix;
 
@@ -108,7 +114,7 @@ public class LinearParameters implements FeedForwardParameters {
     /**
      * Generates an unnormalised prediction by leftMultiply'ing the weights with the incoming features.
      * @param example A feature vector
-     * @return A {@link org.tribuo.math.la.DenseVector} containing a score for each label.
+     * @return A {@link DenseVector} containing a score for each label.
      */
     @Override
     public DenseVector predict(SGDVector example) {
@@ -116,10 +122,20 @@ public class LinearParameters implements FeedForwardParameters {
     }
 
     /**
+     * Generates an unnormalised prediction by matrix multiplying the weights with the incoming feature batch.
+     * @param batch A feature matrix
+     * @return A {@link DenseMatrix} containing a score for each output dimension and each batch member.
+     */
+    @Override
+    public DenseMatrix predict(Matrix batch) {
+        return weightMatrix.matrixMultiply(batch);
+    }
+
+    /**
      * Generate the gradients for a particular feature vector given
      * the loss and the per output gradients.
-     *
-     * This parameters returns a single element {@link Tensor} array.
+     * <p>
+     * This method returns a single element {@link Tensor} array.
      * @param score The Pair returned by the objective.
      * @param features The feature vector.
      * @return A {@link Tensor} array with a single {@link Matrix} containing all gradients.
@@ -129,6 +145,12 @@ public class LinearParameters implements FeedForwardParameters {
         Tensor[] output = new Tensor[1];
         output[0] = score.getB().outer(features);
         return output;
+    }
+
+    @Override
+    public Tensor[] gradients(Pair<double[], Matrix> score, Matrix featureBatch) {
+        Matrix gradient = score.getB().matrixMultiply(featureBatch);
+        return new Tensor[]{gradient};
     }
 
     /**
