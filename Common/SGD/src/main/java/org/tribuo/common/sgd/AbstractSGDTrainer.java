@@ -168,8 +168,7 @@ public abstract class AbstractSGDTrainer<T extends Output<T>,U,V extends Model<T
         int featureSpaceSize = featureIDMap.size();
 
         SGDVector[] sgdFeatures = new SGDVector[examples.size()];
-        @SuppressWarnings("unchecked")
-        U[] sgdTargets = (U[]) new Object[examples.size()];
+        U[] sgdTargets = createTargetArray(examples.size());
         double[] weights = new double[examples.size()];
         int n = 0;
         long featureSize = 0;
@@ -230,7 +229,7 @@ public abstract class AbstractSGDTrainer<T extends Output<T>,U,V extends Model<T
                     double[] lossArr = output.getA();
                     for (int k = j; k < bound; k++) {
                         tempWeight += weights[k];
-                        loss += lossArr[k] * weights[k];
+                        loss += lossArr[k-j] * weights[k];
                     }
                     for (int k = 0; k < gradients.length; k++) {
                         gradients[k].scaleInPlace(minibatchSize);
@@ -271,6 +270,13 @@ public abstract class AbstractSGDTrainer<T extends Output<T>,U,V extends Model<T
             SplittableRandom localRNG = rng.split();
         }
     }
+
+    /**
+     * Creates the target array, to get around generic array creation issues.
+     * @param size The size of the array.
+     * @return The target array of the required type.
+     */
+    protected abstract U[] createTargetArray(int size);
 
     /**
      * Extracts the appropriate training time representation from the supplied output.
