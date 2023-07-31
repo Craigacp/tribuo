@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2023, Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,13 +102,13 @@ public class SparseVector implements SGDVector {
     }
 
     /**
-     * Returns a deep copy of the supplied sparse vector.
+     * Returns a deep copy of the supplied vector.
      * <p>
      * Copies the value by iterating it's VectorTuple.
-     * @param other The SparseVector to copy.
+     * @param other The SGDVector to copy.
      */
-    private SparseVector(SparseVector other) {
-        this.size = other.size;
+    SparseVector(SGDVector other) {
+        this.size = other.size();
         int numActiveElements = other.numActiveElements();
         this.indices = new int[numActiveElements];
         this.values = new double[numActiveElements];
