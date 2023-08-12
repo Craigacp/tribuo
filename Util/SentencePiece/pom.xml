@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2015-2020, Oracle and/or its affiliates. All rights reserved.
+  ~ Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@
         <version>5.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <name>Tokenization</name>
-    <artifactId>tribuo-util-tokenization</artifactId>
+    <name>SentencePiece</name>
+    <artifactId>tribuo-util-sentencepiece</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>com.oracle.labs.olcut</groupId>
-            <artifactId>olcut-core</artifactId>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -46,13 +46,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>org.tribuo.tokens</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </build>
