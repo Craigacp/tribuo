@@ -19,9 +19,7 @@ package org.tribuo.util.sentencepiece;
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public final class WordSPModel extends SPModel {
@@ -80,15 +78,6 @@ public final class WordSPModel extends SPModel {
         }
 
         return Arrays.copyOf(tokens, count);
-    }
-
-    @Override
-    protected List<SPToken> encodeToTokens(String input, boolean addBOS, boolean addEOS) {
-        if (input.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-
     }
 
     @Override

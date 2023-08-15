@@ -19,7 +19,6 @@ package org.tribuo.util.sentencepiece;
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.util.EnumSet;
-import java.util.List;
 
 public final class CharSPModel extends SPModel {
     CharSPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
@@ -29,11 +28,6 @@ public final class CharSPModel extends SPModel {
     @Override
     protected int[] encodeToInts(String input, boolean addBOS, boolean addEOS) {
         return new int[0];
-    }
-
-    @Override
-    protected List<SPToken> encodeToTokens(String input, boolean addBOS, boolean addEOS) {
-        return null;
     }
 
     @Override
