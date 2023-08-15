@@ -16,22 +16,17 @@
 
 package org.tribuo.util.sentencepiece;
 
-import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
+import java.nio.ByteBuffer;
+import java.util.Set;
 
-import java.util.EnumSet;
+public final class Trie {
 
-public final class BPESPModel extends SPModel {
-    BPESPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
-        super(proto, options);
+    Trie(Set<String> strings) {
+
     }
 
-    @Override
-    protected int[] encodeToInts(String input, boolean addBOS, boolean addEOS) {
-        return new int[0];
+    Trie(ByteBuffer buffer) {
+
     }
 
-    @Override
-    protected String innerDecodeFromInts(int[] input) {
-        return null;
-    }
 }

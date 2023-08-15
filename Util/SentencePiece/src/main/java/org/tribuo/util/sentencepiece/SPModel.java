@@ -52,7 +52,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
 
     protected final Map<String, Integer> reservedIdMap;
 
-    protected final Trie userDefinedSymbolTrie;
+    protected final PrefixMatcher userDefinedSymbolMatcher;
 
     protected final int unkId;
     protected final int bosId;
@@ -152,9 +152,9 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         this.eos = proto.getTrainerSpec().hasEosPiece() ? proto.getTrainerSpec().getEosPiece() : DEFAULT_EOS;
         this.pad = proto.getTrainerSpec().hasPadPiece() ? proto.getTrainerSpec().getPadPiece() : DEFAULT_PAD;
 
-        this.normalizer = proto.hasNormalizerSpec() ? new Normalizer(proto.getNormalizerSpec()) : null;
+        this.userDefinedSymbolMatcher = new PrefixMatcher(userDefinedSymbols);
+        this.normalizer = new Normalizer(proto.getNormalizerSpec(), proto.getTrainerSpec().getTreatWhitespaceAsSuffix(), userDefinedSymbolMatcher);
         this.denormalizer = proto.hasDenormalizerSpec() ? new Normalizer(proto.getDenormalizerSpec()) : null;
-        this.userDefinedSymbolTrie = buildTrie(userDefinedSymbols);
         this.options = options;
     }
 
@@ -249,18 +249,22 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
     }
 
     public int[] encodeToInts(String input) {
-        String normalized = normalizer == null ? input : normalizer.normalize(input).output();
-        return encodeToInts(normalized, options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
+        Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
+        return encodeToInts(normalized.output(), options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
     }
 
     public List<SPToken> encodeToTokens(String input) {
-        String normalized = normalizer == null ? input : normalizer.normalize(input).output();
-        return encodeToTokens(normalized, options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
+        Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
+        return encodeToTokens(normalized.output(), options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
     }
 
     protected abstract int[] encodeToInts(String input, boolean addBOS, boolean addEOS);
 
-    protected abstract List<SPToken> encodeToTokens(String input, boolean addBOS, boolean addEOS);
+    protected List<SPToken> encodeToTokens(String input, boolean addBOS, boolean addEOS) {
+        int[] ints = encodeToInts(input, addBOS, addEOS);
+
+
+    }
 
     public String decode(List<String> input) {
         int[] ints = new int[input.size()];

@@ -16,22 +16,24 @@
 
 package org.tribuo.util.sentencepiece;
 
-import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
+import java.nio.ByteBuffer;
+import java.util.Set;
 
-import java.util.EnumSet;
+public final class PrefixMatcher {
 
-public final class BPESPModel extends SPModel {
-    BPESPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
-        super(proto, options);
+    private final Trie trie;
+
+    PrefixMatcher(Set<String> strings) {
+        this.trie = new Trie(strings);
     }
 
-    @Override
-    protected int[] encodeToInts(String input, boolean addBOS, boolean addEOS) {
-        return new int[0];
+    public Match prefixMatch(String input) {
+
     }
 
-    @Override
-    protected String innerDecodeFromInts(int[] input) {
-        return null;
+    public Match prefixMatch(ByteBuffer buffer) {
+
     }
+
+    public record Match(int lengthConsumed, boolean found) {}
 }
