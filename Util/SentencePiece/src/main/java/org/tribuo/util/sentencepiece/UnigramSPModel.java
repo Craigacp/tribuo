@@ -18,6 +18,7 @@ package org.tribuo.util.sentencepiece;
 
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
+import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
 public final class UnigramSPModel extends SPModel {
@@ -26,12 +27,12 @@ public final class UnigramSPModel extends SPModel {
     }
 
     @Override
-    protected int[] encodeToInts(String input, boolean addBOS, boolean addEOS) {
+    protected int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS) {
         return new int[0];
     }
 
     @Override
-    protected String innerDecodeFromInts(int[] input) {
+    protected ByteBuffer innerDecodeFromInts(int[] input) {
         return null;
     }
 }
