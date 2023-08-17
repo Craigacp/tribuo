@@ -16,15 +16,14 @@
 
 package org.tribuo.util.sentencepiece;
 
-import com.google.protobuf.ByteString;
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.nio.ByteBuffer;
 
 public final class Normalizer {
 
-    private final Trie trie;
-    private final PrefixMatcher matcher;
+    private final Trie unicodeNormalizer;
+    private final Trie matcher;
     private final boolean treatWhitespaceAsSuffix;
 
     private final ByteBuffer normalizedOutput;
@@ -34,24 +33,36 @@ public final class Normalizer {
         this(proto, false, null);
     }
 
-    public Normalizer(SentencepieceModel.NormalizerSpec proto, boolean treatWhitespaceAsSuffix, PrefixMatcher matcher) {
+    public Normalizer(SentencepieceModel.NormalizerSpec proto, boolean treatWhitespaceAsSuffix, Trie matcher) {
         this.proto = proto;
         this.treatWhitespaceAsSuffix = treatWhitespaceAsSuffix;
         this.matcher = matcher;
         var charMap = decodePrecompiledCharsMap(proto.getPrecompiledCharsmap().asReadOnlyByteBuffer());
         this.normalizedOutput = charMap.normalized;
-        this.trie = new Trie(charMap.trie());
+        this.unicodeNormalizer = new Trie(charMap.trie());
     }
 
     public NormalizedOutput normalize(String input) {
+        return normalize(SPModel.UTF8.encode(input));
+    }
+
+    public NormalizedOutput normalize(ByteBuffer input) {
 
     }
 
     private static SplitCharMap decodePrecompiledCharsMap(ByteBuffer buffer) {
+        // <trie size(4byte)><double array trie><normalized string>
+        int trieSize = buffer.getInt();
 
+        ByteBuffer trieBuffer = ByteBuffer.allocate(trieSize);
+        ByteBuffer normalizedBuffer = ByteBuffer.allocate((buffer.capacity() - trieSize) - 4);
+        trieBuffer.put(0, buffer, 4, trieSize);
+        normalizedBuffer.put(0, buffer, trieSize+4, normalizedBuffer.capacity());
+
+        return new SplitCharMap(trieBuffer, normalizedBuffer);
     }
 
-    public record NormalizedOutput(String output, int[] byteAlignment) {}
+    public record NormalizedOutput(ByteBuffer output, int[] byteAlignment) {}
 
     private record SplitCharMap(ByteBuffer trie, ByteBuffer normalized) {}
 

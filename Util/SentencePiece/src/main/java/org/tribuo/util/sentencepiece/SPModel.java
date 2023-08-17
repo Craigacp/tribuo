@@ -20,6 +20,7 @@ import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -33,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPModel, UnigramSPModel {
-    protected static final Charset UTF8 = StandardCharsets.UTF_8;
+    static final Charset UTF8 = StandardCharsets.UTF_8;
     protected static final HexFormat HEX_FORMATTER = HexFormat.of().withPrefix("<0x").withSuffix(">").withUpperCase();
 
     public enum ExtraOptions {REVERSE, ADD_BOS, ADD_EOS, UNK }
@@ -52,7 +53,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
 
     protected final Map<String, Integer> reservedIdMap;
 
-    protected final PrefixMatcher userDefinedSymbolMatcher;
+    protected final Trie userDefinedSymbolTrie;
 
     protected final int unkId;
     protected final int bosId;
@@ -152,8 +153,8 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         this.eos = proto.getTrainerSpec().hasEosPiece() ? proto.getTrainerSpec().getEosPiece() : DEFAULT_EOS;
         this.pad = proto.getTrainerSpec().hasPadPiece() ? proto.getTrainerSpec().getPadPiece() : DEFAULT_PAD;
 
-        this.userDefinedSymbolMatcher = new PrefixMatcher(userDefinedSymbols);
-        this.normalizer = new Normalizer(proto.getNormalizerSpec(), proto.getTrainerSpec().getTreatWhitespaceAsSuffix(), userDefinedSymbolMatcher);
+        this.userDefinedSymbolTrie = new Trie(userDefinedSymbols);
+        this.normalizer = new Normalizer(proto.getNormalizerSpec(), proto.getTrainerSpec().getTreatWhitespaceAsSuffix(), userDefinedSymbolTrie);
         this.denormalizer = proto.hasDenormalizerSpec() ? new Normalizer(proto.getDenormalizerSpec()) : null;
         this.options = options;
     }
@@ -255,13 +256,13 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
 
     public List<SPToken> encodeToTokens(String input) {
         Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
-        return encodeToTokens(normalized.output(), options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
+        return encodeToTokens(normalized, options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
     }
 
-    protected abstract int[] encodeToInts(String input, boolean addBOS, boolean addEOS);
+    protected abstract int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS);
 
-    protected List<SPToken> encodeToTokens(String input, boolean addBOS, boolean addEOS) {
-        int[] ints = encodeToInts(input, addBOS, addEOS);
+    protected List<SPToken> encodeToTokens(Normalizer.NormalizedOutput input, boolean addBOS, boolean addEOS) {
+        int[] ints = encodeToInts(input.output(), addBOS, addEOS);
 
 
     }
@@ -275,11 +276,14 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
     }
 
     public String decodeFromInts(int[] input) {
-        String output = innerDecodeFromInts(input);
-        return denormalizer == null ? output : denormalizer.normalize(output).output();
+        ByteBuffer output = innerDecodeFromInts(input);
+        if (denormalizer != null) {
+            output = denormalizer.normalize(output).output();
+        }
+        return UTF8.decode(output).toString();
     }
 
-    protected abstract String innerDecodeFromInts(int[] input);
+    protected abstract ByteBuffer innerDecodeFromInts(int[] input);
 
     public String decodeFromTokens(List<SPToken> input) {
         int[] ints = new int[input.size()];
@@ -287,6 +291,21 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
             ints[i] = input.get(i).id();
         }
         return decodeFromInts(ints);
+    }
+
+    public static int utf8CodepointLength(byte input) {
+        byte offset = (byte) ((input >> 4) & 0xF);
+        if (offset < 8) {
+            return 1;
+        } else if (offset == 12 || offset == 13) {
+            return 2;
+        } else if (offset == 14) {
+            return 3;
+        } else if (offset == 15) {
+            return 4;
+        } else {
+            throw new IllegalArgumentException("Invalid UTF-8 start byte, " + HEX_FORMATTER.formatHex(new byte[]{input}));
+        }
     }
 
     public static String byteToPiece(int byteVal) {

@@ -18,6 +18,7 @@ package org.tribuo.util.sentencepiece;
 
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.regex.Pattern;
@@ -32,7 +33,7 @@ public final class WordSPModel extends SPModel {
     }
 
     @Override
-    protected int[] encodeToInts(String input, boolean addBOS, boolean addEOS) {
+    protected int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS) {
         if (input.isEmpty()) {
             if (addBOS && addEOS) {
                 var output = new int[2];
@@ -81,7 +82,7 @@ public final class WordSPModel extends SPModel {
     }
 
     @Override
-    protected String innerDecodeFromInts(int[] input) {
+    protected ByteBuffer innerDecodeFromInts(int[] input) {
         return null;
     }
 }
