@@ -133,7 +133,7 @@ public final class Trie {
         return new TraverseResult(value(unit), id, keyPos);
     }
 
-    public PrefixMatch prefixMatch(ByteBuffer buffer) {
+    public PrefixMatch longestPrefixMatch(ByteBuffer buffer) {
         List<Trie.TrieResult> matches = commonPrefixSearch(buffer);
 
         if (matches.isEmpty()) {
