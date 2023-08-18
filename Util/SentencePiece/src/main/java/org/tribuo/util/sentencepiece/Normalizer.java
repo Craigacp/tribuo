@@ -16,6 +16,12 @@
 
 package org.tribuo.util.sentencepiece;
 
+import java.nio.IntBuffer;
+import java.util.Arrays;
+import java.util.List;
+import org.tribuo.util.sentencepiece.Trie.PrefixMatch;
+import org.tribuo.util.sentencepiece.Trie.TrieResult;
+import org.tribuo.util.sentencepiece.UTF8Utils.UTFCodepoint;
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.nio.ByteBuffer;
@@ -43,11 +49,95 @@ public final class Normalizer {
     }
 
     public NormalizedOutput normalize(String input) {
-        return normalize(SPModel.UTF8.encode(input));
+        return normalize(UTF8Utils.UTF8.encode(input).asReadOnlyBuffer());
     }
 
     public NormalizedOutput normalize(ByteBuffer input) {
+        if (!input.hasRemaining()) {
+            return new NormalizedOutput(ByteBuffer.allocate(0),new int[0]);
+        }
 
+        int consumed = 0;
+
+        // Ignores heading space.
+        if (proto.getRemoveExtraWhitespaces()) {
+            while (input.hasRemaining()) {
+                var p = normalizePrefix(input);
+                if (p.output.get(0) != ' ') {
+                    break;
+                }
+                input.position(input.position() + p.length);
+                consumed += p.length;
+            }
+            // All chars are whitespace, return an empty buffer.
+            if (!input.hasRemaining()) {
+                return new NormalizedOutput(ByteBuffer.allocate(0),new int[0]);
+            }
+        }
+
+        ByteBuffer output = ByteBuffer.allocate(input.remaining() * 3);
+        IntBuffer mapping = IntBuffer.allocate(input.remaining() * 3);
+
+        // Rest of normalization function.
+    }
+
+    private NormalizerPair normalizePrefix(ByteBuffer input) {
+        if (input.remaining() == 0) {
+            return new NormalizerPair(null, 0);
+        }
+
+        if (matcher != null) {
+            PrefixMatch matches = matcher.longestPrefixMatch(input);
+            if (matches.found()) {
+                // TODO not yet a copy, does it need to be?
+                return new NormalizerPair(input.slice(input.position(), matches.lengthConsumed()), matches.lengthConsumed());
+            }
+        }
+
+        int longestLength = 0;
+        int longestValue = 0;
+
+        List<TrieResult> results = unicodeNormalizer.commonPrefixSearch(input);
+
+        // Finds the longest rule.
+        for (var r : results) {
+            if (longestLength == 0 || r.length() > longestLength) {
+                longestLength = r.length();  // length of prefix
+                longestValue = r.value();    // index into normalized.
+            }
+        }
+
+        if (longestLength == 0) {
+            UTFCodepoint decode = UTF8Utils.decodeOneCodepoint(input);
+            if (decode.valid()) {
+                // Found a malformed utf8 codepoint, return 0xFFFD
+                return new NormalizerPair(ByteBuffer.wrap(Arrays.copyOf(UTF8Utils.REPLACEMENT_CHAR_ARR, UTF8Utils.REPLACEMENT_CHAR_ARR.length)), 1);
+            } else {
+                return new NormalizerPair(input.slice(input.position(), decode.length()), decode.length());
+            }
+        } else {
+            return new NormalizerPair(sliceNormalized(longestValue), longestLength);
+        }
+    }
+
+    /**
+     * Slices out a ByteBuffer from {@link #normalizedOutput}, which is delimited by the
+     * zero byte.
+     * @param index The start index.
+     * @return A ByteBuffer.
+     */
+    private ByteBuffer sliceNormalized(int index) {
+        if (index > normalizedOutput.capacity()) {
+            throw new IllegalArgumentException("Invalid index, outside capacity, found " + index + ", expected < " + normalizedOutput.capacity());
+        }
+
+        for (int i = index; i < normalizedOutput.capacity(); i++) {
+            // search for zero byte
+            if (normalizedOutput.get(i) == 0) {
+                return normalizedOutput.slice(index, i-index);
+            }
+        }
+        return normalizedOutput.slice(index, normalizedOutput.capacity() - index);
     }
 
     private static SplitCharMap decodePrecompiledCharsMap(ByteBuffer buffer) {
@@ -59,11 +149,12 @@ public final class Normalizer {
         trieBuffer.put(0, buffer, 4, trieSize);
         normalizedBuffer.put(0, buffer, trieSize+4, normalizedBuffer.capacity());
 
-        return new SplitCharMap(trieBuffer, normalizedBuffer);
+        return new SplitCharMap(trieBuffer.asReadOnlyBuffer(), normalizedBuffer.asReadOnlyBuffer());
     }
 
     public record NormalizedOutput(ByteBuffer output, int[] byteAlignment) {}
 
     private record SplitCharMap(ByteBuffer trie, ByteBuffer normalized) {}
 
+    private record NormalizerPair(ByteBuffer output, int length) {}
 }
