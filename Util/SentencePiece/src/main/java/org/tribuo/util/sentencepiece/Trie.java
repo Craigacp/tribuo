@@ -25,6 +25,8 @@ import java.util.Set;
 
 public final class Trie {
 
+    public static final int DEFAULT_MAX_RESULTS = 32;
+
     private static final TrieResult NOT_FOUND = new TrieResult(-1, 0);
 
     private final IntBuffer buffer;
@@ -67,12 +69,12 @@ public final class Trie {
         return new TrieResult(value(unit), key.length);
     }
 
-    public List<TrieResult> commonPrefixSearch(byte[] key) {
+    public List<TrieResult> commonPrefixSearch(ByteBuffer key) {
         return commonPrefixSearch(key, 0);
     }
 
-    public List<TrieResult> commonPrefixSearch(byte[] key, int startPos) {
-        return commonPrefixSearch(key, startPos, 32);
+    public List<TrieResult> commonPrefixSearch(ByteBuffer key, int startPos) {
+        return commonPrefixSearch(key, startPos, DEFAULT_MAX_RESULTS);
     }
 
     /**
@@ -82,16 +84,16 @@ public final class Trie {
      * @param maxNumResults
      * @return
      */
-    public List<TrieResult> commonPrefixSearch(byte[] key, int startPos, int maxNumResults) {
+    public List<TrieResult> commonPrefixSearch(ByteBuffer key, int startPos, int maxNumResults) {
         List<TrieResult> output = new ArrayList<>();
         int pos = startPos;
 
         int unit = buffer.get(pos);
         pos ^= offset(unit);
-        for (int i = 0; i < key.length; ++i) {
-            pos ^= key[i];
+        for (int i = key.position(); i < key.remaining(); ++i) {
+            pos ^= key.get(i);
             unit = buffer.get(pos);
-            if (label(unit) != key[i]) {
+            if (label(unit) != key.get(i)) {
                 return output;
             }
 
@@ -137,7 +139,7 @@ public final class Trie {
         List<Trie.TrieResult> matches = commonPrefixSearch(buffer);
 
         if (matches.isEmpty()) {
-            return new PrefixMatch(SPModel.utf8CodepointLength(buffer.get(buffer.position())), false);
+            return new PrefixMatch(UTF8Utils.codepointLength(buffer.get(buffer.position())), false);
         } else {
             int length = 0;
             for (var res : matches) {
@@ -188,7 +190,7 @@ public final class Trie {
     private static IntBuffer build(Set<String> strings) {
         List<ByteBuffer> bufs = new ArrayList<>(strings.size());
         for (var s : strings) {
-            bufs.add(SPModel.UTF8.encode(s));
+            bufs.add(UTF8Utils.UTF8.encode(s));
         }
 
     }

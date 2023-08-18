@@ -21,8 +21,6 @@ import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumSet;
@@ -34,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPModel, UnigramSPModel {
-    static final Charset UTF8 = StandardCharsets.UTF_8;
+
     protected static final HexFormat HEX_FORMATTER = HexFormat.of().withPrefix("<0x").withSuffix(">").withUpperCase();
 
     public enum ExtraOptions {REVERSE, ADD_BOS, ADD_EOS, UNK }
@@ -280,7 +278,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         if (denormalizer != null) {
             output = denormalizer.normalize(output).output();
         }
-        return UTF8.decode(output).toString();
+        return UTF8Utils.UTF8.decode(output).toString();
     }
 
     protected abstract ByteBuffer innerDecodeFromInts(int[] input);
@@ -291,21 +289,6 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
             ints[i] = input.get(i).id();
         }
         return decodeFromInts(ints);
-    }
-
-    public static int utf8CodepointLength(byte input) {
-        byte offset = (byte) ((input >> 4) & 0xF);
-        if (offset < 8) {
-            return 1;
-        } else if (offset == 12 || offset == 13) {
-            return 2;
-        } else if (offset == 14) {
-            return 3;
-        } else if (offset == 15) {
-            return 4;
-        } else {
-            throw new IllegalArgumentException("Invalid UTF-8 start byte, " + HEX_FORMATTER.formatHex(new byte[]{input}));
-        }
     }
 
     public static String byteToPiece(int byteVal) {
