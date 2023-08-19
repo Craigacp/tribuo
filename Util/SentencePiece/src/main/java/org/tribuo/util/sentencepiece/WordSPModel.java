@@ -25,8 +25,7 @@ import java.util.regex.Pattern;
 
 public final class WordSPModel extends SPModel {
 
-    private static final char SPACE_SYMBOL = '\u2581';
-    private static final Pattern SPLITTER = Pattern.compile("" + SPACE_SYMBOL);
+    private static final Pattern SPLITTER = Pattern.compile("" + Normalizer.REPLACEMENT_SPACE_CODEPOINT);
 
     WordSPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
         super(proto, options);
@@ -34,7 +33,7 @@ public final class WordSPModel extends SPModel {
 
     @Override
     protected int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS) {
-        if (input.isEmpty()) {
+        if (!input.hasRemaining()) {
             if (addBOS && addEOS) {
                 var output = new int[2];
                 output[0] = bosId;
