@@ -27,6 +27,10 @@ import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 import java.nio.ByteBuffer;
 
 public final class Normalizer {
+    static final char REPLACEMENT_SPACE_CODEPOINT = '\u2581';
+    private static final byte[] REPLACEMENT_SPACE_ARR = new byte[]{(byte)0xE2,(byte)0x96,(byte)0x81};
+    private static final byte SPACE_BYTE = ' ';
+    private static final byte[] SPACE_ARR = new byte[]{SPACE_BYTE};
 
     private final Trie unicodeNormalizer;
     private final Trie matcher;
@@ -34,6 +38,8 @@ public final class Normalizer {
 
     private final ByteBuffer normalizedOutput;
     private final SentencepieceModel.NormalizerSpec proto;
+
+
 
     public Normalizer(SentencepieceModel.NormalizerSpec proto) {
         this(proto, false, null);
@@ -59,17 +65,17 @@ public final class Normalizer {
 
         int consumed = 0;
 
-        // Ignores heading space.
+        // Ignores leading space.
         if (proto.getRemoveExtraWhitespaces()) {
             while (input.hasRemaining()) {
                 var p = normalizePrefix(input);
-                if (p.output.get(0) != ' ') {
+                if (p.output.get(0) != SPACE_BYTE) {
                     break;
                 }
                 input.position(input.position() + p.length);
                 consumed += p.length;
             }
-            // All chars are whitespace, return an empty buffer.
+            // All codepoints are whitespace, return an empty buffer.
             if (!input.hasRemaining()) {
                 return new NormalizedOutput(ByteBuffer.allocate(0),new int[0]);
             }
@@ -78,7 +84,91 @@ public final class Normalizer {
         ByteBuffer output = ByteBuffer.allocate(input.remaining() * 3);
         IntBuffer mapping = IntBuffer.allocate(input.remaining() * 3);
 
-        // Rest of normalization function.
+        // Adds a space symbol as a prefix (default is true)
+        if (!treatWhitespaceAsSuffix && proto.getAddDummyPrefix()){
+            if (proto.getEscapeWhitespaces()) {
+                // Replaces white space with U+2581 (LOWER ONE EIGHT BLOCK)
+                output.put(REPLACEMENT_SPACE_ARR);
+                for (int i = 0; i < REPLACEMENT_SPACE_ARR.length; i++) {
+                    mapping.put(consumed);
+                }
+            } else {
+                output.put((byte) ' ');
+                mapping.put(consumed);
+            }
+        }
+
+        boolean isPrevSpace = proto.getRemoveExtraWhitespaces();
+        while (input.hasRemaining()) {
+            var p = normalizePrefix(input);
+
+            // Removes leading spaces if the previous piece ends with whitespace.
+            while (isPrevSpace && p.output.hasRemaining() && p.output.get() == SPACE_BYTE) { }
+
+            if (p.output().hasRemaining()) {
+                byte cur = p.output.get(p.output.position());
+                while (p.output.hasRemaining()) {
+                    cur = p.output.get();
+                    if (proto.getEscapeWhitespaces() && cur == ' ') {
+                        // replace ' ' with kSpaceSymbol.
+                        output.put(REPLACEMENT_SPACE_ARR);
+                        for (int i = 0; i < REPLACEMENT_SPACE_ARR.length; i++) {
+                            mapping.put(consumed);
+                        }
+                    } else {
+                        output.put(cur);
+                        mapping.put(consumed);
+                    }
+                }
+                // Checks whether the last codepoint is whitespace.
+                isPrevSpace = cur == ' ';
+            }
+
+            consumed += p.length;
+            input.position(input.position()+p.length);
+            if (!proto.getRemoveExtraWhitespaces()) {
+                isPrevSpace = false;
+            }
+        }
+
+        // Ignores trailing space.
+        if (proto.getRemoveExtraWhitespaces()) {
+            byte[] space = proto.getEscapeWhitespaces() ? REPLACEMENT_SPACE_ARR : SPACE_ARR;
+            while (bufferEndsWith(output, space)) {
+                int length = output.position() - space.length;
+                if (length < 0) {
+                    throw new IllegalStateException("Too many spaces after normalizing");
+                }
+                consumed = mapping.get(length);
+                output.position(length);
+                mapping.position(length);
+            }
+        }
+
+        // Adds a space symbol as a suffix
+        if (treatWhitespaceAsSuffix && proto.getAddDummyPrefix()) {
+            if (proto.getEscapeWhitespaces()) {
+                // Replaces white space with U+2581 (LOWER ONE EIGHT BLOCK)
+                output.put(REPLACEMENT_SPACE_ARR);
+                for (int i = 0; i < REPLACEMENT_SPACE_ARR.length; i++) {
+                    mapping.put(consumed);
+                }
+            } else {
+                output.put((byte) ' ');
+                mapping.put(consumed);
+            }
+        }
+
+        mapping.put(consumed);
+
+        if (mapping.position() != (output.position() + 1)) {
+            throw new IllegalStateException("Invalid normalization");
+        }
+
+        ByteBuffer slicedOutput = output.slice(0, output.position());
+        int[] mappingArr = new int[mapping.position()];
+        mapping.get(0, mappingArr,0, mapping.position());
+        return new NormalizedOutput(slicedOutput,mappingArr);
     }
 
     private NormalizerPair normalizePrefix(ByteBuffer input) {
@@ -89,7 +179,6 @@ public final class Normalizer {
         if (matcher != null) {
             PrefixMatch matches = matcher.longestPrefixMatch(input);
             if (matches.found()) {
-                // TODO not yet a copy, does it need to be?
                 return new NormalizerPair(input.slice(input.position(), matches.lengthConsumed()), matches.lengthConsumed());
             }
         }
@@ -140,8 +229,20 @@ public final class Normalizer {
         return normalizedOutput.slice(index, normalizedOutput.capacity() - index);
     }
 
+    private static boolean bufferEndsWith(ByteBuffer buffer, byte[] array) {
+        if (buffer.position() >= array.length) {
+            boolean match = true;
+            for (int i = 0; i < array.length; i++) {
+                match &= buffer.get(buffer.position()-i) == array[(array.length-1)-i];
+            }
+            return match;
+        } else {
+            return false;
+        }
+    }
+
     private static SplitCharMap decodePrecompiledCharsMap(ByteBuffer buffer) {
-        // <trie size(4byte)><double array trie><normalized string>
+        // <trie size(4byte)><trie><normalized string>
         int trieSize = buffer.getInt();
 
         ByteBuffer trieBuffer = ByteBuffer.allocate(trieSize);
