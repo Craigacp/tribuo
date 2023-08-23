@@ -39,8 +39,6 @@ public final class Normalizer {
     private final ByteBuffer normalizedOutput;
     private final SentencepieceModel.NormalizerSpec proto;
 
-
-
     public Normalizer(SentencepieceModel.NormalizerSpec proto) {
         this(proto, false, null);
     }
@@ -60,7 +58,7 @@ public final class Normalizer {
 
     public NormalizedOutput normalize(ByteBuffer input) {
         if (!input.hasRemaining()) {
-            return new NormalizedOutput(ByteBuffer.allocate(0),new int[0]);
+            return new NormalizedOutput(ByteBuffer.allocate(0), ByteBuffer.allocate(0), new int[0]);
         }
 
         int consumed = 0;
@@ -77,7 +75,7 @@ public final class Normalizer {
             }
             // All codepoints are whitespace, return an empty buffer.
             if (!input.hasRemaining()) {
-                return new NormalizedOutput(ByteBuffer.allocate(0),new int[0]);
+                return new NormalizedOutput(ByteBuffer.allocate(0), ByteBuffer.allocate(0), new int[0]);
             }
         }
 
@@ -168,7 +166,7 @@ public final class Normalizer {
         ByteBuffer slicedOutput = output.slice(0, output.position());
         int[] mappingArr = new int[mapping.position()];
         mapping.get(0, mappingArr,0, mapping.position());
-        return new NormalizedOutput(slicedOutput,mappingArr);
+        return new NormalizedOutput(input, slicedOutput, mappingArr);
     }
 
     private NormalizerPair normalizePrefix(ByteBuffer input) {
@@ -253,7 +251,7 @@ public final class Normalizer {
         return new SplitCharMap(trieBuffer.asReadOnlyBuffer(), normalizedBuffer.asReadOnlyBuffer());
     }
 
-    public record NormalizedOutput(ByteBuffer output, int[] byteAlignment) {}
+    public record NormalizedOutput(ByteBuffer input, ByteBuffer output, int[] byteAlignment) {}
 
     private record SplitCharMap(ByteBuffer trie, ByteBuffer normalized) {}
 

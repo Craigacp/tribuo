@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +37,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
 
     protected static final HexFormat HEX_FORMATTER = HexFormat.of().withPrefix("<0x").withSuffix(">").withUpperCase();
 
-    public enum ExtraOptions {REVERSE, ADD_BOS, ADD_EOS, UNK }
+    public enum ExtraOptions {REVERSE, ADD_BOS, ADD_EOS, UNK}
 
     public static final String DEFAULT_UNKNOWN = "<unk>";
     public static final String DEFAULT_BOS = "<s>";
@@ -48,6 +50,8 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
 
     protected final Map<String, Integer> vocab;
     protected final String[] inverseVocab;
+    // This array is ragged.
+    protected final byte[][] inverseVocabUTF8;
 
     protected final Map<String, Integer> reservedIdMap;
 
@@ -62,6 +66,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
     protected final String bos;
     protected final String eos;
     protected final String pad;
+    protected final boolean byteFallback;
 
     protected final EnumSet<ExtraOptions> options;
 
@@ -118,6 +123,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
             }
         }
         this.inverseVocab = new String[vocab.size() + reservedIdMap.size()];
+        this.inverseVocabUTF8 = new byte[vocab.size() + reservedIdMap.size()][];
         for (var e : vocab.entrySet()) {
             int id = e.getValue();
             if ((id < 0) || (id >= inverseVocab.length)) {
@@ -126,6 +132,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
                 throw new IllegalStateException("Invalid vocab, two elements map to id " + id + ", terms '" + inverseVocab[id] + "' & '" + e.getKey() + "'");
             } else {
                 inverseVocab[id] = e.getKey();
+                inverseVocabUTF8[id] = UTF8Utils.UTF8.encode(e.getKey()).array();
             }
         }
         for (var e : reservedIdMap.entrySet()) {
@@ -136,6 +143,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
                 throw new IllegalStateException("Invalid vocab, two elements map to id " + id + ", terms '" + inverseVocab[id] + "' & '" + e.getKey() + "'");
             } else {
                 inverseVocab[id] = e.getKey();
+                inverseVocabUTF8[id] = UTF8Utils.UTF8.encode(e.getKey()).array();
             }
         }
         this.proto = proto;
@@ -150,6 +158,7 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         this.bos = proto.getTrainerSpec().hasBosPiece() ? proto.getTrainerSpec().getBosPiece() : DEFAULT_BOS;
         this.eos = proto.getTrainerSpec().hasEosPiece() ? proto.getTrainerSpec().getEosPiece() : DEFAULT_EOS;
         this.pad = proto.getTrainerSpec().hasPadPiece() ? proto.getTrainerSpec().getPadPiece() : DEFAULT_PAD;
+        this.byteFallback = proto.getTrainerSpec().getByteFallback();
 
         this.userDefinedSymbolTrie = new Trie(userDefinedSymbols);
         this.normalizer = new Normalizer(proto.getNormalizerSpec(), proto.getTrainerSpec().getTreatWhitespaceAsSuffix(), userDefinedSymbolTrie);
@@ -180,6 +189,14 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
             return unk;
         } else {
             return inverseVocab[id];
+        }
+    }
+
+    byte[] getVocabBytesForId(int id) {
+        if ((id < 0) || (id >= inverseVocab.length)) {
+            return unk.getBytes(UTF8Utils.UTF8);
+        } else {
+            return inverseVocabUTF8[id];
         }
     }
 
@@ -244,25 +261,96 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
     }
 
     public List<String> encode(String input) {
-        return encodeToTokens(input).stream().map(SPToken::surface).toList();
+        return encodeToTokens(input).stream().map(SPToken::piece).toList();
     }
 
     public int[] encodeToInts(String input) {
         Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
-        return encodeToInts(normalized.output(), options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
+        return encodeToTokens(normalized).stream().mapToInt(SPToken::id).toArray();
     }
 
     public List<SPToken> encodeToTokens(String input) {
         Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
-        return encodeToTokens(normalized, options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
+        return encodeToTokens(normalized);
     }
 
-    protected abstract int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS);
+    protected abstract SPPair[] encode(ByteBuffer input, boolean addBOS, boolean addEOS);
 
-    protected List<SPToken> encodeToTokens(Normalizer.NormalizedOutput input, boolean addBOS, boolean addEOS) {
-        int[] ints = encodeToInts(input.output(), addBOS, addEOS);
+    protected List<SPToken> encodeToTokens(Normalizer.NormalizedOutput input) {
+        SPPair[] pieces = encode(input.output(), options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
 
+        List<SPToken> output = new ArrayList<>();
 
+        int consumed = 0;
+        boolean isPrevUnk = false;
+        for (SPPair piece : pieces) {
+            int id = piece.id();
+            byte[] pieceBytes = piece.bytes();
+
+            boolean isUnk = isUnknown(id);
+
+            if (isControl(id)) {
+                // Control symbol has no corresponding source surface, so begin == end.
+                SPToken cur = new SPToken(pieceBytes, id, new byte[0], input.byteAlignment()[consumed], input.byteAlignment()[consumed]);
+                output.add(cur);
+            } else {
+                final int begin = consumed;
+                final int end = consumed + pieceBytes.length;
+                if (input.byteAlignment().length < begin || input.byteAlignment().length < end) {
+                    throw new IllegalStateException("Normalizer mapping invalid, begin = " + begin + ", end = " + end + ", mapping.length = " + input.byteAlignment().length);
+                }
+                final int origBegin = input.byteAlignment()[begin];
+                final int origEnd = input.byteAlignment()[end];
+                if (origEnd >= input.input().capacity() || origBegin >= input.input().capacity() || origBegin > origEnd) {
+                    throw new IllegalStateException("Normalizer mapping invalid, input.length = " + input.input().capacity() + ", begin = " + begin + ", end = " + end);
+                }
+                ByteBuffer surface = input.input().slice(origBegin, origEnd - origBegin);
+
+                if (isUnk && byteFallback) {
+                    // Decomposes an unknown piece into UTF-8 bytes
+                    for (int j = 0; j < pieceBytes.length; ++j) {
+                        // Create a byte piece
+                        byte b = pieceBytes[j];
+                        String bytePiece = byteToPiece(b);
+                        int newId = getIdForVocab(bytePiece);
+
+                        SPToken token;
+                        // The last byte piece holds the surface of the original unknown
+                        // character. The other byte pieces have no surface.
+                        if (j == pieceBytes.length - 1) {
+                            token = new SPToken(bytePiece, newId, surface, origBegin, origEnd);
+                        } else {
+                            // begin == end
+                            token = new SPToken(bytePiece, newId, "", origBegin, origBegin);
+                        }
+                        output.add(token);
+                    }
+                } else {
+                    if (isPrevUnk && isUnk) {
+                        // Overwrite the last unknown with a bigger unknown which contains both of them
+                        SPToken oldToken = output.get(output.size() - 1);
+                        SPToken newToken = new SPToken(pieceBytes, id, surface, origBegin, origEnd);
+                        SPToken merged = SPToken.merge(oldToken, newToken);
+                        output.set(output.size() - 1, merged);
+                    } else {
+                        SPToken token = new SPToken(pieceBytes, id, surface, origBegin, origEnd);
+                        output.add(token);
+                    }
+                }
+                consumed += pieceBytes.length;
+            }
+            isPrevUnk = isUnk;
+        }
+
+        if (consumed != input.output().capacity()) {
+            throw new IllegalStateException("All normalized characters are not consumed");
+        }
+
+        if (options.contains(ExtraOptions.REVERSE)) {
+            Collections.reverse(output);
+        }
+
+        return output;
     }
 
     public String decode(List<String> input) {
@@ -281,7 +369,9 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         return UTF8Utils.UTF8.decode(output).toString();
     }
 
-    protected abstract ByteBuffer innerDecodeFromInts(int[] input);
+    protected ByteBuffer innerDecodeFromInts(int[] input) {
+
+    }
 
     public String decodeFromTokens(List<SPToken> input) {
         int[] ints = new int[input.size()];
@@ -292,8 +382,8 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
     }
 
     public static String byteToPiece(int byteVal) {
-        if (byteVal < 256 && byteVal >=0 ) {
-            return HEX_FORMATTER.formatHex(new byte[]{(byte)byteVal});
+        if (byteVal < 256 && byteVal >= 0) {
+            return HEX_FORMATTER.formatHex(new byte[]{(byte) byteVal});
         } else {
             throw new IllegalArgumentException("Invalid byte " + byteVal);
         }
@@ -326,4 +416,6 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
             case CHAR -> new CharSPModel(proto, options);
         };
     }
+
+    protected record SPPair(int id, byte[] bytes) {}
 }

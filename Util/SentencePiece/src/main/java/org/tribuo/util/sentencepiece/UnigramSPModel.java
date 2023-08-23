@@ -27,12 +27,8 @@ public final class UnigramSPModel extends SPModel {
     }
 
     @Override
-    protected int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS) {
-        return new int[0];
+    protected SPPair[] encode(ByteBuffer input, boolean addBOS, boolean addEOS) {
+        return new SPPair[0];
     }
 
-    @Override
-    protected ByteBuffer innerDecodeFromInts(int[] input) {
-        return null;
-    }
 }
