@@ -32,7 +32,7 @@ public final class WordSPModel extends SPModel {
     }
 
     @Override
-    protected int[] encodeToInts(ByteBuffer input, boolean addBOS, boolean addEOS) {
+    protected SPPair[] encode(ByteBuffer input, boolean addBOS, boolean addEOS) {
         if (!input.hasRemaining()) {
             if (addBOS && addEOS) {
                 var output = new int[2];
@@ -80,8 +80,4 @@ public final class WordSPModel extends SPModel {
         return Arrays.copyOf(tokens, count);
     }
 
-    @Override
-    protected ByteBuffer innerDecodeFromInts(int[] input) {
-        return null;
-    }
 }

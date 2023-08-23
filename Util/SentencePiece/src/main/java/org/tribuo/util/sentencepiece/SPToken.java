@@ -16,4 +16,30 @@
 
 package org.tribuo.util.sentencepiece;
 
-public record SPToken(String piece, int id, String surface, int start, int end) { }
+import java.nio.ByteBuffer;
+
+public record SPToken(String piece, int id, String surface, int start, int end) {
+
+    SPToken(byte[] piece, int id, byte[] surface, int start, int end) {
+        this(UTF8Utils.UTF8.decode(ByteBuffer.wrap(piece)).toString(), id, UTF8Utils.UTF8.decode(ByteBuffer.wrap(surface)).toString(), start, end);
+    }
+
+    SPToken(String piece, int id, ByteBuffer surface, int start, int end) {
+        this(piece, id, UTF8Utils.UTF8.decode(surface).toString(), start, end);
+    }
+
+    SPToken(ByteBuffer piece, int id, ByteBuffer surface, int start, int end) {
+        this(UTF8Utils.UTF8.decode(piece).toString(), id, UTF8Utils.UTF8.decode(surface).toString(), start, end);
+    }
+
+    SPToken(byte[] piece, int id, ByteBuffer surface, int start, int end) {
+        this(UTF8Utils.UTF8.decode(ByteBuffer.wrap(piece)).toString(), id, UTF8Utils.UTF8.decode(surface).toString(), start, end);
+    }
+
+    static SPToken merge(SPToken start, SPToken end) {
+        if (start.id != end.id) {
+            throw new IllegalArgumentException("Can only merge tokens with the same (unknown) id, start.id = " + start.id + ", end.id = " + end.id);
+        }
+        return new SPToken(start.piece + end.piece, start.id, start.surface + end.surface, start.start, end.end);
+    }
+}
