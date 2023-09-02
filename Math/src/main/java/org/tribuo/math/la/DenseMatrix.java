@@ -729,7 +729,7 @@ public class DenseMatrix implements Matrix {
 
         for (int i = 0; i < dim1; i++) {
             // getRow is a view on the data
-            getRow(i).subtract(other.getRow(i));
+            output.getRow(i).subtract(other.getRow(i));
         }
 
         return output;
