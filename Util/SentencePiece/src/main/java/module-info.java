@@ -16,4 +16,6 @@
 
 module org.tribuo.util.sentencepiece {
     requires protobuf.java;
+
+    exports org.tribuo.util.sentencepiece;
 }
