@@ -602,22 +602,9 @@ public final class InformationTheory {
 
     /**
      * A tuple of the information theoretic value, along with the number of
-     * states in the random variable. Will be a record one day.
+     * states in the random variable.
      */
-    private static class ScoreStateCountTuple {
-        public final double score;
-        public final int stateCount;
-
-        /**
-         * Construct a score state tuple
-         * @param score The score.
-         * @param stateCount The number of states.
-         */
-        ScoreStateCountTuple(double score, int stateCount) {
-            this.score = score;
-            this.stateCount = stateCount;
-        }
-
+    private record ScoreStateCountTuple(double score, int stateCount) {
         @Override
         public String toString() {
             return "ScoreStateCount(score=" + score + ",stateCount=" + stateCount + ")";
@@ -626,39 +613,15 @@ public final class InformationTheory {
 
     /**
      * An immutable named tuple containing the statistics from a G test.
-     * <p>
-     * Will be a record one day.
+     *
+     * @param gStatistic  The G test statistic.
+     * @param numStates   The number of states.
+     * @param probability The probability of that statistic.
      */
-    public static final class GTestStatistics {
-        /**
-         * The G test statistic.
-         */
-        public final double gStatistic;
-        /**
-         * The number of states.
-         */
-        public final int numStates;
-        /**
-         * The probability of that statistic.
-         */
-        public final double probability;
-
-        /**
-         * Constructs a GTestStatistics tuple with the supplied values.
-         * @param gStatistic The g test statistic.
-         * @param numStates The number of states.
-         * @param probability The probability of that statistic.
-         */
-        // TODO should be package private.
-        public GTestStatistics(double gStatistic, int numStates, double probability) {
-            this.gStatistic = gStatistic;
-            this.numStates = numStates;
-            this.probability = probability;
-        }
-
+    public record GTestStatistics(double gStatistic, int numStates, double probability) {
         @Override
         public String toString() {
-            return "GTest(statistic="+gStatistic+",probability="+probability+",numStates="+numStates+")";
+            return "GTest(statistic=" + gStatistic + ",probability=" + probability + ",numStates=" + numStates + ")";
         }
     }
 }

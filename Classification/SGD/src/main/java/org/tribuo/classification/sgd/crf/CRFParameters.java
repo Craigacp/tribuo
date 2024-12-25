@@ -206,7 +206,7 @@ public final class CRFParameters implements Parameters, Serializable {
      */
     public int[] predict(SGDVector[] features) {
         ChainHelper.ChainViterbiResults result = ChainHelper.viterbi(getCliqueValues(features));
-        return result.mapValues;
+        return result.mapValues();
     }
 
     /**
@@ -218,8 +218,8 @@ public final class CRFParameters implements Parameters, Serializable {
         ChainHelper.ChainBPResults result = ChainHelper.beliefPropagation(getCliqueValues(features));
         DenseVector[] marginals = new DenseVector[features.length];
         for (int i = 0; i < features.length; i++) {
-            marginals[i] = result.alphas[i].add(result.betas[i]);
-            marginals[i].expNormalize(result.logZ);
+            marginals[i] = result.alphas()[i].add(result.betas()[i]);
+            marginals[i].expNormalize(result.logZ());
         }
         return marginals;
     }
@@ -237,7 +237,7 @@ public final class CRFParameters implements Parameters, Serializable {
     public List<Double> predictConfidenceUsingCBP(SGDVector[] features, List<Chunk> chunks) {
         ChainHelper.ChainCliqueValues cliqueValues = getCliqueValues(features);
         ChainHelper.ChainBPResults bpResult = ChainHelper.beliefPropagation(cliqueValues);
-        double bpLogZ = bpResult.logZ;
+        double bpLogZ = bpResult.logZ();
 
         int[] constraints = new int[features.length];
 
@@ -266,9 +266,9 @@ public final class CRFParameters implements Parameters, Serializable {
         ChainHelper.ChainCliqueValues scores = getCliqueValues(features);
         // Infer the marginal distribution over labels for each token.
         ChainHelper.ChainBPResults bpResults = ChainHelper.beliefPropagation(scores);
-        double logZ = bpResults.logZ;
-        DenseVector[] alphas = bpResults.alphas;
-        DenseVector[] betas = bpResults.betas;
+        double logZ = bpResults.logZ();
+        DenseVector[] alphas = bpResults.alphas();
+        DenseVector[] betas = bpResults.betas();
 
         //Calculate the gradients for the parameters.
         Tensor[] gradient = new Tensor[3];
@@ -282,7 +282,7 @@ public final class CRFParameters implements Parameters, Serializable {
         for (int i = 0; i < features.length; i++) {
             int curLabel = labels[i];
             // Increment the loss based on the score for the true label.
-            DenseVector curLocalScores = scores.localValues[i];
+            DenseVector curLocalScores = scores.localValues()[i];
             score += curLocalScores.get(curLabel);
             // Generate the predicted local marginal from the BP run.
             DenseVector curAlpha = alphas[i];

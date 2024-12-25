@@ -143,127 +143,49 @@ public abstract class OCIUtil {
 
     /**
      * Configuration for OCI DS.
-     * <p>
-     * Not a record but will be.
+     *
+     * @param compartmentID OCI compartment ID.
+     * @param projectID     OCI Data Science project ID.
      */
-    public static final class OCIDSConfig {
-        /**
-         * OCI compartment ID.
-         */
-        public final String compartmentID;
-        /**
-         * OCI Data Science project ID.
-         */
-        public final String projectID;
-
-        /**
-         * Constructs an OCIDSConfig.
-         * @param compartmentID The OCI compartment ID.
-         * @param projectID The OCI DS project ID.
-         */
-        public OCIDSConfig(String compartmentID, String projectID) {
-            this.compartmentID = compartmentID;
-            this.projectID = projectID;
-        }
-    }
+    public record OCIDSConfig(String compartmentID, String projectID) { }
 
     /**
      * Configuration for an OCI DS Model artifact.
-     * <p>
-     * Not a record, but will be.
+     *
+     * @param dsConfig         The OCI Data Science config.
+     * @param modelName        The model display name.
+     * @param modelDescription The model description.
+     * @param onnxDomain       The domain to encode in the ONNX file. Should be a reverse-DNS style name, like a Java package.
+     * @param onnxModelVersion The ONNX model version.
+     * @param condaName        The Conda environment name.
+     * @param condaPath        The Conda environment path in object storage.
      */
-    public static final class OCIModelArtifactConfig {
-        /**
-         * The OCI Data Science config.
-         */
-        public final OCIDSConfig dsConfig;
-        /**
-         * The model display name.
-         */
-        public final String modelName;
-        /**
-         * The model description.
-         */
-        public final String modelDescription;
-        /**
-         * The ONNX domain name.
-         */
-        public final String onnxDomain;
-        /**
-         * The ONNX model version.
-         */
-        public final int onnxModelVersion;
-        /**
-         * The Conda environment name.
-         */
-        public final String condaName;
-        /**
-         * The Conda environment path in object storage.
-         */
-        public final String condaPath;
-
-        /**
-         * Constructs an OCIModelArtifactConfig, used to create an OCI DS model.
-         * @param dsConfig The OCI Data Science config.
-         * @param modelName The model display name.
-         * @param modelDescription The model description.
-         * @param onnxDomain The domain to encode in the ONNX file. Should be a reverse-DNS style name, like a Java package.
-         * @param onnxModelVersion The ONNX model version number.
-         * @param condaName The conda environment name.
-         * @param condaPath The conda environment path.
-         */
-        public OCIModelArtifactConfig(OCIDSConfig dsConfig, String modelName, String modelDescription, String onnxDomain, int onnxModelVersion, String condaName, String condaPath) {
-            this.dsConfig = dsConfig;
-            this.modelDescription = modelDescription;
-            this.modelName = modelName;
-            this.onnxDomain = onnxDomain;
-            this.onnxModelVersion = onnxModelVersion;
-            this.condaName = condaName;
-            this.condaPath = condaPath;
-        }
-    }
+    public record OCIModelArtifactConfig(OCIDSConfig dsConfig, String modelName, String modelDescription,
+                                             String onnxDomain, int onnxModelVersion, String condaName, String condaPath) { }
 
     /**
      * Configuration for an OCI DS Model Deployment.
-     * <p>
-     * Not a record, but will be.
+     *
+     * @param dsConfig       The OCI Data Science config.
+     * @param bandwidth      The bandwidth for the load balancer in MBps (minimum value is 10).
+     * @param instanceCount  The number of instances to create.
+     * @param deploymentName The deployment name.
+     * @param shape          The instance shape.
+     * @param modelID        The ID of the model artifact to deploy.
      */
-    public static final class OCIModelDeploymentConfig {
-        /**
-         * The OCI Data Science config.
-         */
-        public final OCIDSConfig dsConfig;
-        /**
-         * The bandwidth for the load balancer in MBps.
-         */
-        public final int bandwidth;
-        /**
-         * The number of instances to create.
-         */
-        public final int instanceCount;
-        /**
-         * The deployment name.
-         */
-        public final String deploymentName;
-        /**
-         * The instance shape.
-         */
-        public final String shape;
-        /**
-         * The ID of the model artifact to deploy.
-         */
-        public final String modelID;
-
+    public record OCIModelDeploymentConfig(OCIDSConfig dsConfig, String modelID, String deploymentName, String shape,
+                                               int bandwidth, int instanceCount) {
         /**
          * Constructs an OCI DS Model Deployment configuration.
-         * @param dsConfig The OCI Data Science config.
-         * @param modelID The ID of the model artifact to deploy.
+         *
+         * @param dsConfig       The OCI Data Science config.
+         * @param bandwidth      The bandwidth for the load balancer in MBps (minimum value is 10).
+         * @param modelID        The ID of the model artifact to deploy.
          * @param deploymentName The model deployment name.
-         * @param shape The instance shape.
-         * @param bandwidth The bandwidth for the load balancer in MBps (minimum value is 10).
-         * @param instanceCount The number of instances to spawn.
+         * @param shape          The instance shape.
+         * @param instanceCount  The number of instances to spawn.
          */
-        public OCIModelDeploymentConfig(OCIDSConfig dsConfig, String modelID, String deploymentName, String shape, int bandwidth, int instanceCount) {
+        public OCIModelDeploymentConfig {
             if (instanceCount < 1) {
                 throw new IllegalArgumentException("Instance count must be positive, found " + instanceCount);
             }
@@ -279,12 +201,6 @@ public abstract class OCIUtil {
             if (modelID == null || modelID.isEmpty()) {
                 throw new IllegalArgumentException("Must supply valid modelID");
             }
-            this.dsConfig = dsConfig;
-            this.modelID = modelID;
-            this.deploymentName = deploymentName;
-            this.shape = shape;
-            this.bandwidth = bandwidth;
-            this.instanceCount = instanceCount;
         }
     }
 

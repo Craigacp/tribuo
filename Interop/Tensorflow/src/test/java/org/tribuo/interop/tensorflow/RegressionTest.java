@@ -68,8 +68,8 @@ public class RegressionTest {
         gradientParams.put("initialAccumulatorValue", 0.1f);
         FeatureConverter denseConverter = new DenseFeatureConverter(INPUT_NAME);
         OutputConverter<Regressor> outputConverter = new RegressorConverter();
-        TensorFlowTrainer<Regressor> trainer = new TensorFlowTrainer<>(graphDefTuple.graphDef,
-                graphDefTuple.outputName,
+        TensorFlowTrainer<Regressor> trainer = new TensorFlowTrainer<>(graphDefTuple.graphDef(),
+                graphDefTuple.outputName(),
                 GradientOptimiser.ADAGRAD,
                 gradientParams,
                 denseConverter,

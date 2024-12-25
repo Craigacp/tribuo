@@ -216,7 +216,7 @@ public final class XGBoostClassificationTrainer extends XGBoostTrainer<Label> {
         Function<Label,Float> responseExtractor = (Label l) -> (float) outputInfo.getID(l);
         try {
             DMatrixTuple<Label> trainingData = convertExamples(examples, featureMap, responseExtractor);
-            model = XGBoost.train(trainingData.data, curParams, numTrees, Collections.emptyMap(), null, null);
+            model = XGBoost.train(trainingData.data(), curParams, numTrees, Collections.emptyMap(), null, null);
         } catch (XGBoostError e) {
             logger.log(Level.SEVERE, "XGBoost threw an error", e);
             throw new IllegalStateException(e);

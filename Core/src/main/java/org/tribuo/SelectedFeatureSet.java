@@ -36,11 +36,17 @@ import java.util.Objects;
 
 /**
  * A record-like class for a selected feature set.
- * <p>
- * Uses record style accessors as it may be refactored into a record one day.
+ *
+ * @param featureNames  The feature names.
+ * @param featureScores The feature scores.
+ * @param isOrdered     Is this feature set ordered?
+ * @param provenance    The provenance of the feature selection.
  */
 @ProtoSerializableClass(serializedDataClass = SelectedFeatureSetProto.class, version = SelectedFeatureSet.CURRENT_VERSION)
-public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetProto>, Provenancable<FeatureSetProvenance>, Serializable {
+public record SelectedFeatureSet(@ProtoSerializableField List<String> featureNames,
+                                 @ProtoSerializableField List<Double> featureScores,
+                                 @ProtoSerializableField(name = "ordered") boolean isOrdered,
+                                 @ProtoSerializableField FeatureSetProvenance provenance) implements ProtoSerializable<FeatureSetProto>, Provenancable<FeatureSetProvenance>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -48,24 +54,13 @@ public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetPro
      */
     public static final int CURRENT_VERSION = 0;
 
-    @ProtoSerializableField
-    private final List<String> featureNames;
-
-    @ProtoSerializableField
-    private final List<Double> featureScores;
-
-    @ProtoSerializableField
-    private final FeatureSetProvenance provenance;
-
-    @ProtoSerializableField(name="ordered")
-    private final boolean isOrdered;
-
     /**
      * Create a selected feature set.
-     * @param featureNames The feature names.
+     *
+     * @param featureNames  The feature names.
      * @param featureScores The feature scores.
-     * @param isOrdered Is this feature set ordered?
-     * @param provenance The provenance of the feature selection.
+     * @param isOrdered     Is this feature set ordered?
+     * @param provenance    The provenance of the feature selection.
      */
     public SelectedFeatureSet(List<String> featureNames, List<Double> featureScores, boolean isOrdered, FeatureSetProvenance provenance) {
         this.featureNames = Collections.unmodifiableList(featureNames);
@@ -76,13 +71,14 @@ public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetPro
 
     /**
      * Deserialization factory.
-     * @param version The serialized object version.
+     *
+     * @param version   The serialized object version.
      * @param className The class name.
-     * @param message The serialized data.
-     * @throws InvalidProtocolBufferException If the protobuf could not be parsed from the {@code message}.
+     * @param message   The serialized data.
      * @return The deserialized object.
+     * @throws InvalidProtocolBufferException If the protobuf could not be parsed from the {@code message}.
      */
-    @SuppressWarnings({"unchecked","rawtypes"}) // guarded & checked by getClass checks.
+    @SuppressWarnings({"unchecked", "rawtypes"}) // guarded & checked by getClass checks.
     public static SelectedFeatureSet deserializeFromProto(int version, String className, Any message) throws InvalidProtocolBufferException {
         if (version < 0 || version > CURRENT_VERSION) {
             throw new IllegalArgumentException("Unknown version " + version + ", this class supports at most version " + CURRENT_VERSION);
@@ -96,13 +92,15 @@ public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetPro
             throw new IllegalStateException("Invalid protobuf, provenance was not a FeatureSetProvenance, found " + prov.getClass());
         }
         FeatureSetProvenance fsProv = (FeatureSetProvenance) prov;
-        return new SelectedFeatureSet(proto.getFeatureNamesList(),proto.getFeatureScoresList(),proto.getOrdered(),fsProv);
+        return new SelectedFeatureSet(proto.getFeatureNamesList(), proto.getFeatureScoresList(), proto.getOrdered(), fsProv);
     }
 
     /**
      * The selected feature names in a possibly ordered list.
+     *
      * @return The selected feature names.
      */
+    @Override
     public List<String> featureNames() {
         return featureNames;
     }
@@ -111,16 +109,20 @@ public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetPro
      * The selected feature scores in a possibly ordered list.
      * <p>
      * If the algorithm did not produce scores then these values are all {@link Double#NaN}.
+     *
      * @return The selected feature scores.
      */
+    @Override
     public List<Double> featureScores() {
         return featureScores;
     }
 
     /**
      * The provenance of the feature set.
+     *
      * @return The feature set provenance.
      */
+    @Override
     public FeatureSetProvenance provenance() {
         return provenance;
     }
@@ -132,8 +134,10 @@ public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetPro
 
     /**
      * Is this feature set ordered?
+     *
      * @return True if the set is ordered.
      */
+    @Override
     public boolean isOrdered() {
         return isOrdered;
     }
@@ -143,41 +147,12 @@ public final class SelectedFeatureSet implements ProtoSerializable<FeatureSetPro
         return ProtoUtil.serialize(this);
     }
 
-    /**
-     * Checks if this {@code SelectedFeatureSet} is equal to the supplied object.
-     * <p>
-     * Equals is defined as containing the same features, in the same order, with the same scores, and with
-     * the same provenance information. As that provenance includes machine information and timestamps, this
-     * means equals is defined as did this object derive from the same computation as the supplied object.
-     * @param o The object to test.
-     * @return True if they are equal.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SelectedFeatureSet that = (SelectedFeatureSet) o;
-        return isOrdered == that.isOrdered && featureNames.equals(that.featureNames) && featureScores.equals(that.featureScores) && provenance.equals(that.provenance);
-    }
-
-    /**
-     * Computes the hash code.
-     * <p>
-     * The hash code depends on the provenance object, and is not just a function of the feature names and scores, to
-     * be consistent with the definition of equals.
-     * @return The hash code.
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(featureNames, featureScores, provenance, isOrdered);
-    }
-
     @Override
     public String toString() {
         return "SelectedFeatureSet{" +
-            "featureNames=" + featureNames +
-            ", featureScores=" + featureScores +
-            ", isOrdered=" + isOrdered +
-            '}';
+                "featureNames=" + featureNames +
+                ", featureScores=" + featureScores +
+                ", isOrdered=" + isOrdered +
+                '}';
     }
 }

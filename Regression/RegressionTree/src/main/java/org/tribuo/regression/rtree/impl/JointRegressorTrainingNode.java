@@ -198,9 +198,9 @@ public class JointRegressorTrainingNode extends AbstractTrainingNode<Regressor> 
                 double greaterThanScore = 0.0;
                 for (int k = 0; k < targets.length; k++) {
                     ImpurityTuple left = impurity.impurityTuple(curLeftIndices,targets[k],weights);
-                    lessThanScore += left.impurity * left.weight;
+                    lessThanScore += left.impurity() * left.weight();
                     ImpurityTuple right = impurity.impurityTuple(curRightIndices,targets[k],weights);
-                    greaterThanScore += right.impurity * right.weight;
+                    greaterThanScore += right.impurity() * right.weight();
                 }
                 double score = (lessThanScore + greaterThanScore) / (targets.length * weightSum);
                 if (score < bestScore) {
@@ -220,7 +220,7 @@ public class JointRegressorTrainingNode extends AbstractTrainingNode<Regressor> 
         List<AbstractTrainingNode<Regressor>> output;
         double impurityDecrease = weightSum * (getImpurity() - bestScore);
         // If we found a split better than the current impurity.
-        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.getScaledMinImpurityDecrease())) {
+        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.scaledMinImpurityDecrease())) {
             output = splitAtBest(featureIDs, bestID, bestSplitValue, bestLeftIndices, bestRightIndices);
         } else {
             output = Collections.emptyList();
@@ -271,9 +271,9 @@ public class JointRegressorTrainingNode extends AbstractTrainingNode<Regressor> 
 
             for (int k = 0; k < targets.length; k++) {
                 ImpurityTuple left = impurity.impurityTuple(curLeftIndices,targets[k],weights);
-                lessThanScore += left.impurity * left.weight;
+                lessThanScore += left.impurity() * left.weight();
                 ImpurityTuple right = impurity.impurityTuple(curRightIndices,targets[k],weights);
-                greaterThanScore += right.impurity * right.weight;
+                greaterThanScore += right.impurity() * right.weight();
             }
 
             double score = (lessThanScore + greaterThanScore) / (targets.length * weightSum);
@@ -294,7 +294,7 @@ public class JointRegressorTrainingNode extends AbstractTrainingNode<Regressor> 
         List<AbstractTrainingNode<Regressor>> output;
         double impurityDecrease = weightSum * (getImpurity() - bestScore);
         // If we found a split better than the current impurity.
-        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.getScaledMinImpurityDecrease())) {
+        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.scaledMinImpurityDecrease())) {
             output = splitAtBest(featureIDs, bestID, bestSplitValue, bestLeftIndices, bestRightIndices);
         } else {
             output = Collections.emptyList();

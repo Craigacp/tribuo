@@ -98,8 +98,8 @@ public class ClassificationTest {
         OutputConverter<Label> outputConverter = new LabelConverter();
 
         // Test native trainer
-        TensorFlowTrainer<Label> nativeTrainer = new TensorFlowTrainer<>(graphDefTuple.graphDef,
-                graphDefTuple.outputName,
+        TensorFlowTrainer<Label> nativeTrainer = new TensorFlowTrainer<>(graphDefTuple.graphDef(),
+                graphDefTuple.outputName(),
                 GradientOptimiser.ADAGRAD,
                 gradientParams,
                 denseConverter,
@@ -129,8 +129,8 @@ public class ClassificationTest {
 
         // Test checkpoint trainer
         Path checkpointPath = Files.createTempDirectory("tf-classification-test-ckpt");
-        TensorFlowTrainer<Label> checkpointTrainer = new TensorFlowTrainer<>(graphDefTuple.graphDef,
-                graphDefTuple.outputName,
+        TensorFlowTrainer<Label> checkpointTrainer = new TensorFlowTrainer<>(graphDefTuple.graphDef(),
+                graphDefTuple.outputName(),
                 GradientOptimiser.ADAGRAD,
                 gradientParams,
                 denseConverter,
@@ -332,8 +332,8 @@ public class ClassificationTest {
         gradientParams.put("initialAccumulatorValue", 0.1f);
         FeatureConverter imageConverter = new ImageConverter(INPUT_NAME, 10, 10, 1);
         OutputConverter<Label> outputConverter = new LabelConverter();
-        TensorFlowTrainer<Label> trainer = new TensorFlowTrainer<>(graphDefTuple.graphDef,
-                graphDefTuple.outputName,
+        TensorFlowTrainer<Label> trainer = new TensorFlowTrainer<>(graphDefTuple.graphDef(),
+                graphDefTuple.outputName(),
                 GradientOptimiser.ADAGRAD,
                 gradientParams,
                 imageConverter,
@@ -421,8 +421,8 @@ public class ClassificationTest {
         System.out.println("Building graph");
         GraphDefTuple graphDefTuple = CNNExamples.buildLeNetGraph(INPUT_NAME,IMAGE_SIZE,PIXEL_DEPTH,NUM_LABELS);
 
-        System.out.println("Writing graph to " + args[0] + " with output  name '" + graphDefTuple.outputName + "'");
-        GraphDef graphDef = graphDefTuple.graphDef;
+        System.out.println("Writing graph to " + args[0] + " with output  name '" + graphDefTuple.outputName() + "'");
+        GraphDef graphDef = graphDefTuple.graphDef();
         byte[] bytes = graphDef.toByteArray();
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(args[0]))) {
             bos.write(bytes);
@@ -435,8 +435,8 @@ public class ClassificationTest {
         FeatureConverter imageConverter = new ImageConverter(INPUT_NAME, 28, 28, 1);
         OutputConverter<Label> outputConverter = new LabelConverter();
 
-        TensorFlowTrainer<Label> trainer = new TensorFlowTrainer<>(graphDefTuple.graphDef,
-                graphDefTuple.outputName,
+        TensorFlowTrainer<Label> trainer = new TensorFlowTrainer<>(graphDefTuple.graphDef(),
+                graphDefTuple.outputName(),
                 GradientOptimiser.ADAGRAD,
                 gradientParams,
                 imageConverter,

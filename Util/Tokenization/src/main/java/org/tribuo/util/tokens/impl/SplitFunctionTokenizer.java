@@ -360,7 +360,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
     @Override
     public String getText() {
         if (ready) {
-            return currentToken.text;
+            return currentToken.text();
         } else {
             throw new IllegalStateException("SplitFunctionTokenizer is not ready.");
         }
@@ -369,7 +369,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
     @Override
     public int getStart() {
         if (ready) {
-            return currentToken.start;
+            return currentToken.start();
         } else {
             throw new IllegalStateException("SplitFunctionTokenizer is not ready.");
         }
@@ -378,7 +378,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
     @Override
     public int getEnd() {
         if (ready) {
-            return currentToken.end;
+            return currentToken.end();
         } else {
             throw new IllegalStateException("SplitFunctionTokenizer is not ready.");
         }
@@ -386,7 +386,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
 
     @Override
     public TokenType getType() {
-        return currentToken.type;
+        return currentToken.type();
     }
 
     @Override

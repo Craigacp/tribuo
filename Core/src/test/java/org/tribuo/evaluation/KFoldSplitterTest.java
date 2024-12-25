@@ -47,8 +47,8 @@ public class KFoldSplitterTest {
         int ct = 0;
         while (iter.hasNext()) {
             KFoldSplitter.TrainTestFold<MockOutput> fold = iter.next();
-            assertEquals(expectTrainSize, fold.train.size());
-            assertEquals(expectTestSize, fold.test.size());
+            assertEquals(expectTrainSize, fold.train().size());
+            assertEquals(expectTestSize, fold.test().size());
             ct++;
         }
         assertEquals(nsplits, ct);
@@ -66,14 +66,14 @@ public class KFoldSplitterTest {
         int ct = 0;
         while (ct < 2 && iter.hasNext()) {
             KFoldSplitter.TrainTestFold<MockOutput> fold = iter.next();
-            assertEquals(expectTrainSize-1, fold.train.size());
-            assertEquals(expectTestSize+1, fold.test.size());
+            assertEquals(expectTrainSize-1, fold.train().size());
+            assertEquals(expectTestSize+1, fold.test().size());
             ct++;
         }
         while (iter.hasNext()) {
             KFoldSplitter.TrainTestFold<MockOutput> fold = iter.next();
-            assertEquals(expectTrainSize, fold.train.size());
-            assertEquals(expectTestSize, fold.test.size());
+            assertEquals(expectTrainSize, fold.train().size());
+            assertEquals(expectTestSize, fold.test().size());
             ct++;
         }
         assertEquals(nsplits, ct);
@@ -98,7 +98,7 @@ public class KFoldSplitterTest {
         Iterator<KFoldSplitter.TrainTestFold<MockOutput>> itr = kf.split(data,false);
         while (itr.hasNext()) {
             KFoldSplitter.TrainTestFold<MockOutput> fold = itr.next();
-            assertFalse(Arrays.equals(fold.train.getExampleIndices(),fold.test.getExampleIndices()));
+            assertFalse(Arrays.equals(fold.train().getExampleIndices(), fold.test().getExampleIndices()));
         }
     }
 

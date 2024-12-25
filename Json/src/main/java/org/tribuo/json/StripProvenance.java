@@ -374,23 +374,9 @@ public final class StripProvenance {
     }
 
     /**
-     * It's a record. Or at least it will be.
+     * Tuple of model and provenance.
      *
      * @param <T> The output type.
      */
-    private static class ModelTuple<T extends Output<T>> {
-        public final Model<T> model;
-        public final ModelProvenance provenance;
-
-        /**
-         * Constructs a model tuple.
-         *
-         * @param model      The model.
-         * @param provenance The provenance.
-         */
-        public ModelTuple(Model<T> model, ModelProvenance provenance) {
-            this.model = model;
-            this.provenance = provenance;
-        }
-    }
+    private record ModelTuple<T extends Output<T>>(Model<T> model, ModelProvenance provenance) { }
 }

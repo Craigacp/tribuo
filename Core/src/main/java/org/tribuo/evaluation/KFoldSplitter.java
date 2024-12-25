@@ -122,30 +122,11 @@ public final class KFoldSplitter<T extends Output<T>> {
 
     /**
      * Stores a train/test split for a dataset.
-     * <p>
-     * Will be a record one day.
-     * @see KFoldSplitter#split
      *
-     * @param <T> the type of the examples that make up the data we've split.
+     * @param <T>   the type of the examples that make up the data we've split.
+     * @param train The training fold.
+     * @param test  The testing fold.
+     * @see KFoldSplitter#split
      */
-    public static class TrainTestFold<T extends Output<T>> {
-        /**
-         * The training fold.
-         */
-        public final DatasetView<T> train;
-        /**
-         * The testing fold.
-         */
-        public final DatasetView<T> test;
-
-        /**
-         * Constructs a train test fold.
-         * @param train The training fold.
-         * @param test The testing fold.
-         */
-        TrainTestFold(DatasetView<T> train, DatasetView<T> test) {
-            this.train = train;
-            this.test = test;
-        }
-    }
+    public record TrainTestFold<T extends Output<T>>(DatasetView<T> train, DatasetView<T> test) { }
 }

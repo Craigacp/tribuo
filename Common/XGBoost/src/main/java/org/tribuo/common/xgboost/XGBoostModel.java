@@ -207,11 +207,11 @@ public final class XGBoostModel<T extends Output<T>> extends Model<T> {
             DMatrixTuple<T> testMatrix = XGBoostTrainer.convertExamples(examples,featureIDMap);
             List<float[][]> outputs = new ArrayList<>();
             for (Booster model : models) {
-                outputs.add(model.predict(testMatrix.data));
+                outputs.add(model.predict(testMatrix.data()));
             }
 
-            int[] numValidFeatures = testMatrix.numValidFeatures;
-            Example<T>[] exampleArray = testMatrix.examples;
+            int[] numValidFeatures = testMatrix.numValidFeatures();
+            Example<T>[] exampleArray = testMatrix.examples();
             return converter.convertBatchOutput(outputIDInfo,outputs,numValidFeatures,exampleArray);
         } catch (XGBoostError e) {
             logger.log(Level.SEVERE, "XGBoost threw an error", e);
@@ -226,9 +226,9 @@ public final class XGBoostModel<T extends Output<T>> extends Model<T> {
             DMatrixTuple<T> testData = XGBoostTrainer.convertExample(example,featureIDMap);
             List<float[]> outputs = new ArrayList<>();
             for (Booster model : models) {
-                outputs.add(model.predict(testData.data)[0]);
+                outputs.add(model.predict(testData.data())[0]);
             }
-            Prediction<T> pred = converter.convertOutput(outputIDInfo,outputs,testData.numValidFeatures[0],example);
+            Prediction<T> pred = converter.convertOutput(outputIDInfo,outputs, testData.numValidFeatures()[0],example);
             return pred;
         } catch (XGBoostError e) {
             logger.log(Level.SEVERE, "XGBoost threw an error", e);

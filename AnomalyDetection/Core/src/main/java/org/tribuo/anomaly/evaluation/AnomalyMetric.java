@@ -155,20 +155,6 @@ public class AnomalyMetric implements EvaluationMetric<Event, AnomalyMetric.Cont
         }
     }
 
-    /**
-     * One day it will be a record. Not today though.
-     */
-    private static final class PredictionStatistics {
-        private final long truePositive;
-        private final long falsePositive;
-        private final long trueNegative;
-        private final long falseNegative;
-        PredictionStatistics(long truePositive, long falsePositive, long trueNegative, long falseNegative) {
-            this.truePositive = truePositive;
-            this.falsePositive = falsePositive;
-            this.trueNegative = trueNegative;
-            this.falseNegative = falseNegative;
-        }
-    }
+    private record PredictionStatistics(long truePositive, long falsePositive, long trueNegative, long falseNegative) { }
 
 }

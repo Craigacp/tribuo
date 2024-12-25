@@ -34,46 +34,22 @@ import java.util.Objects;
 
 /**
  * Serialization carrier for common fields in Dataset.
- * <p>
- * Likely to be a record one day.
+ *
+ * @param provenance           The data provenance.
+ * @param featureDomain        The features this dataset contains.
+ * @param outputDomain         The outputs this dataset contains.
+ * @param transformProvenances The transformation provenances.
+ * @param outputFactory        The output factory.
+ * @param tribuoVersion        The Tribuo version string.
  */
-public final class DatasetDataCarrier<T extends Output<T>> {
+public record DatasetDataCarrier<T extends Output<T>>(DataProvenance provenance, FeatureMap featureDomain,
+                                                      OutputInfo<T> outputDomain, OutputFactory<T> outputFactory,
+                                                      List<ObjectProvenance> transformProvenances,
+                                                      String tribuoVersion) {
     private static final ProtoProvenanceSerialization PROVENANCE_SERIALIZER = new ProtoProvenanceSerialization(false);
 
     /**
-     * The data provenance.
-     */
-    private final DataProvenance provenance;
-
-    /**
-     * The features this dataset contains.
-     */
-    private final FeatureMap featureDomain;
-
-    /**
-     * The outputs this dataset contains.
-     */
-    private final OutputInfo<T> outputDomain;
-
-    /**
-     * The transformation provenances.
-     */
-    private final List<ObjectProvenance> transformProvenances;
-
-    /**
-     * The output factory.
-     */
-    private final OutputFactory<T> outputFactory;
-
-    /**
-     * The Tribuo version string.
-     */
-    private final String tribuoVersion;
-
-    /**
      * Constructs a new DatasetDataCarrier.
-     * <p>
-     * Will be the canonical constructor for the record form.
      *
      * @param provenance           The data provenance.
      * @param featureDomain        The feature domain.
@@ -135,82 +111,15 @@ public final class DatasetDataCarrier<T extends Output<T>> {
         return builder.build();
     }
 
-    /**
-     * Get the dataset provenance.
-     *
-     * @return The dataset provenance.
-     */
-    public DataProvenance provenance() {
-        return provenance;
-    }
-
-    /**
-     * Get the feature domain.
-     *
-     * @return The feature domain.
-     */
-    public FeatureMap featureDomain() {
-        return featureDomain;
-    }
-
-    /**
-     * Get the output domain.
-     *
-     * @return The output domain.
-     */
-    public OutputInfo<T> outputDomain() {
-        return outputDomain;
-    }
-
-    /**
-     * Get the transform provenances.
-     *
-     * @return The transform provenances.
-     */
-    public List<ObjectProvenance> transformProvenances() {
-        return transformProvenances;
-    }
-
-    /**
-     * Get the output factory.
-     *
-     * @return The output factory.
-     */
-    public OutputFactory<T> outputFactory() {
-        return outputFactory;
-    }
-
-    /**
-     * Gets the Tribuo version string.
-     *
-     * @return The Tribuo version string.
-     */
-    public String tribuoVersion() {
-        return tribuoVersion;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DatasetDataCarrier<?> that = (DatasetDataCarrier<?>) o;
-        return provenance.equals(that.provenance) && featureDomain.equals(that.featureDomain) && outputDomain.equals(that.outputDomain) && transformProvenances.equals(that.transformProvenances) && outputFactory.equals(that.outputFactory) && tribuoVersion.equals(that.tribuoVersion);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(provenance, featureDomain, outputDomain, transformProvenances, outputFactory, tribuoVersion);
-    }
-
     @Override
     public String toString() {
         return "DatasetDataCarrier{" +
-            "provenance=" + provenance +
-            ", featureDomain=" + featureDomain +
-            ", outputDomain=" + outputDomain +
-            ", transformProvenances=" + transformProvenances +
-            ", outputFactory=" + outputFactory +
-            ", tribuoVersion=" + tribuoVersion +
-            '}';
+                "provenance=" + provenance +
+                ", featureDomain=" + featureDomain +
+                ", outputDomain=" + outputDomain +
+                ", transformProvenances=" + transformProvenances +
+                ", outputFactory=" + outputFactory +
+                ", tribuoVersion=" + tribuoVersion +
+                '}';
     }
 }

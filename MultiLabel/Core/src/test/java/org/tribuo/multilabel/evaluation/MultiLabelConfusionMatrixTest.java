@@ -105,7 +105,7 @@ public class MultiLabelConfusionMatrixTest {
 
         DenseMatrix[] mcm = MultiLabelConfusionMatrix
                 .tabulate(domain, predictions)
-                .getMCM();
+                .mcm();
 
         int aIndex = domain.getID(a);
         int bIndex = domain.getID(b);
@@ -185,7 +185,7 @@ public class MultiLabelConfusionMatrixTest {
 
         DenseMatrix[] mcm = MultiLabelConfusionMatrix
                 .tabulate(domain, predictions)
-                .getMCM();
+                .mcm();
 
         int aIndex = domain.getID(a);
         int bIndex = domain.getID(b);

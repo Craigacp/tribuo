@@ -175,7 +175,7 @@ public class ClassifierTrainingNode extends AbstractTrainingNode<Label> {
         List<AbstractTrainingNode<Label>> output;
         double impurityDecrease = weightSum * (getImpurity() - bestScore);
         // If we found a split better than the current impurity.
-        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.getScaledMinImpurityDecrease())) {
+        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.scaledMinImpurityDecrease())) {
             output = splitAtBest(featureIDs, bestID, bestSplitValue, lessThanCountsOfBest, greaterThanCountsOfBest);
         } else {
             output = Collections.emptyList();
@@ -233,7 +233,7 @@ public class ClassifierTrainingNode extends AbstractTrainingNode<Label> {
         List<AbstractTrainingNode<Label>> output;
         double impurityDecrease = weightSum * (getImpurity() - bestScore);
         // If we found a split better than the current impurity.
-        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.getScaledMinImpurityDecrease())) {
+        if ((bestID != -1) && (impurityDecrease >= leafDeterminer.scaledMinImpurityDecrease())) {
             output = splitAtBest(featureIDs, bestID, bestSplitValue, lessThanCountsOfBest, greaterThanCountsOfBest);
         } else {
             output = Collections.emptyList();

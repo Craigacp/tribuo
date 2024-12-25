@@ -20,29 +20,17 @@ package org.tribuo.util.tokens;
  * A single token extracted from a String.
  * <p>
  * Tokens are immutable, and may be records one day.
+ *
+ * @param text  The token text.
+ * @param start The start index.
+ * @param end   The end index.
+ * @param type  The token type.
  */
-public final class Token {
+public record Token(String text, int start, int end, Token.TokenType type) {
 
     /**
-     * The token text.
-     */
-    public final String text;
-    /**
-     * The start index.
-     */
-    public final int start;
-    /**
-     * The end index.
-     */
-    public final int end;
-    /**
-     * The token type.
-     */
-    public final TokenType type;
-
-    /**
-     * Constructs a token.
-     * 
+     * Constructs a token, defaults token type to {@link TokenType#WORD}.
+     *
      * @param text  should be equivalent to the substring of the original tokenized
      *              text for the given character offsets start and end
      * @param start the starting offset of the token
@@ -54,23 +42,18 @@ public final class Token {
 
     /**
      * Constructs a token.
-     * 
+     *
      * @param text  should be equivalent to the substring of the original tokenized
      *              text for the given character offsets start and end
      * @param start the starting offset of the token
      * @param end   the ending offset of the token (exclusive or inclusive?)
      * @param type  the type of the token
      */
-    public Token(String text, int start, int end, TokenType type) {
-        this.text = text;
-        this.start = start;
-        this.end = end;
-        this.type = type;
-    }
+    public Token { }
 
     /**
      * The number of characters in this token.
-     * 
+     *
      * @return The number of characters.
      */
     public int length() {

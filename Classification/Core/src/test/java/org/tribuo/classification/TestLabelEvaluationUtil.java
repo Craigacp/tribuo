@@ -38,10 +38,10 @@ public class TestLabelEvaluationUtil {
         boolean[] yTrue = new boolean[]{true, false, false, true};
         double[] yScore = new double[]{1, 2, 3, 4};
         PRCurve prc = generatePRCurve(yTrue,yScore);
-        assertArrayEquals(new double[]{0.5, 1.0/3.0, 0.5, 1., 1.},prc.precision,DELTA);
-        assertArrayEquals(new double[]{1., 0.5, 0.5, 0.5, 0.},prc.recall,DELTA);
-        assertArrayEquals(new double[]{1, 2, 3, 4},prc.thresholds,DELTA);
-        assertEquals(prc.precision.length, prc.recall.length);
+        assertArrayEquals(new double[]{0.5, 1.0/3.0, 0.5, 1., 1.}, prc.precision(),DELTA);
+        assertArrayEquals(new double[]{1., 0.5, 0.5, 0.5, 0.}, prc.recall(),DELTA);
+        assertArrayEquals(new double[]{1, 2, 3, 4}, prc.thresholds(),DELTA);
+        assertEquals(prc.precision().length, prc.recall().length);
     }
 
     @Test
@@ -59,48 +59,48 @@ public class TestLabelEvaluationUtil {
         double[] yScore = new double[]{0, 1};
         PRCurve prc = generatePRCurve(yTrue, yScore);
         double aucprc = averagedPrecision(yTrue, yScore);
-        assertArrayEquals(new double[]{1,1}, prc.precision, DELTA);
-        assertArrayEquals(new double[]{1,0}, prc.recall, DELTA);
+        assertArrayEquals(new double[]{1,1}, prc.precision(), DELTA);
+        assertArrayEquals(new double[]{1,0}, prc.recall(), DELTA);
         assertEquals(1.,aucprc,DELTA);
 
         yTrue = new boolean[]{false, true};
         yScore = new double[]{1, 0};
         prc = generatePRCurve(yTrue, yScore);
         aucprc = averagedPrecision(yTrue, yScore);
-        assertArrayEquals(new double[]{0.5, 0., 1.}, prc.precision, DELTA);
-        assertArrayEquals(new double[]{1., 0., 0.}, prc.recall, DELTA);
+        assertArrayEquals(new double[]{0.5, 0., 1.}, prc.precision(), DELTA);
+        assertArrayEquals(new double[]{1., 0., 0.}, prc.recall(), DELTA);
         assertEquals(0.5,aucprc, DELTA);
 
         yTrue = new boolean[]{true,false};
         yScore = new double[]{1, 1};
         prc = generatePRCurve(yTrue, yScore);
         aucprc = averagedPrecision(yTrue, yScore);
-        assertArrayEquals(new double[]{0.5,1.0}, prc.precision,DELTA);
-        assertArrayEquals(new double[]{1.0,0.0}, prc.recall,DELTA);
+        assertArrayEquals(new double[]{0.5,1.0}, prc.precision(),DELTA);
+        assertArrayEquals(new double[]{1.0,0.0}, prc.recall(),DELTA);
         assertEquals(aucprc, .5,DELTA);
 
         yTrue = new boolean[]{true,false};
         yScore = new double[]{1, 0};
         prc = generatePRCurve(yTrue, yScore);
         aucprc = averagedPrecision(yTrue, yScore);
-        assertArrayEquals(new double[]{1.0,1.0}, prc.precision,DELTA);
-        assertArrayEquals(new double[]{1.0,0.0}, prc.recall,DELTA);
+        assertArrayEquals(new double[]{1.0,1.0}, prc.precision(),DELTA);
+        assertArrayEquals(new double[]{1.0,0.0}, prc.recall(),DELTA);
         assertEquals(aucprc, 1.,DELTA);
 
         yTrue = new boolean[]{true,false};
         yScore = new double[]{0.5,0.5};
         prc = generatePRCurve(yTrue, yScore);
         aucprc = averagedPrecision(yTrue, yScore);
-        assertArrayEquals(new double[]{0.5,1.0}, prc.precision,DELTA);
-        assertArrayEquals(new double[]{1.0,0.0}, prc.recall,DELTA);
+        assertArrayEquals(new double[]{0.5,1.0}, prc.precision(),DELTA);
+        assertArrayEquals(new double[]{1.0,0.0}, prc.recall(),DELTA);
         assertEquals(aucprc, .5,DELTA);
 
         yTrue = new boolean[]{true,true};
         yScore = new double[]{0.25,0.75};
         prc = generatePRCurve(yTrue, yScore);
         aucprc = averagedPrecision(yTrue,yScore);
-        assertArrayEquals(new double[]{1.0,1.0,1.0}, prc.precision, DELTA);
-        assertArrayEquals(new double[]{ 1.0, 0.5, 0.0}, prc.recall, DELTA);
+        assertArrayEquals(new double[]{1.0,1.0,1.0}, prc.precision(), DELTA);
+        assertArrayEquals(new double[]{ 1.0, 0.5, 0.0}, prc.recall(), DELTA);
         assertEquals(1.,aucprc,DELTA);
     }
 
@@ -109,10 +109,10 @@ public class TestLabelEvaluationUtil {
         boolean[] yTrue = new boolean[]{false, false, true, true, true};
         double[] yScore = new double[]{0.1, 0.7, 0.3, 0.4, 0.5};
         ROC roc = generateROCCurve(yTrue, yScore);
-        for (int i = 1; i < roc.fpr.length; i++) {
-            double fprDiff = roc.fpr[i] - roc.fpr[i-1];
+        for (int i = 1; i < roc.fpr().length; i++) {
+            double fprDiff = roc.fpr()[i] - roc.fpr()[i-1];
             assertTrue(fprDiff >= 0.0);
-            double tprDiff = roc.tpr[i] - roc.tpr[i-1];
+            double tprDiff = roc.tpr()[i] - roc.tpr()[i-1];
             assertTrue(tprDiff >= 0.0);
         }
     }
@@ -127,41 +127,41 @@ public class TestLabelEvaluationUtil {
         yTrue = new boolean[]{false, true};
         yScore = new double[]{0, 1};
         roc = generateROCCurve(yTrue, yScore);
-        auc = Util.auc(roc.fpr, roc.tpr);
-        assertArrayEquals(new double[]{0, 0, 1}, roc.fpr, DELTA);
-        assertArrayEquals(new double[]{0, 1, 1}, roc.tpr, DELTA);
+        auc = Util.auc(roc.fpr(), roc.tpr());
+        assertArrayEquals(new double[]{0, 0, 1}, roc.fpr(), DELTA);
+        assertArrayEquals(new double[]{0, 1, 1}, roc.tpr(), DELTA);
         assertEquals(1.0, auc, DELTA);
 
         yTrue = new boolean[]{false, true};
         yScore = new double[]{1, 0};
         roc = generateROCCurve(yTrue, yScore);
-        auc = Util.auc(roc.fpr, roc.tpr);
-        assertArrayEquals(new double[]{0, 1, 1}, roc.fpr, DELTA);
-        assertArrayEquals(new double[]{0, 0, 1}, roc.tpr, DELTA);
+        auc = Util.auc(roc.fpr(), roc.tpr());
+        assertArrayEquals(new double[]{0, 1, 1}, roc.fpr(), DELTA);
+        assertArrayEquals(new double[]{0, 0, 1}, roc.tpr(), DELTA);
         assertEquals(0.0, auc, DELTA);
 
         yTrue = new boolean[]{true, false};
         yScore = new double[]{1, 1};
         roc = generateROCCurve(yTrue, yScore);
-        auc = Util.auc(roc.fpr, roc.tpr);
-        assertArrayEquals(new double[]{0, 1}, roc.fpr, DELTA);
-        assertArrayEquals(new double[]{0, 1}, roc.tpr, DELTA);
+        auc = Util.auc(roc.fpr(), roc.tpr());
+        assertArrayEquals(new double[]{0, 1}, roc.fpr(), DELTA);
+        assertArrayEquals(new double[]{0, 1}, roc.tpr(), DELTA);
         assertEquals(0.5, auc, DELTA);
 
         yTrue = new boolean[]{true, false};
         yScore = new double[]{1, 0};
         roc = generateROCCurve(yTrue, yScore);
-        auc = Util.auc(roc.fpr, roc.tpr);
-        assertArrayEquals(new double[]{0, 0, 1}, roc.fpr, DELTA);
-        assertArrayEquals(new double[]{0, 1, 1}, roc.tpr, DELTA);
+        auc = Util.auc(roc.fpr(), roc.tpr());
+        assertArrayEquals(new double[]{0, 0, 1}, roc.fpr(), DELTA);
+        assertArrayEquals(new double[]{0, 1, 1}, roc.tpr(), DELTA);
         assertEquals(1.0, auc, DELTA);
 
         yTrue = new boolean[]{true, false};
         yScore = new double[]{0.5, 0.5};
         roc = generateROCCurve(yTrue, yScore);
-        auc = Util.auc(roc.fpr, roc.tpr);
-        assertArrayEquals(new double[]{0, 1}, roc.fpr, DELTA);
-        assertArrayEquals(new double[]{0, 1}, roc.tpr, DELTA);
+        auc = Util.auc(roc.fpr(), roc.tpr());
+        assertArrayEquals(new double[]{0, 1}, roc.fpr(), DELTA);
+        assertArrayEquals(new double[]{0, 1}, roc.tpr(), DELTA);
         assertEquals(0.5, auc, DELTA);
     }
 
@@ -170,10 +170,10 @@ public class TestLabelEvaluationUtil {
         boolean[] yTrue = new boolean[]{false, false, true, true};
         double[] yScore = new double[]{0.1, 0.4, 0.35, 0.8};
         ROC roc = generateROCCurve(yTrue, yScore);
-        double auc = Util.auc(roc.fpr,roc.tpr);
-        assertArrayEquals(new double[]{0.0, 0.5, 0.5, 1.0, 1.0}, roc.tpr, DELTA);
-        assertArrayEquals(new double[]{0.0, 0.0, 0.5, 0.5, 1.0}, roc.fpr, DELTA);
-        assertArrayEquals(new double[]{Double.POSITIVE_INFINITY, 0.8, 0.4, 0.35, 0.1}, roc.thresholds, DELTA);
+        double auc = Util.auc(roc.fpr(), roc.tpr());
+        assertArrayEquals(new double[]{0.0, 0.5, 0.5, 1.0, 1.0}, roc.tpr(), DELTA);
+        assertArrayEquals(new double[]{0.0, 0.0, 0.5, 0.5, 1.0}, roc.fpr(), DELTA);
+        assertArrayEquals(new double[]{Double.POSITIVE_INFINITY, 0.8, 0.4, 0.35, 0.1}, roc.thresholds(), DELTA);
         assertEquals(0.75,auc,DELTA);
     }
 

@@ -219,74 +219,29 @@ public final class ChainHelper {
     }
 
     /**
-     * Belief Propagation results. One day it'll be a record, but not today.
+     * Belief Propagation results.
+     *
+     * @param logZ   The normalization constant.
+     * @param alphas The alpha values array from forward propagation.
+     * @param betas  The beta values array from backward propagation.
+     * @param scores The local clique scores (i.e., the linear model scores).
      */
-    public static final class ChainBPResults {
-        /**
-         * The normalization constant.
-         */
-        public final double logZ;
-        /**
-         * The alpha values array from forward propagation.
-         */
-        public final DenseVector[] alphas;
-        /**
-         * The beta values array from backward propagation.
-         */
-        public final DenseVector[] betas;
-        /**
-         * The local clique scores (i.e., the linear model scores).
-         */
-        public final ChainCliqueValues scores;
-
-        ChainBPResults(double logZ, DenseVector[] alphas, DenseVector[] betas, ChainCliqueValues scores) {
-            this.logZ = logZ;
-            this.alphas = alphas;
-            this.betas = betas;
-            this.scores = scores;
-        }
-    }
+    public record ChainBPResults(double logZ, DenseVector[] alphas, DenseVector[] betas, ChainCliqueValues scores) { }
 
     /**
-     * Clique scores within a chain. One day it'll be a record, but not today.
+     * Clique scores within a chain.
+     *
+     * @param localValues      The per element values.
+     * @param transitionValues The label-label transition matrix.
      */
-    public static final class ChainCliqueValues {
-        /**
-         * The per element values.
-         */
-        public final DenseVector[] localValues;
-        /**
-         * The label-label transition matrix.
-         */
-        public final DenseMatrix transitionValues;
-
-        ChainCliqueValues(DenseVector[] localValues, DenseMatrix transitionValues) {
-            this.localValues = localValues;
-            this.transitionValues = transitionValues;
-        }
-    }
+    public record ChainCliqueValues(DenseVector[] localValues, DenseMatrix transitionValues) { }
 
     /**
      * Viterbi output from a linear chain. One day it'll be a record, but not today.
+     *
+     * @param mapScore  The score for this result.
+     * @param mapValues The viterbi states.
+     * @param scores    The pre-viterbi scores.
      */
-    public static final class ChainViterbiResults {
-        /**
-         * The score for this result.
-         */
-        public final double mapScore;
-        /**
-         * The viterbi states.
-         */
-        public final int[] mapValues;
-        /**
-         * The pre-viterbi scores.
-         */
-        public final ChainCliqueValues scores;
-
-        ChainViterbiResults(double mapScore, int[] mapValues, ChainCliqueValues scores) {
-            this.mapScore = mapScore;
-            this.mapValues = mapValues;
-            this.scores = scores;
-        }
-    }
+    public record ChainViterbiResults(double mapScore, int[] mapValues, ChainCliqueValues scores) { }
 }

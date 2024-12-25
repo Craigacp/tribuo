@@ -309,21 +309,5 @@ public final class MultiLabelConfusionMatrix implements ConfusionMatrix<MultiLab
         return new ConfusionMatrixTuple(mcm, confusion, observed);
     }
 
-    /**
-     * It's a record, ooops not yet, we don't require Java 14.
-     */
-    static final class ConfusionMatrixTuple {
-        final DenseMatrix[] mcm;
-        final DenseMatrix confusion;
-        final Set<MultiLabel> observed;
-        ConfusionMatrixTuple(DenseMatrix[] mcm, DenseMatrix confusion, Set<MultiLabel> observed) {
-            this.mcm = mcm;
-            this.confusion = confusion;
-            this.observed = observed;
-        }
-
-        DenseMatrix[] getMCM() {
-            return mcm;
-        }
-    }
+    record ConfusionMatrixTuple(DenseMatrix[] mcm, DenseMatrix confusion, Set<MultiLabel> observed) { }
 }

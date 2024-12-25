@@ -764,36 +764,13 @@ public abstract class XGBoostTrainer<T extends Output<T>> implements Trainer<T>,
 
     /**
      * Tuple of a DMatrix, the number of valid features in each example, and the examples themselves.
-     * <p>
-     * One day it'll be a record.
-     * @param <T> The output type.
+     *
+     * @param <T>              The output type.
+     * @param data             The data matrix.
+     * @param numValidFeatures The number of valid features in each example.
+     * @param examples         The examples.
      */
-    protected static class DMatrixTuple<T extends Output<T>> {
-        /**
-         * The data matrix.
-         */
-        public final DMatrix data;
-        /**
-         * The number of valid features in each example.
-         */
-        public final int[] numValidFeatures;
-        /**
-         * The examples.
-         */
-        public final Example<T>[] examples;
-
-        /**
-         * Constructs a tuple containing the data and some Tribuo metadata.
-         * @param data The data matrix.
-         * @param numValidFeatures The number of valid features in each example.
-         * @param examples The examples.
-         */
-        protected DMatrixTuple(DMatrix data, int[] numValidFeatures, Example<T>[] examples) {
-            this.data = data;
-            this.numValidFeatures = numValidFeatures;
-            this.examples = examples;
-        }
-    }
+    protected record DMatrixTuple<T extends Output<T>>(DMatrix data, int[] numValidFeatures, Example<T>[] examples) { }
 
     /**
      * Provenance for {@link XGBoostTrainer}. No longer used.

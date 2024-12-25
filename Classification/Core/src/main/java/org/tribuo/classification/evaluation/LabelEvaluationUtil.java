@@ -184,19 +184,7 @@ public final class LabelEvaluationUtil {
         return new TPFP(falsePos,truePos,thresholds,totalPos);
     }
 
-    private static class TPFP {
-        public final List<Integer> falsePos;
-        public final List<Integer> truePos;
-        public final List<Double> thresholds;
-        public final int totalPos;
-
-        public TPFP(List<Integer> falsePos, List<Integer> truePos, List<Double> thresholds, int totalPos) {
-            this.falsePos = falsePos;
-            this.truePos = truePos;
-            this.thresholds = thresholds;
-            this.totalPos = totalPos;
-        }
-    }
+    private record TPFP(List<Integer> falsePos, List<Integer> truePos, List<Double> thresholds, int totalPos) { }
 
     /**
      * Stores the ROC curve as three arrays: the false positive rate, the true positive rate,
@@ -204,65 +192,19 @@ public final class LabelEvaluationUtil {
      * <p>
      * By definition if both tpr and fpr are zero for the first value, the threshold is positive infinity.
      * <p>
-     * Not yet a record, but it will be one day.
+     * @param fpr        The false positive rate at the corresponding threshold.
+     * @param tpr        The true positive rate at the corresponding threshold.
+     * @param thresholds The threshold values.
      */
-    public static class ROC {
-        /**
-         * The false positive rate at the corresponding threshold.
-         */
-        public final double[] fpr;
-        /**
-         * The true positive rate at the corresponding threshold.
-         */
-        public final double[] tpr;
-        /**
-         * The threshold values.
-         */
-        public final double[] thresholds;
-
-        /**
-         * Constructs an ROC curve.
-         * @param fpr The false positive rates.
-         * @param tpr The true positive rates.
-         * @param thresholds The classification thresholds for the relevant rates.
-         */
-        public ROC(double[] fpr, double[] tpr, double[] thresholds) {
-            this.fpr = fpr;
-            this.tpr = tpr;
-            this.thresholds = thresholds;
-        }
-    }
+    public record ROC(double[] fpr, double[] tpr, double[] thresholds) { }
 
     /**
      * Stores the Precision-Recall curve as three arrays: the precisions, the recalls,
      * and the thresholds associated with those values.
      * <p>
-     * Not yet a record, but it will be one day.
+     * @param precision  The precision at the corresponding threshold.
+     * @param recall     The recall at the corresponding threshold.
+     * @param thresholds The threshold values.
      */
-    public static class PRCurve {
-        /**
-         * The precision at the corresponding threshold.
-         */
-        public final double[] precision;
-        /**
-         * The recall at the corresponding threshold.
-         */
-        public final double[] recall;
-        /**
-         * The threshold values.
-         */
-        public final double[] thresholds;
-
-        /**
-         * Constructs a precision-recall curve.
-         * @param precision The precisions.
-         * @param recall The recalls.
-         * @param thresholds The classification thresholds for the precisions and recalls.
-         */
-        public PRCurve(double[] precision, double[] recall, double[] thresholds) {
-            this.precision = precision;
-            this.recall = recall;
-            this.thresholds = thresholds;
-        }
-    }
+    public record PRCurve(double[] precision, double[] recall, double[] thresholds) { }
 }

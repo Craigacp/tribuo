@@ -160,7 +160,7 @@ public final class WordpieceTokenizer implements Tokenizer {
     private void getWordpieceTokens() {
         this.currentWordpieceTokens.clear();
 
-        String text = currentToken.text;
+        String text = currentToken.text();
         if(neverSplitTokens.contains(text)) {
             currentWordpieceTokens.add(currentToken);
             return;
@@ -169,7 +169,7 @@ public final class WordpieceTokenizer implements Tokenizer {
         List<Token> basicTokens = this.basicTokenizer.tokenize(text);
         for(Token basicToken : basicTokens) {
             
-            text = basicToken.text;
+            text = basicToken.text();
             
             if (toLowerCase) {
                 text = text.toLowerCase();
@@ -185,15 +185,15 @@ public final class WordpieceTokenizer implements Tokenizer {
                 return;
             } else if (wordpieces.size() == 1) {
                 String wp = wordpieces.get(0);
-                int start = basicToken.start + currentToken.start;
-                int end = basicToken.end + currentToken.start;
+                int start = basicToken.start() + currentToken.start();
+                int end = basicToken.end() + currentToken.start();
                 if (wp.equals(this.wordpiece.getUnknownToken())) {
                     currentWordpieceTokens.add(new Token(wp, start, end, TokenType.UNKNOWN));
                 } else {
                     currentWordpieceTokens.add(new Token(wp, start, end, TokenType.WORD));
                 }
             } else {
-                int begin = currentToken.start + basicToken.start;
+                int begin = currentToken.start() + basicToken.start();
                 for (String wp : wordpieces) {
                     TokenType type = TokenType.PREFIX;
                     int end = begin + wp.length();
@@ -219,22 +219,22 @@ public final class WordpieceTokenizer implements Tokenizer {
 
     @Override
     public String getText() {
-        return getToken().text;
+        return getToken().text();
     }
 
     @Override
     public int getStart() {
-        return getToken().start;
+        return getToken().start();
     }
 
     @Override
     public int getEnd() {
-        return getToken().end;
+        return getToken().end();
     }
 
     @Override
     public TokenType getType() {
-        return getToken().type;
+        return getToken().type();
     }
 
     @Override

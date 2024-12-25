@@ -202,49 +202,26 @@ public abstract class TensorFlowUtil {
 
     /**
      * A serializable tuple containing the tensor class name, the shape and the data.
-     * <p>
-     * It's almost a record.
+     *
+     * @param className The tensor class name.
+     * @param shape     The shape of the tensor.
+     * @param data      The tensor data.
      */
-    public static final class TensorTuple implements Serializable {
+    public record TensorTuple(String className, long[] shape, byte[] data) implements Serializable {
         private static final long serialVersionUID = 1L;
 
         /**
-         * The tensor class name.
-         */
-        public final String className;
-        /**
-         * The shape of the tensor.
-         */
-        public final long[] shape;
-        /**
-         * The tensor data.
-         */
-        public final byte[] data;
-
-        /**
-         * Makes a TensorTuple.
-         * @param className The tensor class name.
-         * @param shape The dimensions of the tensor.
-         * @param data The data in the tensor.
-         */
-        public TensorTuple(String className, long[] shape, byte[] data) {
-            this.className = className;
-            this.shape = shape;
-            this.data = data;
-        }
-
-        /**
          * Deserializes the tensor tuple from the supplied protobuf.
+         *
          * @param proto The proto to deserialize.
          */
         public TensorTuple(TensorTupleProto proto) {
-            this.className = proto.getClassName();
-            this.shape = Util.toPrimitiveLong(proto.getShapeList());
-            this.data = proto.getData().toByteArray();
+            this(proto.getClassName(), Util.toPrimitiveLong(proto.getShapeList()), proto.getData().toByteArray());
         }
 
         /**
          * Recreates the Tensor from the serialized form.
+         *
          * @return The Tensor.
          */
         public Tensor rebuildTensor() {
@@ -255,17 +232,18 @@ public abstract class TensorFlowUtil {
                     Class<? extends TType> tensorClass = (Class<? extends TType>) clazz;
                     Shape shapeObj = Shape.of(shape);
                     ByteDataBuffer buf = DataBuffers.of(data);
-                    return Tensor.of(tensorClass,shapeObj,buf);
+                    return Tensor.of(tensorClass, shapeObj, buf);
                 } else {
                     throw new IllegalStateException("Unexpected Tensor type, found " + className);
                 }
             } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("Failed to instantiate Tensor class",e);
+                throw new IllegalStateException("Failed to instantiate Tensor class", e);
             }
         }
 
         /**
          * Serializes this object to a protobuf.
+         *
          * @return The protobuf.
          */
         public TensorTupleProto serialize() {
@@ -280,6 +258,7 @@ public abstract class TensorFlowUtil {
 
         /**
          * Makes a TensorTuple out of this tensor.
+         *
          * @param tensor The tensor to serialize.
          * @return A serializable form of the Tensor.
          */
@@ -291,10 +270,10 @@ public abstract class TensorFlowUtil {
             }
             String className = tensor.type().getName();
             long[] shape = tensor.shape().asArray();
-            byte[] data = new byte[(int)size];
+            byte[] data = new byte[(int) size];
             buffer.read(data);
 
-            return new TensorTuple(className,shape,data);
+            return new TensorTuple(className, shape, data);
         }
     }
 }

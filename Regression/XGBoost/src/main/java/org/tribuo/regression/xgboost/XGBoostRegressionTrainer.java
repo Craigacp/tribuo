@@ -267,13 +267,13 @@ public final class XGBoostRegressionTrainer extends XGBoostTrainer<Regressor> {
                 }
                 i++;
             }
-            trainingData.data.setWeight(weights);
+            trainingData.data().setWeight(weights);
 
             Map<String,Object> curParams = overrideParameters.isEmpty() ? copyParams(parameters) : copyParams(overrideParameters);
             // Finished setup, now train one model per dimension.
             for (i = 0; i < numOutputs; i++) {
-                trainingData.data.setLabel(outputs[i]);
-                models.add(XGBoost.train(trainingData.data, curParams, numTrees, Collections.emptyMap(), null, null));
+                trainingData.data().setLabel(outputs[i]);
+                models.add(XGBoost.train(trainingData.data(), curParams, numTrees, Collections.emptyMap(), null, null));
             }
         } catch (XGBoostError e) {
             logger.log(Level.SEVERE, "XGBoost threw an error", e);

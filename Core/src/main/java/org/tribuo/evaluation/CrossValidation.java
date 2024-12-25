@@ -95,8 +95,8 @@ public final class CrossValidation<T extends Output<T>, E extends Evaluation<T>>
         while (iter.hasNext()) {
             logger.log(Level.INFO, "Training for fold " + ct);
             KFoldSplitter.TrainTestFold<T> fold = iter.next();
-            Model<T> model = trainer.train(fold.train);
-            evals.add(new Pair<>(evaluator.evaluate(model, fold.test), model));
+            Model<T> model = trainer.train(fold.train());
+            evals.add(new Pair<>(evaluator.evaluate(model, fold.test()), model));
             ct++;
         }
         return evals;

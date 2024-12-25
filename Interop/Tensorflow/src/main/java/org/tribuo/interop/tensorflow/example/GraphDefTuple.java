@@ -20,32 +20,9 @@ import org.tensorflow.proto.GraphDef;
 
 /**
  * A tuple containing a graph def protobuf along with the relevant operation names.
- * <p>
- * Will be a record one day.
+ *
+ * @param graphDef   The graph definition protobuf.
+ * @param inputName  Name of the input operation.
+ * @param outputName Name of the output operation.
  */
-public final class GraphDefTuple {
-    /**
-     * The graph definition protobuf.
-     */
-    public final GraphDef graphDef;
-    /**
-     * Name of the input operation.
-     */
-    public final String inputName;
-    /**
-     * Name of the output operation.
-     */
-    public final String outputName;
-
-    /**
-     * Creates a graphDef record.
-     * @param graphDef The TF Graph.
-     * @param inputName The name of the input placeholder.
-     * @param outputName The name of the output operation.
-     */
-    public GraphDefTuple(GraphDef graphDef, String inputName, String outputName) {
-        this.graphDef = graphDef;
-        this.outputName = outputName;
-        this.inputName = inputName;
-    }
-}
+public record GraphDefTuple(GraphDef graphDef, String inputName, String outputName) { }
