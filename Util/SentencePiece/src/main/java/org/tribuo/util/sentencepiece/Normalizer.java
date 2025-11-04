@@ -28,7 +28,7 @@ import java.nio.ByteBuffer;
 
 public final class Normalizer {
     static final char REPLACEMENT_SPACE_CODEPOINT = '\u2581';
-    private static final byte[] REPLACEMENT_SPACE_ARR = new byte[]{(byte)0xE2,(byte)0x96,(byte)0x81};
+    static final byte[] REPLACEMENT_SPACE_ARR = new byte[]{(byte)0xE2,(byte)0x96,(byte)0x81};
     private static final byte SPACE_BYTE = ' ';
     private static final byte[] SPACE_ARR = new byte[]{SPACE_BYTE};
 

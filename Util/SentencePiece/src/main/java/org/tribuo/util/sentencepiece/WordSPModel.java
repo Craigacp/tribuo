@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.regex.Pattern;
 
+/**
+ * Whitespace separated tokenizer.
+ */
 public final class WordSPModel extends SPModel {
 
     private static final Pattern SPLITTER = Pattern.compile("" + Normalizer.REPLACEMENT_SPACE_CODEPOINT);
@@ -35,20 +38,13 @@ public final class WordSPModel extends SPModel {
     protected SPPair[] encode(ByteBuffer input, boolean addBOS, boolean addEOS) {
         if (!input.hasRemaining()) {
             if (addBOS && addEOS) {
-                var output = new int[2];
-                output[0] = bosId;
-                output[1] = eosId;
-                return output;
+                return new SPPair[] {bosPair, eosPair};
             } else if (addBOS) {
-                var output = new int[1];
-                output[0] = bosId;
-                return output;
+                return new SPPair[] {bosPair};
             } else if (addEOS) {
-                var output = new int[1];
-                output[0] = eosId;
-                return output;
+                return new SPPair[] {eosPair};
             } else {
-                return new int[0];
+                return new SPPair[0];
             }
         }
 
@@ -60,10 +56,10 @@ public final class WordSPModel extends SPModel {
         if (addEOS) {
             length++;
         }
-        int[] tokens = new int[length];
+        SPPair[] tokens = new SPPair[length];
         int count = 0;
         if (addBOS) {
-            tokens[count] = bosId;
+            tokens[count] = bosPair;
             count++;
         }
         for (String s : split) {
@@ -73,7 +69,7 @@ public final class WordSPModel extends SPModel {
             }
         }
         if (addEOS) {
-            tokens[count] = eosId;
+            tokens[count] = eosPair;
             count++;
         }
 

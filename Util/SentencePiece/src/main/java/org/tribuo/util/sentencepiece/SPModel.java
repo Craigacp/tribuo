@@ -63,9 +63,13 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
     protected final int padId;
 
     protected final String unk;
+    protected final SPPair unkPair;
     protected final String bos;
+    protected final SPPair bosPair;
     protected final String eos;
+    protected final SPPair eosPair;
     protected final String pad;
+    protected final SPPair padPair;
     protected final boolean byteFallback;
 
     protected final EnumSet<ExtraOptions> options;
@@ -158,6 +162,10 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         this.bos = proto.getTrainerSpec().hasBosPiece() ? proto.getTrainerSpec().getBosPiece() : DEFAULT_BOS;
         this.eos = proto.getTrainerSpec().hasEosPiece() ? proto.getTrainerSpec().getEosPiece() : DEFAULT_EOS;
         this.pad = proto.getTrainerSpec().hasPadPiece() ? proto.getTrainerSpec().getPadPiece() : DEFAULT_PAD;
+        this.unkPair = new SPPair(unkId, UTF8Utils.UTF8.encode(unk).array());
+        this.bosPair = new SPPair(bosId, UTF8Utils.UTF8.encode(bos).array());
+        this.eosPair = new SPPair(eosId, UTF8Utils.UTF8.encode(eos).array());
+        this.padPair = new SPPair(padId, UTF8Utils.UTF8.encode(pad).array());
         this.byteFallback = proto.getTrainerSpec().getByteFallback();
 
         this.userDefinedSymbolTrie = new Trie(userDefinedSymbols);
