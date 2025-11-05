@@ -282,6 +282,13 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         return encodeToTokens(normalized);
     }
 
+    /**
+     * Tokenize the input UTF-8 buffer.
+     * @param input UTF-8 buffer to encode. Does not respect the buffer's starting position and may change it.
+     * @param addBOS Add the BOS token.
+     * @param addEOS Add the EOS token.
+     * @return The sentencepiece pairs representing the tokenization.
+     */
     protected abstract SPPair[] encode(ByteBuffer input, boolean addBOS, boolean addEOS);
 
     protected List<SPToken> encodeToTokens(Normalizer.NormalizedOutput input) {

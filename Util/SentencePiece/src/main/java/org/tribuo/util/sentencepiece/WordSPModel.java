@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,20 @@ package org.tribuo.util.sentencepiece;
 import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * Whitespace separated tokenizer.
  */
 public final class WordSPModel extends SPModel {
 
-    private static final Pattern SPLITTER = Pattern.compile("" + Normalizer.REPLACEMENT_SPACE_CODEPOINT);
-
+    /**
+     * Construct a whitespace separated tokenizer using the supplied proto and options.
+     * @param proto The tokenizer proto.
+     * @param options The tokenizer options.
+     */
     WordSPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
         super(proto, options);
     }
@@ -48,32 +51,35 @@ public final class WordSPModel extends SPModel {
             }
         }
 
-        String[] split = SPLITTER.split(input);
-        int length = split.length;
+        List<SPPair> tokens = new ArrayList<>();
         if (addBOS) {
-            length++;
+            tokens.add(bosPair);
         }
-        if (addEOS) {
-            length++;
-        }
-        SPPair[] tokens = new SPPair[length];
-        int count = 0;
-        if (addBOS) {
-            tokens[count] = bosPair;
-            count++;
-        }
-        for (String s : split) {
-            if (!s.isEmpty()) {
-                tokens[count] = getIdForVocab(s);
-                count++;
+        int curStart = 0;
+        for (int i = 0; i < input.remaining(); i++) {
+            if (input.get(i) == Normalizer.REPLACEMENT_SPACE_ARR[0] && (i+Normalizer.REPLACEMENT_SPACE_ARR.length < input.remaining())) {
+                // Could be a replacement space, check the next bytes.
+                if (input.get(i+1) == Normalizer.REPLACEMENT_SPACE_ARR[1] && input.get(i+2) == Normalizer.REPLACEMENT_SPACE_ARR[2]) {
+                    // If a valid space character emit curStart -> i-1 as a token, set
+                    // curStart to i, continue.
+                    ByteBuffer slice = input.slice(curStart, i - curStart);
+                    int id = getIdForVocab(UTF8Utils.UTF8.decode(slice).toString());
+                    tokens.add(new SPPair(id, slice.array()));
+                    curStart = i;
+                }
             }
         }
+        // Deal with trailing token if it exists
+        if (curStart != input.remaining()) {
+            ByteBuffer slice = input.slice(curStart, input.remaining()-curStart);
+            int id = getIdForVocab(UTF8Utils.UTF8.decode(slice).toString());
+            tokens.add(new SPPair(id, slice.array()));
+        }
         if (addEOS) {
-            tokens[count] = eosPair;
-            count++;
+            tokens.add(eosPair);
         }
 
-        return Arrays.copyOf(tokens, count);
+        return tokens.toArray(new SPPair[0]);
     }
 
 }
