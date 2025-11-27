@@ -258,7 +258,7 @@ public class LIMEColumnar extends LIMEBase implements ColumnarExplainer<Regresso
                     if (value != null) {
                         List<Token> tokens = tokenizerThreadLocal.get().tokenize(value);
                         for (int i = 0; i < tokens.size(); i++) {
-                            labelledExample.add(nameFeature(e.getKey(),tokens.get(i).text,i),1.0);
+                            labelledExample.add(nameFeature(e.getKey(), tokens.get(i).text(),i),1.0);
                         }
                         exampleTextValues.put(e.getKey(),value);
                         exampleTextTokens.put(e.getKey(),tokens);
@@ -391,7 +391,7 @@ public class LIMEColumnar extends LIMEBase implements ColumnarExplainer<Regresso
                     if (activeFeatures[j] == 0) {
                         textDistance++;
                         Token curToken = tokens.get(j);
-                        Arrays.fill(sampledText, curToken.start, curToken.end, '\0');
+                        Arrays.fill(sampledText, curToken.start(), curToken.end(), '\0');
                     }
                 }
                 String sampledString = new String(sampledText);
@@ -400,7 +400,7 @@ public class LIMEColumnar extends LIMEBase implements ColumnarExplainer<Regresso
                 textFeatures.addAll(textFields.get(e.getKey()).process(sampledString));
 
                 for (int j = 0; j < activeFeatures.length; j++) {
-                    perturbedFeatures.add(new Feature(nameFeature(e.getKey(), tokens.get(j).text, j), activeFeatures[j]));
+                    perturbedFeatures.add(new Feature(nameFeature(e.getKey(), tokens.get(j).text(), j), activeFeatures[j]));
                 }
             }
             // Add the text features to the current example

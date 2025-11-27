@@ -45,7 +45,7 @@ import com.oracle.labs.mlrg.olcut.util.IOUtil;
  * To test this tokenizer we threw a bunch of text segments drawn from Wikipedia from lots of different languages
  * and generated regression data using the referenced python implementation.  The regression data can be found in
  * <code>src/test/resources</code> as <code>/org/tribuo/util/tokens/impl/test/regression-text_bert-base-uncased.txt</code> and
- * <code>/org/tribuo/util/tokens/impl/test/regression-text_bert-base-uncased_failes.txt</code>.  The former is used in the regression
+ * <code>/org/tribuo/util/tokens/impl/test/regression-text_bert-base-uncased_fails.txt</code>.  The former is used in the regression
  * test defined below and each line represents a passing regression test.  The latter represents the outstanding and known 
  * regression test failures.  Most of these involve texts that include Arabic and other
  * non-latin scripts that generate so many "[UNK]" tokens for an English-based

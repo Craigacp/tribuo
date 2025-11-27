@@ -88,7 +88,7 @@ public class LIMEText extends LIMEBase implements TextExplainer<Regressor> {
         ArrayExample<Regressor> bowExample = new ArrayExample<>(transformOutput(prediction));
         List<Token> tokens = tokenizerThreadLocal.get().tokenize(inputText);
         for (int i = 0; i < tokens.size(); i++) {
-            bowExample.add(nameFeature(tokens.get(i).text,i),1.0);
+            bowExample.add(nameFeature(tokens.get(i).text(),i),1.0);
         }
 
         // Sample a dataset.
@@ -137,7 +137,7 @@ public class LIMEText extends LIMEBase implements TextExplainer<Regressor> {
                 if (activeFeatures[j] == 0) {
                     distance++;
                     Token curToken = tokens.get(j);
-                    Arrays.fill(sampledText,curToken.start,curToken.end,'\0');
+                    Arrays.fill(sampledText, curToken.start(), curToken.end(),'\0');
                 }
             }
             String sampledString = new String(sampledText);
@@ -156,7 +156,7 @@ public class LIMEText extends LIMEBase implements TextExplainer<Regressor> {
                 // Generate the new sample with the appropriate label and weight.
                 ArrayExample<Regressor> labelledSample = new ArrayExample<>(transformOutput(samplePrediction), (float) weight);
                 for (int j = 0; j < activeFeatures.length; j++) {
-                    labelledSample.add(nameFeature(tokens.get(j).text, j), activeFeatures[j]);
+                    labelledSample.add(nameFeature(tokens.get(j).text(), j), activeFeatures[j]);
                 }
                 output.add(labelledSample);
             }

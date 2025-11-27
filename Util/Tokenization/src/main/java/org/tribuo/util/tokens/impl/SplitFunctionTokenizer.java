@@ -239,7 +239,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
 
     private int p;
 
-    private StringBuilder tokenSb = new StringBuilder();
+    private final StringBuilder tokenSb = new StringBuilder();
 
     private TokenType currentType = TokenType.WORD;
 
@@ -287,7 +287,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
             // If we want to keep it, then go ahead and do that and remember
             // where the end of the token is.
             if (splitType == SplitType.NO_SPLIT) {
-                if (tokenSb.length() == 0) {
+                if (tokenSb.isEmpty()) {
                     start = p;
                 }
                 p += Character.charCount(codepoint);
@@ -297,14 +297,14 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
             }
 
             if (splitType == SplitType.SPLIT_AT) {
-                if (tokenSb.length() > 0) {
+                if (!tokenSb.isEmpty()) {
                     currentToken = new Token(tokenSb.toString(), start, p, currentType);
                 }
                 p += Character.charCount(codepoint);
                 start = p;
                 tokenSb.delete(0, tokenSb.length());
             } else if (splitType == SplitType.SPLIT_BEFORE) {
-                if (tokenSb.length() > 0) {
+                if (!tokenSb.isEmpty()) {
                     currentToken = new Token(tokenSb.toString(), start, p, currentType);
                 }
                 start = p;
@@ -321,7 +321,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
             } else if (splitType == SplitType.SPLIT_BEFORE_AND_AFTER) {
                 // wrap up the token we are currently building and then create
                 // the next token which consists of just the character
-                if (tokenSb.length() > 0) {
+                if (!tokenSb.isEmpty()) {
                     currentToken = new Token(tokenSb.toString(), start, p, currentType);
                     tokenSb.delete(0, tokenSb.length());
                     start = p;
@@ -343,7 +343,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
         }
 
         if (currentToken == null) {
-            if (tokenSb.length() > 0) {
+            if (!tokenSb.isEmpty()) {
                 currentToken = new Token(tokenSb.toString(), start, p, currentType);
             }
         }
@@ -360,7 +360,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
     @Override
     public String getText() {
         if (ready) {
-            return currentToken.text;
+            return currentToken.text();
         } else {
             throw new IllegalStateException("SplitFunctionTokenizer is not ready.");
         }
@@ -369,7 +369,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
     @Override
     public int getStart() {
         if (ready) {
-            return currentToken.start;
+            return currentToken.start();
         } else {
             throw new IllegalStateException("SplitFunctionTokenizer is not ready.");
         }
@@ -378,7 +378,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
     @Override
     public int getEnd() {
         if (ready) {
-            return currentToken.end;
+            return currentToken.end();
         } else {
             throw new IllegalStateException("SplitFunctionTokenizer is not ready.");
         }
@@ -386,7 +386,7 @@ public abstract class SplitFunctionTokenizer implements Tokenizer {
 
     @Override
     public TokenType getType() {
-        return currentToken.type;
+        return currentToken.type();
     }
 
     @Override

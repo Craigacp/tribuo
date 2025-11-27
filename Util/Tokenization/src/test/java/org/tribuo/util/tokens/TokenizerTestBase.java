@@ -37,9 +37,9 @@ public class TokenizerTestBase {
 
         for (int i = 0; i < expectedTokens.length; i++) {
             assertEquals(expectedTokens[i], actualSplits.get(i), message + ", split strings don't match -");
-            assertEquals(expectedTokens[i], actualTokens.get(i).text, message + ", token strings don't match -");
-            assertEquals(expectedTokens[i], text.substring(actualTokens.get(i).start, actualTokens.get(i).end), message + ", start & end values don't produce correct substring (start="
-                    + actualTokens.get(i).start + ",end=" + actualTokens.get(i).end + ")-");
+            assertEquals(expectedTokens[i], actualTokens.get(i).text(), message + ", token strings don't match -");
+            assertEquals(expectedTokens[i], text.substring(actualTokens.get(i).start(), actualTokens.get(i).end()), message + ", start & end values don't produce correct substring (start="
+                    + actualTokens.get(i).start() + ",end=" + actualTokens.get(i).end() + ")-");
         }
     }
 
@@ -90,14 +90,14 @@ public class TokenizerTestBase {
 
             for (int i = 0; i < expectedTokens.length; i++) {
                 assertEquals(expectedTokens[i], actualSplits.get(i), message + ", split strings don't match -");
-                assertEquals(expectedTokens[i], actualTokens.get(i).text, message + ", token strings don't match -");
-                assertEquals(expectedTokens[i], text.substring(actualTokens.get(i).start, actualTokens.get(i).end), message + ", start & end values don't produce correct substring (start="
-                        + actualTokens.get(i).start + ",end=" + actualTokens.get(i).end + ")-");
+                assertEquals(expectedTokens[i], actualTokens.get(i).text(), message + ", token strings don't match -");
+                assertEquals(expectedTokens[i], text.substring(actualTokens.get(i).start(), actualTokens.get(i).end()), message + ", start & end values don't produce correct substring (start="
+                        + actualTokens.get(i).start() + ",end=" + actualTokens.get(i).end() + ")-");
 
                 assertEquals(expectedTokens[i], otherActualSplits.get(i), message + ", split strings don't match in clone -");
-                assertEquals(expectedTokens[i], otherActualTokens.get(i).text, message + ", token strings don't match in clone -");
-                assertEquals(expectedTokens[i], text.substring(otherActualTokens.get(i).start, otherActualTokens.get(i).end), message + ", start & end values don't produce correct substring in clone (start="
-                        + otherActualTokens.get(i).start + ",end=" + otherActualTokens.get(i).end + ")-");
+                assertEquals(expectedTokens[i], otherActualTokens.get(i).text(), message + ", token strings don't match in clone -");
+                assertEquals(expectedTokens[i], text.substring(otherActualTokens.get(i).start(), otherActualTokens.get(i).end()), message + ", start & end values don't produce correct substring in clone (start="
+                        + otherActualTokens.get(i).start() + ",end=" + otherActualTokens.get(i).end() + ")-");
             }
         } catch (CloneNotSupportedException e) {
             fail("Failed to clone tokenizer " + e.getMessage());
