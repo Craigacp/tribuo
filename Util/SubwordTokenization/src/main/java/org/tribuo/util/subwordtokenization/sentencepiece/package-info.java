@@ -15,14 +15,7 @@
  */
 
 /**
- * Implementations of subword tokenization algorithms.
+ * Provides a wrapper around a sentencepiece implementation which implements the
+ * Tribuo {@link org.tribuo.util.subwordtokenization.SubwordTokenizer} API.
  */
-module org.tribuo.util.subwordtokenization {
-    requires org.tribuo.util.buffers;
-    requires org.tribuo.util.sentencepiece;
-
-    exports org.tribuo.util.subwordtokenization;
-    exports org.tribuo.util.subwordtokenization.bpe;
-    exports org.tribuo.util.subwordtokenization.sentencepiece;
-    exports org.tribuo.util.subwordtokenization.wordpiece;
-}
+package org.tribuo.util.subwordtokenization.sentencepiece;

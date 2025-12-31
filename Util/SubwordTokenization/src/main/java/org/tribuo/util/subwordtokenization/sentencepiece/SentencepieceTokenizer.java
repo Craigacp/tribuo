@@ -13,16 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.tribuo.util.subwordtokenization.sentencepiece;
 
-/**
- * Implementations of subword tokenization algorithms.
- */
-module org.tribuo.util.subwordtokenization {
-    requires org.tribuo.util.buffers;
-    requires org.tribuo.util.sentencepiece;
+import org.tribuo.util.subwordtokenization.SubwordTokenizer;
 
-    exports org.tribuo.util.subwordtokenization;
-    exports org.tribuo.util.subwordtokenization.bpe;
-    exports org.tribuo.util.subwordtokenization.sentencepiece;
-    exports org.tribuo.util.subwordtokenization.wordpiece;
+public class SentencepieceTokenizer implements SubwordTokenizer {
 }

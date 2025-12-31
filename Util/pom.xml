@@ -27,6 +27,7 @@
     <artifactId>tribuo-util</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>DataBuffers</module>
         <module>InformationTheory</module>
         <module>ONNXExport</module>
         <module>SentencePiece</module>

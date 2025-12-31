@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Sentencepiece tokenization implementation.
+ */
 module org.tribuo.util.sentencepiece {
     requires protobuf.java;
 

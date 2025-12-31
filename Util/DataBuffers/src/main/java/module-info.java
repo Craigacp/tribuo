@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-/**
- * Implementations of subword tokenization algorithms.
- */
-module org.tribuo.util.subwordtokenization {
-    requires org.tribuo.util.buffers;
-    requires org.tribuo.util.sentencepiece;
-
-    exports org.tribuo.util.subwordtokenization;
-    exports org.tribuo.util.subwordtokenization.bpe;
-    exports org.tribuo.util.subwordtokenization.sentencepiece;
-    exports org.tribuo.util.subwordtokenization.wordpiece;
+module org.tribuo.util.buffers {
+    exports org.tribuo.util.buffers;
 }

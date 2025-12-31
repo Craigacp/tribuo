@@ -33,7 +33,7 @@ import java.util.Map;
  * That functionality is provided by {@link WordpieceTokenizer} and
  * {@link WordpieceBasicTokenizer}.
  */
-public class Wordpiece {
+public final class Wordpiece {
 
     public record StringIntTuple(String token, int id) {}
 
