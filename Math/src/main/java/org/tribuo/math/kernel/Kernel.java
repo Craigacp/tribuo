@@ -23,7 +23,6 @@ import org.tribuo.math.la.DenseMatrix;
 import org.tribuo.math.la.DenseVector;
 import org.tribuo.math.la.Matrix;
 import org.tribuo.math.la.SGDVector;
-import org.tribuo.math.la.SparseVector;
 import org.tribuo.math.protos.KernelProto;
 import org.tribuo.protos.ProtoSerializable;
 import org.tribuo.protos.ProtoUtil;
