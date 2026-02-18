@@ -18,7 +18,7 @@
  * Sentencepiece tokenization implementation.
  */
 module org.tribuo.util.sentencepiece {
-    requires protobuf.java;
+    requires com.google.protobuf;
 
     exports org.tribuo.util.sentencepiece;
     exports org.tribuo.util.sentencepiece.protos;
