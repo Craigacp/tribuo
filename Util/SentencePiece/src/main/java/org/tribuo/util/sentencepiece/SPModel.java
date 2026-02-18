@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2026, Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,19 +33,66 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPModel, UnigramSPModel {
+/**
+ * Base class for Sentencepiece tokenizers.
+ */
+public abstract sealed class SPModel permits BPESPModel, CharSPModel, UnigramSPModel, WordSPModel {
 
     protected static final HexFormat HEX_FORMATTER = HexFormat.of().withPrefix("<0x").withSuffix(">").withUpperCase();
 
-    public enum ExtraOptions {REVERSE, ADD_BOS, ADD_EOS, UNK}
+    /**
+     * Tokenization output options.
+     */
+    public enum ExtraOptions {
+        /**
+         * Reverse the output tokens.
+         */
+        REVERSE,
+        /**
+         * Add the BOS token to the start of the output
+         */
+        ADD_BOS,
+        /**
+         * Add the EOS token to the end of the output.
+         */
+        ADD_EOS,
+        /**
+         * Emit an unknown token if the input contains an unknown token.
+         */
+        UNK;
+    }
 
+    /**
+     * Default unknown token.
+     */
     public static final String DEFAULT_UNKNOWN = "<unk>";
+    /**
+     * Default BOS token.
+     */
     public static final String DEFAULT_BOS = "<s>";
+    /**
+     * Default EOS token.
+     */
     public static final String DEFAULT_EOS = "</s>";
+    /**
+     * Default padding token.
+     */
     public static final String DEFAULT_PAD = "<pad>";
+    /**
+     * Default unknown token id.
+     */
     public static final int DEFAULT_UNKNOWN_ID = 0;
+    /**
+     * Default BOS token id.
+     */
     public static final int DEFAULT_BOS_ID = 1;
+    /**
+     * Default EOS token id.
+     */
     public static final int DEFAULT_EOS_ID = 2;
+    /**
+     * Default pad token id.
+     */
     public static final int DEFAULT_PAD_ID = -1;
 
     protected final Map<String, Integer> vocab;
@@ -79,6 +126,11 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
 
     protected final SentencepieceModel.ModelProto proto;
 
+    /**
+     * Builds a SPModel from the protobuf.
+     * @param proto The protobuf.
+     * @param options Additional options to control the output.
+     */
     protected SPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
         Set<String> userDefinedSymbols = new HashSet<>();
         boolean[] bytes = new boolean[256];
@@ -174,24 +226,33 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         this.options = options;
     }
 
+    /**
+     * The vocab size of this tokenizer.
+     * @return The vocab size.
+     */
     public int getVocabSize() {
         return vocab.size();
     }
 
+    /**
+     * Returns the id number associated with this token.
+     * @param vocabElement The token.
+     * @return The id number, or the unknown token id if unknown.
+     */
     public int getIdForVocab(String vocabElement) {
         var output = vocab.get(vocabElement);
         if (output == null) {
-            output = reservedIdMap.get(vocabElement);
-            if (output == null) {
-                return 0;
-            } else {
-                return output;
-            }
+            return reservedIdMap.getOrDefault(vocabElement, unkId);
         } else {
             return output;
         }
     }
 
+    /**
+     * Returns the token for this id. If the id is out of bounds returns the UNK token.
+     * @param id The token id.
+     * @return The token.
+     */
     public String getVocabForId(int id) {
         if ((id < 0) || (id >= inverseVocab.length)) {
             return unk;
@@ -200,6 +261,11 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         }
     }
 
+    /**
+     * Returns the UTF-8 byte array for this token id, or the byte array for the unknown token if the id is out of bounds.
+     * @param id The token id.
+     * @return The token UTF-8 byte array.
+     */
     byte[] getVocabBytesForId(int id) {
         if ((id < 0) || (id >= inverseVocab.length)) {
             return unk.getBytes(UTF8Utils.UTF8);
@@ -208,6 +274,12 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         }
     }
 
+    /**
+     * Returns the score (log probability) of the token with the given id.
+     * Returns {@link Float#NEGATIVE_INFINITY} if the id is out of range.
+     * @param id The token id.
+     * @return The score.
+     */
     public float getScore(int id) {
         if ((id < 0) || (id >= proto.getPiecesCount())) {
             return Float.NEGATIVE_INFINITY;
@@ -216,67 +288,139 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         }
     }
 
+    /**
+     * Returns true if the given id is the unknown token id.
+     * @param id The token id.
+     * @return True if it is the unknown token.
+     */
     public boolean isUnknown(int id) {
         return id == unkId;
     }
 
+    /**
+     * Returns true if the given id is a control token (e.g. BOS or EOS).
+     * @param id The token id.
+     * @return True if it is a control token.
+     */
     public boolean isControl(int id) {
         return proto.getPieces(id).getType().equals(SentencepieceModel.ModelProto.SentencePiece.Type.CONTROL);
     }
 
+    /**
+     * Returns true if the given id is an unused token.
+     * @param id The token id.
+     * @return True if it is an unused token.
+     */
     public boolean isUnused(int id) {
         return proto.getPieces(id).getType().equals(SentencepieceModel.ModelProto.SentencePiece.Type.UNUSED);
     }
 
+    /**
+     * Returns true if the given id is a byte fallback token representing a single raw byte.
+     * @param id The token id.
+     * @return True if it is a byte token.
+     */
     public boolean isByte(int id) {
         return proto.getPieces(id).getType().equals(SentencepieceModel.ModelProto.SentencePiece.Type.BYTE);
     }
 
+    /**
+     * Returns true if the given id is a user-defined token.
+     * @param id The token id.
+     * @return True if it is a user-defined token.
+     */
     public boolean isUserDefined(int id) {
         return proto.getPieces(id).getType().equals(SentencepieceModel.ModelProto.SentencePiece.Type.USER_DEFINED);
     }
 
+    /**
+     * Returns the unknown token id.
+     * @return The unknown token id.
+     */
     public int getUnknownId() {
         return unkId;
     }
 
+    /**
+     * Returns the beginning-of-sequence token id.
+     * @return The BOS token id.
+     */
     public int getBOSId() {
         return bosId;
     }
 
+    /**
+     * Returns the end-of-sequence token id.
+     * @return The EOS token id.
+     */
     public int getEOSId() {
         return eosId;
     }
 
+    /**
+     * Returns the padding token id.
+     * @return The pad token id.
+     */
     public int getPadId() {
         return padId;
     }
 
+    /**
+     * Returns the unknown token string.
+     * @return The unknown token.
+     */
     public String getUnknown() {
         return unk;
     }
 
+    /**
+     * Returns the beginning-of-sequence token string.
+     * @return The BOS token.
+     */
     public String getBOS() {
         return bos;
     }
 
+    /**
+     * Returns the end-of-sequence token string.
+     * @return The EOS token.
+     */
     public String getEOS() {
         return eos;
     }
 
+    /**
+     * Returns the padding token string.
+     * @return The pad token.
+     */
     public String getPad() {
         return pad;
     }
 
+    /**
+     * Tokenizes the input string and returns the token pieces as strings.
+     * @param input The string to tokenize.
+     * @return The list of token piece strings.
+     */
     public List<String> encode(String input) {
         return encodeToTokens(input).stream().map(SPToken::piece).toList();
     }
 
+    /**
+     * Tokenizes the input string and returns the token ids.
+     * @param input The string to tokenize.
+     * @return The array of token ids.
+     */
     public int[] encodeToInts(String input) {
         Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
         return encodeToTokens(normalized).stream().mapToInt(SPToken::id).toArray();
     }
 
+    /**
+     * Tokenizes the input string and returns the full token objects including piece, id, and source span.
+     * @param input The string to tokenize.
+     * @return The list of tokens.
+     */
     public List<SPToken> encodeToTokens(String input) {
         Normalizer.NormalizedOutput normalized = normalizer.normalize(input);
         return encodeToTokens(normalized);
@@ -291,6 +435,11 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
      */
     protected abstract SPPair[] encode(ByteBuffer input, boolean addBOS, boolean addEOS);
 
+    /**
+     * Tokenizes the supplied normalized input text.
+     * @param input The input text.
+     * @return The list of tokens.
+     */
     protected List<SPToken> encodeToTokens(Normalizer.NormalizedOutput input) {
         SPPair[] pieces = encode(input.output(), options.contains(ExtraOptions.ADD_BOS), options.contains(ExtraOptions.ADD_EOS));
 
@@ -341,15 +490,14 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
                         output.add(token);
                     }
                 } else {
+                    SPToken newToken = new SPToken(pieceBytes, id, surface, origBegin, origEnd);
                     if (isPrevUnk && isUnk) {
                         // Overwrite the last unknown with a bigger unknown which contains both of them
-                        SPToken oldToken = output.get(output.size() - 1);
-                        SPToken newToken = new SPToken(pieceBytes, id, surface, origBegin, origEnd);
+                        SPToken oldToken = output.getLast();
                         SPToken merged = SPToken.merge(oldToken, newToken);
                         output.set(output.size() - 1, merged);
                     } else {
-                        SPToken token = new SPToken(pieceBytes, id, surface, origBegin, origEnd);
-                        output.add(token);
+                        output.add(newToken);
                     }
                 }
                 consumed += pieceBytes.length;
@@ -368,6 +516,12 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         return output;
     }
 
+    /**
+     * Decodes a list of token piece strings back into the original text.
+     * Each piece is looked up in the vocabulary to obtain its id, then decoded via {@link #decodeFromInts(int[])}.
+     * @param input The list of token piece strings to decode.
+     * @return The decoded string.
+     */
     public String decode(List<String> input) {
         int[] ints = new int[input.size()];
         for (int i = 0; i < ints.length; i++) {
@@ -376,6 +530,13 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         return decodeFromInts(ints);
     }
 
+    /**
+     * Decodes an array of token ids back into the original text.
+     * Applies the denormalizer after decoding if one is present in the model.
+     * @param input The array of token ids to decode.
+     * @return The decoded string.
+     * @throws IllegalArgumentException If any token id is negative or out of range.
+     */
     public String decodeFromInts(int[] input) {
         ByteBuffer output = innerDecodeFromInts(input);
         if (denormalizer != null) {
@@ -384,18 +545,78 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         return UTF8Utils.UTF8.decode(output).toString();
     }
 
+    /**
+     * Decodes the supplied token ids into a UTF-8 encoded byte buffer.
+     * <p>
+     * Control tokens (BOS, EOS) are skipped. When byte fallback is enabled, consecutive
+     * byte tokens are accumulated and emitted as their raw byte values rather than as
+     * their piece string bytes. All other tokens emit the UTF-8 bytes of their piece
+     * string. The returned buffer may still contain the replacement space character
+     * (U+2581) which is converted to a regular space by the denormalizer in
+     * {@link #decodeFromInts(int[])}.
+     * @param input The token ids to decode.
+     * @return A ByteBuffer positioned at zero containing the UTF-8 bytes of the decoded text.
+     * @throws IllegalArgumentException If any token id is negative or out of range.
+     */
     protected ByteBuffer innerDecodeFromInts(int[] input) {
+        // Validate all ids and compute an upper bound on output size.
+        // Upper bound as byte fallback tokens and control tokens contribute fewer bytes than their pieces
+        int maxSize = 0;
+        for (int id : input) {
+            if ((id < 0 || id >= inverseVocab.length) && (id != padId)) {
+                throw new IllegalArgumentException("Invalid token id: " + id + ", expected id in range [0, " + inverseVocab.length + ")");
+            }
+            maxSize += inverseVocabUTF8[id].length;
+        }
+        ByteBuffer output = ByteBuffer.allocate(maxSize);
 
+        // Buffer for accumulating raw bytes from consecutive byte-fallback tokens
+        int pendingByteCount = 0;
+        byte[] pendingBytes = new byte[input.length];
+
+        for (int id : input) {
+            if (id != padId) {
+                if (byteFallback && isByte(id)) {
+                    // Accumulate the raw byte-fallback bytes
+                    pendingBytes[pendingByteCount++] = (byte) pieceToByte(inverseVocab[id]);
+                } else {
+                    // Flush any pending byte-fallback bytes
+                    if (pendingByteCount > 0) {
+                        output.put(pendingBytes, 0, pendingByteCount);
+                        pendingByteCount = 0;
+                    }
+                    // Emit the UTF-8 bytes of this piece (skipping control tokens)
+                    if (!isControl(id)) {
+                        output.put(inverseVocabUTF8[id]);
+                    }
+                }
+            }
+        }
+
+        // Flush any remaining byte-fallback bytes
+        if (pendingByteCount > 0) {
+            output.put(pendingBytes, 0, pendingByteCount);
+        }
+
+        return output.slice(0, output.position());
     }
 
+    /**
+     * Decodes a list of {@link SPToken} objects back into the original text.
+     * @param input The list of tokens to decode.
+     * @return The decoded string.
+     * @throws IllegalArgumentException If any token id is negative or out of range.
+     */
     public String decodeFromTokens(List<SPToken> input) {
-        int[] ints = new int[input.size()];
-        for (int i = 0; i < ints.length; i++) {
-            ints[i] = input.get(i).id();
-        }
+        int[] ints = input.stream().mapToInt(SPToken::id).toArray();
         return decodeFromInts(ints);
     }
 
+    /**
+     * Formats the supplied int as a hexadecimal number. Only accepts numbers between 0 and 255, otherwise throws {@link IllegalArgumentException}.
+     * @param byteVal The input int to format.
+     * @return The hexadecimal representation.
+     */
     public static String byteToPiece(int byteVal) {
         if (byteVal < 256 && byteVal >= 0) {
             return HEX_FORMATTER.formatHex(new byte[]{(byte) byteVal});
@@ -404,6 +625,11 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         }
     }
 
+    /**
+     * Converts the supplied string into an int by parsing it as a hexadecimal number.
+     * @param piece The hexadecimal number.
+     * @return An int.
+     */
     public static int pieceToByte(String piece) {
         try {
             return 0xFF & (int) HEX_FORMATTER.parseHex(piece)[0];
@@ -412,16 +638,36 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         }
     }
 
+    /**
+     * Reads a sentencepiece model protobuf from the supplied path and constructs an {@link SPModel}.
+     * @param protoPath The input path.
+     * @param options Additional options to control the tokenizer output.
+     * @return A SPModel instance.
+     * @throws IOException If the input path could not be read, or the protobuf failed to parse.
+     */
     public static SPModel loadFromProto(Path protoPath, EnumSet<ExtraOptions> options) throws IOException {
         try (var fis = Files.newInputStream(protoPath)) {
             return loadFromProto(fis, options);
         }
     }
 
+    /**
+     * Reads a sentencepiece model protobuf from the supplied input stream and constructs an {@link SPModel}.
+     * @param protoStream The input stream.
+     * @param options Additional options to control the tokenizer output.
+     * @return A SPModel instance.
+     * @throws IOException If the input stream could not be read, or the protobuf failed to parse.
+     */
     public static SPModel loadFromProto(InputStream protoStream, EnumSet<ExtraOptions> options) throws IOException {
         return loadFromProto(SentencepieceModel.ModelProto.parseFrom(protoStream), options);
     }
 
+    /**
+     * Builds an SPModel subclass from the supplied sentencepiece model protobuf.
+     * @param proto The input protobuf.
+     * @param options Additional options to control the tokenizer output.
+     * @return A SPModel instance.
+     */
     public static SPModel loadFromProto(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
         var type = proto.getTrainerSpec().getModelType();
         return switch (type) {
@@ -432,5 +678,10 @@ public abstract sealed class SPModel permits BPESPModel, CharSPModel, WordSPMode
         };
     }
 
+    /**
+     * Tuple containing the token id and the token bytes.
+     * @param id The token id.
+     * @param bytes The UTF-8 bytes representing the token.
+     */
     protected record SPPair(int id, byte[] bytes) {}
 }
