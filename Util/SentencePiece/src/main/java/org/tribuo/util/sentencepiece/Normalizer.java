@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2026, Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,11 @@ import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Normalizes input text according to a precompiled SentencePiece character map, applying
+ * Unicode normalization rules, whitespace handling, and optional escape of whitespace to
+ * the replacement space character (U+2581).
+ */
 public final class Normalizer {
     static final char REPLACEMENT_SPACE_CODEPOINT = '\u2581';
     static final byte[] REPLACEMENT_SPACE_ARR = new byte[]{(byte)0xE2,(byte)0x96,(byte)0x81};
@@ -39,10 +44,22 @@ public final class Normalizer {
     private final ByteBuffer normalizedOutput;
     private final SentencepieceModel.NormalizerSpec proto;
 
+    /**
+     * Constructs a normalizer from the given spec, with whitespace treated as a prefix and
+     * no user-defined symbol matching.
+     * @param proto The normalizer spec from the SentencePiece model protobuf.
+     */
     public Normalizer(SentencepieceModel.NormalizerSpec proto) {
         this(proto, false, null);
     }
 
+    /**
+     * Constructs a normalizer from the given spec.
+     * @param proto The normalizer spec from the SentencePiece model protobuf.
+     * @param treatWhitespaceAsSuffix If true, the dummy whitespace prefix is added as a suffix instead.
+     * @param matcher A trie of user-defined symbols that are passed through unchanged during normalization,
+     *                or null if there are no user-defined symbols.
+     */
     public Normalizer(SentencepieceModel.NormalizerSpec proto, boolean treatWhitespaceAsSuffix, Trie matcher) {
         this.proto = proto;
         this.treatWhitespaceAsSuffix = treatWhitespaceAsSuffix;
@@ -52,10 +69,21 @@ public final class Normalizer {
         this.unicodeNormalizer = new Trie(charMap.trie());
     }
 
+    /**
+     * Normalizes the input string and returns the normalized output along with the byte alignment mapping.
+     * @param input The string to normalize.
+     * @return The normalized output.
+     */
     public NormalizedOutput normalize(String input) {
         return normalize(UTF8Utils.UTF8.encode(input).asReadOnlyBuffer());
     }
 
+    /**
+     * Normalizes the input UTF-8 byte buffer and returns the normalized output along with the byte
+     * alignment mapping from normalized bytes back to positions in the original input buffer.
+     * @param input The UTF-8 encoded input to normalize.
+     * @return The normalized output.
+     */
     public NormalizedOutput normalize(ByteBuffer input) {
         if (!input.hasRemaining()) {
             return new NormalizedOutput(ByteBuffer.allocate(0), ByteBuffer.allocate(0), new int[0]);
@@ -169,6 +197,15 @@ public final class Normalizer {
         return new NormalizedOutput(input, slicedOutput, mappingArr);
     }
 
+    /**
+     * Normalizes the longest prefix of the input buffer and returns the normalized bytes along with
+     * the number of input bytes consumed. If a user-defined symbol matches at the current position it
+     * is returned verbatim. Otherwise the precompiled Unicode normalization trie is consulted, and if
+     * no rule matches the next UTF-8 codepoint is passed through unchanged (or replaced with U+FFFD if
+     * it is malformed).
+     * @param input The UTF-8 input buffer, read from the current position.
+     * @return A pair of the normalized output bytes and the number of input bytes consumed.
+     */
     private NormalizerPair normalizePrefix(ByteBuffer input) {
         if (input.remaining() == 0) {
             return new NormalizerPair(null, 0);
@@ -227,6 +264,13 @@ public final class Normalizer {
         return normalizedOutput.slice(index, normalizedOutput.capacity() - index);
     }
 
+    /**
+     * Returns true if the bytes written so far into {@code buffer} (up to its current position)
+     * end with the given byte sequence.
+     * @param buffer The buffer to check, using its current position as the logical end.
+     * @param array The byte sequence to look for at the end.
+     * @return True if the filled portion of the buffer ends with {@code array}.
+     */
     private static boolean bufferEndsWith(ByteBuffer buffer, byte[] array) {
         if (buffer.position() >= array.length) {
             boolean match = true;
@@ -239,6 +283,12 @@ public final class Normalizer {
         }
     }
 
+    /**
+     * Parses the precompiled character map from the SentencePiece model protobuf.
+     * The layout is: {@code trie size (4 bytes little-endian),trie bytes,normalized string bytes}.
+     * @param buffer The raw precompiled character map bytes.
+     * @return A record holding the trie buffer and the normalized string table buffer.
+     */
     private static SplitCharMap decodePrecompiledCharsMap(ByteBuffer buffer) {
         // <trie size(4byte)><trie><normalized string>
         int trieSize = buffer.getInt();
@@ -251,9 +301,28 @@ public final class Normalizer {
         return new SplitCharMap(trieBuffer.asReadOnlyBuffer(), normalizedBuffer.asReadOnlyBuffer());
     }
 
+    /**
+     * The result of normalizing a string.
+     * @param input The original input as a UTF-8 byte buffer.
+     * @param output The normalized output as a UTF-8 byte buffer.
+     * @param byteAlignment An array of length {@code output.capacity() + 1} mapping each byte position
+     *                      in the normalized output back to its corresponding byte position in the original
+     *                      input. The final entry maps the position one past the end of the output.
+     */
     public record NormalizedOutput(ByteBuffer input, ByteBuffer output, int[] byteAlignment) {}
 
+    /**
+     * The two halves of the precompiled character map blob.
+     * @param trie The serialised double-array trie used to match input prefixes.
+     * @param normalized The concatenated normalized replacement strings, each terminated by a zero byte,
+     *                   indexed by the values stored in the trie.
+     */
     private record SplitCharMap(ByteBuffer trie, ByteBuffer normalized) {}
 
+    /**
+     * The normalized output for a single input prefix together with the number of input bytes consumed.
+     * @param output The normalized UTF-8 bytes for this prefix.
+     * @param length The number of bytes consumed from the input buffer.
+     */
     private record NormalizerPair(ByteBuffer output, int length) {}
 }
