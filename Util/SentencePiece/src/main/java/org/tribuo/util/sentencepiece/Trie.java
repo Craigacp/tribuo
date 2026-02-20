@@ -47,6 +47,19 @@ public final class Trie {
     }
 
     /**
+     * Returns a copy of the byte buffer that backs this Trie.
+     * @return A copy of the Trie buffer.
+     */
+    ByteBuffer getBuffer() {
+        ByteBuffer output = ByteBuffer.allocate(buffer.limit() * Integer.BYTES);
+        output.order(ByteOrder.LITTLE_ENDIAN);
+        output.asIntBuffer().put(buffer);
+        buffer.rewind();
+        output.rewind();
+        return output;
+    }
+
+    /**
      * Checks if the given byte sequence exists or not, if it exists its value and length
      * are returned. Otherwise, the returned record contains -1 and 0 respectively.
      * @param key The query.

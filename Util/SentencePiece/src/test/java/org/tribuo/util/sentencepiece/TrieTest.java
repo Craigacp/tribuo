@@ -18,11 +18,14 @@ package org.tribuo.util.sentencepiece;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -330,5 +333,80 @@ public class TrieTest {
             assertEquals(exact.value(), traversed.value(),
                     "exactMatchSearch and traverse should agree on value for '" + word + "'");
         }
+    }
+
+    @Test
+    public void testRoundTripThroughBuffer() {
+        Set<String> words = Set.of("apple", "app", "application", "banana", "band", "bat",
+                "cat", "car", "card", "the quick brown fox");
+        Trie original = new Trie(words);
+
+        // Extract the buffer and create a fresh Trie from it
+        ByteBuffer buffer = original.getBuffer();
+        Trie restored = new Trie(buffer);
+
+        // Verify exactMatchSearch returns identical results for all keys
+        for (String word : words) {
+            byte[] key = word.getBytes(StandardCharsets.UTF_8);
+            Trie.TrieResult origResult = original.exactMatchSearch(key);
+            Trie.TrieResult restoredResult = restored.exactMatchSearch(key);
+            assertEquals(origResult.value(), restoredResult.value(),
+                    "exactMatchSearch value mismatch for '" + word + "'");
+            assertEquals(origResult.length(), restoredResult.length(),
+                    "exactMatchSearch length mismatch for '" + word + "'");
+        }
+
+        // Verify missing keys return -1 in both
+        String[] missing = {"grape", "b", "ap", "cards", "the quick brown"};
+        for (String word : missing) {
+            byte[] key = word.getBytes(StandardCharsets.UTF_8);
+            Trie.TrieResult origResult = original.exactMatchSearch(key);
+            Trie.TrieResult restoredResult = restored.exactMatchSearch(key);
+            assertEquals(-1, origResult.value());
+            assertEquals(origResult.value(),
+                    restoredResult.value(),
+                    "Missing key '" + word + "' should return same result in both tries");
+        }
+
+        // Verify traverse returns identical results
+        for (String word : words) {
+            byte[] key = word.getBytes(StandardCharsets.UTF_8);
+            Trie.TraverseResult origTraverse = original.traverse(key, 0, 0);
+            Trie.TraverseResult restoredTraverse = restored.traverse(key, 0, 0);
+            assertEquals(origTraverse.value(), restoredTraverse.value(),
+                    "traverse value mismatch for '" + word + "'");
+            assertEquals(origTraverse.nodePos(), restoredTraverse.nodePos(),
+                    "traverse nodePos mismatch for '" + word + "'");
+            assertEquals(origTraverse.queryPos(), restoredTraverse.queryPos(),
+                    "traverse queryPos mismatch for '" + word + "'");
+        }
+
+        // Verify commonPrefixSearch returns identical results
+        String[] prefixQueries = {"application", "banana", "cardboard"};
+        for (String query : prefixQueries) {
+            ByteBuffer origQuery = ByteBuffer.wrap(query.getBytes(StandardCharsets.UTF_8));
+            ByteBuffer restoredQuery = ByteBuffer.wrap(query.getBytes(StandardCharsets.UTF_8));
+            List<Trie.TrieResult> origResults = original.commonPrefixSearch(origQuery);
+            List<Trie.TrieResult> restoredResults = restored.commonPrefixSearch(restoredQuery);
+            assertEquals(origResults.size(), restoredResults.size(),
+                    "commonPrefixSearch result count mismatch for '" + query + "'");
+            for (int i = 0; i < origResults.size(); i++) {
+                assertEquals(origResults.get(i).value(), restoredResults.get(i).value(),
+                        "commonPrefixSearch value mismatch at index " + i + " for '" + query + "'");
+                assertEquals(origResults.get(i).length(), restoredResults.get(i).length(),
+                        "commonPrefixSearch length mismatch at index " + i + " for '" + query + "'");
+            }
+        }
+
+        // Verify the buffers themselves are identical
+        ByteBuffer origBuffer = original.getBuffer();
+        ByteBuffer restoredBuffer = restored.getBuffer();
+        assertEquals(origBuffer.remaining(), restoredBuffer.remaining(),
+                "Buffer sizes should match");
+        byte[] origBytes = new byte[origBuffer.remaining()];
+        byte[] restoredBytes = new byte[restoredBuffer.remaining()];
+        origBuffer.get(origBytes);
+        restoredBuffer.get(restoredBytes);
+        assertArrayEquals(origBytes, restoredBytes, "Raw buffer contents should be identical");
     }
 }
