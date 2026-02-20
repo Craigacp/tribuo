@@ -21,6 +21,9 @@ import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
+/**
+ * A Unigram language model tokenizer.
+ */
 public final class UnigramSPModel extends SPModel {
     UnigramSPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
         super(proto, options);

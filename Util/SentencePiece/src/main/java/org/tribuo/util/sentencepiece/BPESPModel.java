@@ -21,6 +21,9 @@ import org.tribuo.util.sentencepiece.protos.SentencepieceModel;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
+/**
+ * A Byte-Pair Encoding tokenizer.
+ */
 public final class BPESPModel extends SPModel {
     BPESPModel(SentencepieceModel.ModelProto proto, EnumSet<ExtraOptions> options) {
         super(proto, options);
